@@ -13,12 +13,30 @@ enum class EQSkillType : uint8
 	Double
 };
 
+UENUM(BlueprintType)
+enum class EWSkillType : uint8
+{
+	UnConfirmed = 0
+};
+
+UENUM(BlueprintType)
+enum class EESkillType : uint8
+{
+	UnConfirmed = 0
+};
+
+UENUM(BlueprintType)
+enum class ERSkillType : uint8
+{
+	UnConfirmed = 0
+};
+
 UCLASS()
 class CAPSTONEPROJECT_API ACharacterBase : public ACharacter
 {
 	GENERATED_BODY()
 
-/* 해당 클래스는 캐릭터의 Base 클래스로 객체를 생성하지 않는다. */
+/* 해당 클래스는 캐릭터의 Base 이다. */
 public:
 	ACharacterBase();
 
@@ -48,9 +66,21 @@ protected:
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill", meta = (AllowPrivateAccess = "true"))
 	EQSkillType CurrentQSkillType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill", meta = (AllowPrivateAccess = "true"))
+	EWSkillType CurrentWSkillType;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill", meta = (AllowPrivateAccess = "true"))
+	EESkillType CurrentESkillType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill", meta = (AllowPrivateAccess = "true"))
+	ERSkillType CurrentRSkillType;
+
 	
 	TMap<EQSkillType, class USkill_Q_Base*> Q_SkillMap;
-
+	TMap<EWSkillType, class USkill_W_Base*> W_SkillMap;
+	TMap<EESkillType, class USkill_E_Base*> E_SkillMap;
+	TMap<ERSkillType, class USkill_R_Base*> R_SkillMap;
 
 
 /* Enhanced Input */

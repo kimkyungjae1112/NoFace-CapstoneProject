@@ -25,6 +25,7 @@ class CAPSTONEPROJECT_API USkillBase : public UObject
 
 public:
 	/* SkillBase를 상속받은 클래스는 반드시 이 가상함수를 재정의 하도록 합시다. */
+	// 왜 순수 가상 함수가 안되는지 도통 모르겄네
 	virtual void ExecuteSkill(); /*PURE_VIRTUAL(USkillBase::ExecuteSkill, );*/
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ShortcutKey")

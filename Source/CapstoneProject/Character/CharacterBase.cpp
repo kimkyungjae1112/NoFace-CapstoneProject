@@ -12,6 +12,9 @@
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Skill/Skill_Q_ChargeAttack.h"
 #include "Skill/Skill_Q_DoubleAttack.h"
+#include "Skill/Skill_W_UnConfirmed.h"
+#include "Skill/Skill_E_UnConfirmed.h"
+#include "Skill/Skill_R_UnConfirmed.h"
 
 ACharacterBase::ACharacterBase()
 {
@@ -37,12 +40,12 @@ ACharacterBase::ACharacterBase()
 	Camera->bUsePawnControlRotation = false;
 
 	/* Enhanced Input 로딩 */
-	static ConstructorHelpers::FObjectFinder<UInputMappingContext> InputMappingContextRef(TEXT("/Script/EnhancedInput.InputMappingContext'/Game/Input/IMC_Default.IMC_Default'"));
+	static ConstructorHelpers::FObjectFinder<UInputMappingContext> InputMappingContextRef(TEXT("/Script/EnhancedInput.InputMappingContext'/Game/No-Face/Input/InputMappingContext/IMC_Default.IMC_Default'"));
 	if (InputMappingContextRef.Object)
 	{
 		InputMappingContext = InputMappingContextRef.Object;
 	}
-	static ConstructorHelpers::FObjectFinder<UInputAction> RightClickActionRef(TEXT("/Script/EnhancedInput.InputAction'/Game/Input/IA_RightClick.IA_RightClick'"));
+	static ConstructorHelpers::FObjectFinder<UInputAction> RightClickActionRef(TEXT("/Script/EnhancedInput.InputAction'/Game/No-Face/Input/InputAction/IA_RightClick.IA_RightClick'"));
 	if (RightClickActionRef.Object)
 	{
 		RightClickAction = RightClickActionRef.Object;
@@ -75,6 +78,7 @@ ACharacterBase::ACharacterBase()
 
 	/* 스킬 */
 	CurrentQSkillType = EQSkillType::Double;
+	CurrentWSkillType = EWSkillType::UnConfirmed;
 	
 
 }
@@ -92,6 +96,10 @@ void ACharacterBase::BeginPlay()
 	/* 스킬 */
 	Q_SkillMap.Add(EQSkillType::Double, NewObject<USkill_Q_DoubleAttack>(this));
 	Q_SkillMap.Add(EQSkillType::Charge, NewObject<USkill_Q_ChargeAttack>(this));
+	W_SkillMap.Add(EWSkillType::UnConfirmed, NewObject<USkill_W_UnConfirmed>(this));
+	E_SkillMap.Add(EESkillType::UnConfirmed, NewObject<USkill_E_UnConfirmed>(this));
+	R_SkillMap.Add(ERSkillType::UnConfirmed, NewObject<USkill_R_UnConfirmed>(this));
+	
 }
 
 void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -120,16 +128,19 @@ void ACharacterBase::Q_Skill()
 void ACharacterBase::W_Skill()
 {
 	UE_LOG(LogTemp, Display, TEXT("Base W Skill"));
+	W_SkillMap[CurrentWSkillType]->ExecuteSkill();
 }
 
 void ACharacterBase::E_Skill()
 {
 	UE_LOG(LogTemp, Display, TEXT("Base E Skill"));
+	E_SkillMap[CurrentESkillType]->ExecuteSkill();
 }
 
 void ACharacterBase::R_Skill()
 {
 	UE_LOG(LogTemp, Display, TEXT("Base R Skill"));
+	R_SkillMap[CurrentRSkillType]->ExecuteSkill();
 }
 
 void ACharacterBase::OnClickStart()
