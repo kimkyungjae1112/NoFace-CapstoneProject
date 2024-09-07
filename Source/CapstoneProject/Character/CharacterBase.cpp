@@ -15,6 +15,7 @@
 #include "Skill/Skill_W_UnConfirmed.h"
 #include "Skill/Skill_E_UnConfirmed.h"
 #include "Skill/Skill_R_UnConfirmed.h"
+#include "Stat/CharacterStatComponent.h"
 
 ACharacterBase::ACharacterBase()
 {
@@ -79,7 +80,11 @@ ACharacterBase::ACharacterBase()
 	/* 스킬 */
 	CurrentQSkillType = EQSkillType::Double;
 	CurrentWSkillType = EWSkillType::UnConfirmed;
-	
+	CurrentESkillType = EESkillType::UnConfirmed;
+	CurrentRSkillType = ERSkillType::UnConfirmed;
+
+	/* 스텟 */
+	Stat = CreateDefaultSubobject<UCharacterStatComponent>(TEXT("Stat"));
 
 }
 
@@ -99,6 +104,7 @@ void ACharacterBase::BeginPlay()
 	W_SkillMap.Add(EWSkillType::UnConfirmed, NewObject<USkill_W_UnConfirmed>(this));
 	E_SkillMap.Add(EESkillType::UnConfirmed, NewObject<USkill_E_UnConfirmed>(this));
 	R_SkillMap.Add(ERSkillType::UnConfirmed, NewObject<USkill_R_UnConfirmed>(this));
+
 	
 }
 
@@ -117,6 +123,15 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	EnhancedInputComponent->BindAction(E_SkillAction, ETriggerEvent::Started, this, &ACharacterBase::E_Skill);
 	EnhancedInputComponent->BindAction(R_SkillAction, ETriggerEvent::Started, this, &ACharacterBase::R_Skill);
 	
+}
+
+float ACharacterBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+	
+	Stat->ApplyDamage(Damage);
+
+	return 0.0f;
 }
 
 void ACharacterBase::Q_Skill()

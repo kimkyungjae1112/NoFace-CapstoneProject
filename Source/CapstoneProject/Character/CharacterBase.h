@@ -46,6 +46,9 @@ protected:
 public:	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+/* 오버라이딩 섹션 */
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
 /* 스킬 섹션 */
 protected:
 	virtual void Q_Skill();
@@ -112,6 +115,11 @@ private:
 
 	FVector CachedLocation;
 	
+/* 스텟 */
+private:
+	UPROPERTY(VisibleAnywhere, Category = "Stat")
+	TObjectPtr<class UCharacterStatComponent> Stat;
+
 
 /* 유틸리티 */
 private:
