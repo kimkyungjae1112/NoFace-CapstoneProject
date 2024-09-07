@@ -15,8 +15,6 @@ class CAPSTONEPROJECT_API UCharacterDataStat : public UPrimaryDataAsset
 	GENERATED_BODY()
 
 public:
-	UCharacterDataStat();
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hp")
 	float Hp;
 

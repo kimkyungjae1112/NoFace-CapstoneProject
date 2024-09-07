@@ -2,7 +2,3 @@
 
 
 #include "Stat/CharacterDataStat.h"
-
-UCharacterDataStat::UCharacterDataStat()
-{
-}
