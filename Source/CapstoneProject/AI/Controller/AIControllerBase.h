@@ -17,11 +17,11 @@ class CAPSTONEPROJECT_API AAIControllerBase : public AAIController
 public:
 	AAIControllerBase();
 
-protected:
-	virtual void OnPossess(APawn* InPawn) override;
-
 	void RunAI();
 	void StopAI();
+
+protected:
+	virtual void OnPossess(APawn* InPawn) override;
 
 	UPROPERTY(VisibleAnywhere, Category = "BT")
 	TObjectPtr<class UBlackboardData> BBData;

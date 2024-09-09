@@ -2,6 +2,9 @@
 
 
 #include "Enemy/EnemyBase.h"
+#include "Animation/AnimInstance.h"
+#include "Animation/AnimMontage.h"
+#include "AI/Controller/AIControllerBase.h"
 
 AEnemyBase::AEnemyBase()
 {
@@ -39,6 +42,39 @@ float AEnemyBase::GetTurnSpeed()
 {
 	return 10.0f;
 }
+
+void AEnemyBase::SetMonsterAttackDelegate(FMonsterAttackFinished InMonsterAttackFinished)
+{
+	MonsterAttackFinished = InMonsterAttackFinished;
+}
+
+void AEnemyBase::AttackByAI()
+{
+	UE_LOG(LogTemp, Display, TEXT("몬스터 공격"));
+	BeginAttack();
+}
+
+void AEnemyBase::BeginAttack()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+
+	AAIControllerBase* AIController = Cast<AAIControllerBase>(GetController());
+	AIController->StopAI();
+	AnimInstance->Montage_Play(AttackMontage);
+
+
+	FOnMontageEnded MontageEnd;
+	MontageEnd.BindUObject(this, &AEnemyBase::EndAttack);
+	AnimInstance->Montage_SetEndDelegate(MontageEnd, AttackMontage);
+}
+
+void AEnemyBase::EndAttack(class UAnimMontage* Target, bool IsProperlyEnded)
+{
+	AAIControllerBase* AIController = Cast<AAIControllerBase>(GetController());
+	AIController->RunAI();
+}
+
+
 
 
 
