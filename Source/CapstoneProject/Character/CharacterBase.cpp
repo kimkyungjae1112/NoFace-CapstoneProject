@@ -87,7 +87,7 @@ ACharacterBase::ACharacterBase()
 	GetMesh()->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 
-	/* 스킬 */
+	/* 스킬 기본 타입 */
 	CurrentQSkillType = EQSkillType::Double;
 	CurrentWSkillType = EWSkillType::UnConfirmed;
 	CurrentESkillType = EESkillType::UnConfirmed;

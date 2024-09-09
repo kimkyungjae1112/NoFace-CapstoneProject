@@ -18,7 +18,7 @@ enum class EShortcutkey : uint8
 /**
  * 
  */
-UCLASS(Abstract)
+UCLASS()
 class CAPSTONEPROJECT_API USkillBase : public UObject
 {
 	GENERATED_BODY()
