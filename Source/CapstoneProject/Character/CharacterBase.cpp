@@ -12,6 +12,9 @@
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "SkillHeader/CSkillHeader.h"
 #include "Stat/CharacterStatComponent.h"
+#include "Animation/AnimInstance.h"
+#include "Animation/AnimMontage.h"
+#include "Character/CharacterComboAttackData.h"
 
 ACharacterBase::ACharacterBase()
 {
@@ -67,7 +70,18 @@ ACharacterBase::ACharacterBase()
 	{
 		R_SkillAction = R_SkillActionRef.Object;
 	}
-
+	static ConstructorHelpers::FObjectFinder<UInputAction> LeftClickActionRef(TEXT("/Script/EnhancedInput.InputAction'/Game/No-Face/Input/InputAction/IA_LeftClick.IA_LeftClick'"));
+	if (LeftClickActionRef.Object)
+	{
+		LeftClickAction = LeftClickActionRef.Object;
+	}
+	
+	/* Mesh */
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MainMeshRef(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequins/Meshes/SKM_Manny.SKM_Manny'"));
+	if (MainMeshRef.Object)
+	{
+		GetMesh()->SetSkeletalMesh(MainMeshRef.Object);
+	}
 
 	/* 애니메이션 */
 	GetMesh()->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
@@ -81,7 +95,7 @@ ACharacterBase::ACharacterBase()
 
 	/* 스텟 */
 	Stat = CreateDefaultSubobject<UCharacterStatComponent>(TEXT("Stat"));
-
+	
 }
 
 void ACharacterBase::BeginPlay()
@@ -118,6 +132,8 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	EnhancedInputComponent->BindAction(W_SkillAction, ETriggerEvent::Started, this, &ACharacterBase::W_Skill);
 	EnhancedInputComponent->BindAction(E_SkillAction, ETriggerEvent::Started, this, &ACharacterBase::E_Skill);
 	EnhancedInputComponent->BindAction(R_SkillAction, ETriggerEvent::Started, this, &ACharacterBase::R_Skill);
+
+	EnhancedInputComponent->BindAction(LeftClickAction, ETriggerEvent::Started, this, &ACharacterBase::OnAttackStart);
 	
 }
 
@@ -178,6 +194,111 @@ void ACharacterBase::OnClicking()
 void ACharacterBase::OnRelease()
 {
 	UAIBlueprintHelperLibrary::SimpleMoveToLocation(GetController(), CachedLocation);
+}
+
+void ACharacterBase::OnAttackStart()
+{
+	if (TraceAttack() == false)
+	{
+		return;
+	}
+
+	if (CurrentCombo == 0)
+	{
+		UE_LOG(LogTemp, Display, TEXT("공격시작"));
+		BeginDefaultAttack();
+		return;
+	}
+
+	if (!ComboTimer.IsValid())
+	{
+		HasNextComboCommand = false;
+	}
+	else
+	{
+		HasNextComboCommand = true;
+	}
+}
+
+bool ACharacterBase::TraceAttack()
+{
+	return GetPlayerController()->GetHitResultUnderCursor(ECC_Visibility, true, AttackHitResult);
+}
+
+void ACharacterBase::BeginDefaultAttack()
+{
+	CurrentCombo = 1;
+	RotateToTarget();
+
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	AnimInstance->Montage_Play(DefaultAttackMontage);
+
+	FOnMontageEnded MontageEnded;
+	MontageEnded.BindUObject(this, &ACharacterBase::EndDefaultAttack);
+	AnimInstance->Montage_SetEndDelegate(MontageEnded, DefaultAttackMontage);
+	
+	ComboTimer.Invalidate();
+	SetComboTimer();
+}
+
+void ACharacterBase::EndDefaultAttack(UAnimMontage* Target, bool IsProperlyEnded)
+{
+	ensure(CurrentCombo != 0);
+	CurrentCombo = 0;
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+}
+
+void ACharacterBase::SetComboTimer()
+{
+	int32 ComboIndex = CurrentCombo - 1;
+	ensure(ComboData->EffectiveFrameCount.IsValidIndex(ComboIndex));
+
+	float ComboEffectiveTime = (ComboData->EffectiveFrameCount[ComboIndex] / ComboData->FrameRate);
+	if (ComboEffectiveTime > 0.0f)
+	{
+		GetWorld()->GetTimerManager().SetTimer(ComboTimer, this, &ACharacterBase::CheckCombo, ComboEffectiveTime, false);
+	}
+}
+
+void ACharacterBase::CheckCombo()
+{
+	ComboTimer.Invalidate();
+	if (HasNextComboCommand)
+	{
+		RotateToTarget();
+
+		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+
+		CurrentCombo = FMath::Clamp(CurrentCombo + 1, 1, ComboData->MaxComboCount);
+		FName NextSection = *FString::Printf(TEXT("%s%d"), *ComboData->MontageSectionNamePrefix, CurrentCombo);
+		AnimInstance->Montage_JumpToSection(NextSection, DefaultAttackMontage);
+		SetComboTimer();
+		HasNextComboCommand = false;
+	}
+}
+
+void ACharacterBase::RotateToTarget()
+{
+	if (RotateTimer.IsValid())
+	{
+		GetWorld()->GetTimerManager().ClearTimer(RotateTimer);
+	}
+
+	GetWorld()->GetTimerManager().SetTimer(RotateTimer, this, &ACharacterBase::UpdateRotate, 0.01f, true);
+
+}
+
+void ACharacterBase::UpdateRotate()
+{
+	FRotator TargetRotation = (AttackHitResult.Location - GetActorLocation()).Rotation();
+	SetActorRelativeRotation(FMath::RInterpTo(GetActorRotation(), TargetRotation, GetWorld()->GetDeltaSeconds(), 15.0f));
+
+	if (FMath::Abs((TargetRotation - GetActorRotation()).Yaw) < 5.0f)
+	{
+		GetWorld()->GetTimerManager().ClearTimer(RotateTimer);
+	}
 }
 
 ACPlayerController* ACharacterBase::GetPlayerController() const

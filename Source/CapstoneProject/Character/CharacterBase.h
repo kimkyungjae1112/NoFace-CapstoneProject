@@ -106,6 +106,8 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Input")
 	TObjectPtr<class UInputAction> R_SkillAction;
 
+	UPROPERTY(VisibleAnywhere, Category = "Input")
+	TObjectPtr<class UInputAction> LeftClickAction;
 
 
 /* 마우스 우클릭을 통해 캐릭터 이동 기능을 실현하는 함수와 변수 */
@@ -114,14 +116,36 @@ private:
 	void OnRelease();
 
 	FVector CachedLocation;
-	
-/* 스텟 */
+
+/* 마우스 좌클릭을 이용한 콤보공격 구현 */
+	void OnAttackStart();
+	bool TraceAttack();
+	void BeginDefaultAttack();
+	void EndDefaultAttack(class UAnimMontage* Target, bool IsProperlyEnded);
+	void SetComboTimer();
+	void CheckCombo();
+	void RotateToTarget();
+	void UpdateRotate();
+
+	FTimerHandle ComboTimer;
+	FTimerHandle RotateTimer;
+	int32 CurrentCombo = 0;
+	bool HasNextComboCommand = false;
+	FHitResult AttackHitResult;
+
+	UPROPERTY(EditAnywhere, Category = "Combo")
+	TObjectPtr<class UCharacterComboAttackData> ComboData;
+
+	UPROPERTY(EditAnywhere, Category = "Montage")
+	TObjectPtr<class UAnimMontage> DefaultAttackMontage;
+
+/* 스텟 섹션 */
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Stat")
 	TObjectPtr<class UCharacterStatComponent> Stat;
 
 
-/* 유틸리티 */
+/* 유틸리티 섹션 */
 private:
 	class ACPlayerController* GetPlayerController() const;
 };
