@@ -144,6 +144,13 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Stat")
 	TObjectPtr<class UCharacterStatComponent> Stat;
 
+	
+/* 무기 섹션 */
+private:
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	TSubclassOf<class ASword> SwordClass;
+
+
 
 /* 유틸리티 섹션 */
 private:

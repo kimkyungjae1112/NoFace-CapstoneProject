@@ -22,6 +22,8 @@
 # 임시 ignore
 /Content/Characters
 /Content/ParagonKallari
+/Content/ParagonAurora
+/Content/InfinityBladeWeapons
 
 # Allow any files from /RawContent dir.
 # Any file in /RawContent dir will be managed by git lfs.

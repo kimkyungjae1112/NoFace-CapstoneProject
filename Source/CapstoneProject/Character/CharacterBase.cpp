@@ -15,6 +15,7 @@
 #include "Animation/AnimInstance.h"
 #include "Animation/AnimMontage.h"
 #include "Character/CharacterComboAttackData.h"
+#include "Weapon/Sword.h"
 
 ACharacterBase::ACharacterBase()
 {
@@ -114,8 +115,19 @@ void ACharacterBase::BeginPlay()
 	W_SkillMap.Add(EWSkillType::UnConfirmed, NewObject<USkill_W_UnConfirmed>(this));
 	E_SkillMap.Add(EESkillType::UnConfirmed, NewObject<USkill_E_UnConfirmed>(this));
 	R_SkillMap.Add(ERSkillType::UnConfirmed, NewObject<USkill_R_UnConfirmed>(this));
-
 	
+
+	/* 무기 임시 코드 */
+	FVector SpawnLocation = GetMesh()->GetSocketLocation(TEXT("hand_rSocket"));
+	FRotator SpawnRotation = GetMesh()->GetSocketRotation(TEXT("hand_rSocket"));
+	
+	ASword* Sword = GetWorld()->SpawnActor<ASword>(SwordClass, SpawnLocation, SpawnRotation);
+	Sword->SetOwner(this);
+
+	if (Sword)
+	{
+		Sword->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("hand_rSocket"));
+	}
 }
 
 void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -293,6 +305,7 @@ void ACharacterBase::RotateToTarget()
 void ACharacterBase::UpdateRotate()
 {
 	FRotator TargetRotation = (AttackHitResult.Location - GetActorLocation()).Rotation();
+	TargetRotation.Pitch = 0;
 	SetActorRelativeRotation(FMath::RInterpTo(GetActorRotation(), TargetRotation, GetWorld()->GetDeltaSeconds(), 15.0f));
 
 	if (FMath::Abs((TargetRotation - GetActorRotation()).Yaw) < 5.0f)
