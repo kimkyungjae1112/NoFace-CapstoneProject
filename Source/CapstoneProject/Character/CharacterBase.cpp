@@ -205,7 +205,7 @@ void ACharacterBase::OnAttackStart()
 
 	if (CurrentCombo == 0)
 	{
-		UE_LOG(LogTemp, Display, TEXT("공격시작"));
+		OnClickStart();
 		BeginDefaultAttack();
 		return;
 	}
