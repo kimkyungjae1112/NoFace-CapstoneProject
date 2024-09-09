@@ -5,7 +5,13 @@
 
 AEnemyBase::AEnemyBase()
 {
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MainMeshRef(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequins/Meshes/SKM_Manny.SKM_Manny'"));
+	if (MainMeshRef.Object)
+	{
+		GetMesh()->SetSkeletalMesh(MainMeshRef.Object);
+	}
 
+	GetMesh()->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
 }
 
 void AEnemyBase::BeginPlay()
