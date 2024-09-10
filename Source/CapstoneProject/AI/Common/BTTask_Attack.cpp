@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AI/BTTask_Attack.h"
+#include "AI/Common/BTTask_Attack.h"
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Interface/AIInterface.h"
