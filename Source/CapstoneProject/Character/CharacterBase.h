@@ -50,7 +50,6 @@ class CAPSTONEPROJECT_API ACharacterBase : public ACharacter, public ITakeWeapon
 {
 	GENERATED_BODY()
 
-/* 해당 클래스는 캐릭터의 Base 이다. */
 public:
 	ACharacterBase();
 
@@ -71,7 +70,7 @@ protected:
 	virtual void R_Skill();
 
 
-/* 카메라 섹션으로 하위 클래스들이 상속받도록 한다. */
+/* 카메라 섹션 */
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	TObjectPtr<class USpringArmComponent> SpringArm;
@@ -157,8 +156,6 @@ private:
 	TObjectPtr<class UAnimMontage> DefaultAttackMontage;
 
 /* 무기 교체 */
-	/* 무기 교체 UI 띄우는 함수 필요 */
-	//임시
 	void OpenWeaponChoiceUI();
 	virtual void CloseWeaponChoiceUI() override;
 	virtual void TakeWeapon(EWeaponType WeaponType) override;
