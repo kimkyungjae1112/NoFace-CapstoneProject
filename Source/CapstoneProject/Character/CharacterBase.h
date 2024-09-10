@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Interface/TakeWeaponInterface.h"
 #include "CharacterBase.generated.h"
 
 UENUM(BlueprintType)
@@ -31,8 +32,21 @@ enum class ERSkillType : uint8
 	UnConfirmed = 0
 };
 
+DECLARE_DELEGATE(FTakeItemDelegate)
+
+USTRUCT()
+struct FTakeItemDelegateWrapper
+{
+	GENERATED_BODY()
+
+	FTakeItemDelegateWrapper() {}
+	FTakeItemDelegateWrapper(const FTakeItemDelegate& InTakeItemDelegate) : TakeItemDelegate(InTakeItemDelegate) {}
+
+	FTakeItemDelegate TakeItemDelegate;
+};
+
 UCLASS()
-class CAPSTONEPROJECT_API ACharacterBase : public ACharacter
+class CAPSTONEPROJECT_API ACharacterBase : public ACharacter, public ITakeWeaponInterface
 {
 	GENERATED_BODY()
 
@@ -109,11 +123,14 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Input")
 	TObjectPtr<class UInputAction> LeftClickAction;
 
+	UPROPERTY(VisibleAnywhere, Category = "Input")
+	TObjectPtr<class UInputAction> ExchangeWeaponAction;
+
 
 /* 마우스 우클릭을 통해 캐릭터 이동 기능을 실현하는 함수와 변수 */
-	void OnClickStart();
-	void OnClicking();
-	void OnRelease();
+	void OnClickStart();	//Mouse Right Click Started
+	void OnClicking();	//Mouse Right Click Triggered
+	void OnRelease();	//Mouse Right Click Completed
 
 	FVector CachedLocation;
 
@@ -139,17 +156,46 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Montage")
 	TObjectPtr<class UAnimMontage> DefaultAttackMontage;
 
-/* 스텟 섹션 */
-private:
-	UPROPERTY(VisibleAnywhere, Category = "Stat")
-	TObjectPtr<class UCharacterStatComponent> Stat;
+/* 무기 교체 */
+	/* 무기 교체 UI 띄우는 함수 필요 */
+	//임시
+	void OpenWeaponChoiceUI();
+	virtual void CloseWeaponChoiceUI() override;
+	virtual void TakeWeapon(EWeaponType WeaponType) override;
+
+	void EquipSword();
+	void EquipBow();
+	void EquipStaff();
+
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<class UWeaponChoiceUI> WeaponChoiceUIClass;
+
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TObjectPtr<class UWeaponChoiceUI> WeaponChoiceUIPtr;
+
+	UPROPERTY()
+	TArray<FTakeItemDelegateWrapper> TakeItemDelegateArray;
 
 	
-/* 무기 섹션 */
+/* 무기 데이터 섹션 */
 private:
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	TSubclassOf<class ASword> SwordClass;
 
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	TSubclassOf<class ABow> BowClass;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	TSubclassOf<class AStaff> StaffClass;
+
+	UPROPERTY(VisibleAnywhere, Category = "Weapon")
+	TObjectPtr<class AWeaponBase> WeaponBase;
+
+
+/* 스텟 섹션 */
+private:
+	UPROPERTY(VisibleAnywhere, Category = "Stat")
+	TObjectPtr<class UCharacterStatComponent> Stat;
 
 
 /* 유틸리티 섹션 */

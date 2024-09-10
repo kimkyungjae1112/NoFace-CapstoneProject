@@ -16,6 +16,9 @@
 #include "Animation/AnimMontage.h"
 #include "Character/CharacterComboAttackData.h"
 #include "Weapon/Sword.h"
+#include "Weapon/Bow.h"
+#include "Weapon/Staff.h"
+#include "UI/WeaponChoiceUI.h"
 
 ACharacterBase::ACharacterBase()
 {
@@ -76,6 +79,11 @@ ACharacterBase::ACharacterBase()
 	{
 		LeftClickAction = LeftClickActionRef.Object;
 	}
+	static ConstructorHelpers::FObjectFinder<UInputAction> ExchangeWeaponActionRef(TEXT("/Script/EnhancedInput.InputAction'/Game/No-Face/Input/InputAction/IA_ExchangeWeapon.IA_ExchangeWeapon'"));
+	if (ExchangeWeaponActionRef.Object)
+	{
+		ExchangeWeaponAction = ExchangeWeaponActionRef.Object;
+	}
 	
 	/* Mesh */
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MainMeshRef(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequins/Meshes/SKM_Manny.SKM_Manny'"));
@@ -96,6 +104,12 @@ ACharacterBase::ACharacterBase()
 
 	/* 스텟 */
 	Stat = CreateDefaultSubobject<UCharacterStatComponent>(TEXT("Stat"));
+
+	/* 무기 */
+	TakeItemDelegateArray.Add(FTakeItemDelegateWrapper(FTakeItemDelegate::CreateUObject(this, &ACharacterBase::EquipSword)));
+	TakeItemDelegateArray.Add(FTakeItemDelegateWrapper(FTakeItemDelegate::CreateUObject(this, &ACharacterBase::EquipBow)));
+	TakeItemDelegateArray.Add(FTakeItemDelegateWrapper(FTakeItemDelegate::CreateUObject(this, &ACharacterBase::EquipStaff)));
+
 	
 }
 
@@ -116,18 +130,8 @@ void ACharacterBase::BeginPlay()
 	E_SkillMap.Add(EESkillType::UnConfirmed, NewObject<USkill_E_UnConfirmed>(this));
 	R_SkillMap.Add(ERSkillType::UnConfirmed, NewObject<USkill_R_UnConfirmed>(this));
 	
-
-	/* 무기 임시 코드 */
-	FVector SpawnLocation = GetMesh()->GetSocketLocation(TEXT("hand_rSocket"));
-	FRotator SpawnRotation = GetMesh()->GetSocketRotation(TEXT("hand_rSocket"));
-	
-	ASword* Sword = GetWorld()->SpawnActor<ASword>(SwordClass, SpawnLocation, SpawnRotation);
-	Sword->SetOwner(this);
-
-	if (Sword)
-	{
-		Sword->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("hand_rSocket"));
-	}
+	/* UI 등록 */
+	WeaponChoiceUIPtr = CreateWidget<UWeaponChoiceUI>(GetWorld(), WeaponChoiceUIClass);
 }
 
 void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -139,13 +143,12 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Started, this, &ACharacterBase::OnClickStart);
 	EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Triggered, this, &ACharacterBase::OnClicking);
 	EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Completed, this, &ACharacterBase::OnRelease);
-	
+	EnhancedInputComponent->BindAction(LeftClickAction, ETriggerEvent::Started, this, &ACharacterBase::OnAttackStart);
 	EnhancedInputComponent->BindAction(Q_SkillAction, ETriggerEvent::Started, this, &ACharacterBase::Q_Skill);
 	EnhancedInputComponent->BindAction(W_SkillAction, ETriggerEvent::Started, this, &ACharacterBase::W_Skill);
 	EnhancedInputComponent->BindAction(E_SkillAction, ETriggerEvent::Started, this, &ACharacterBase::E_Skill);
 	EnhancedInputComponent->BindAction(R_SkillAction, ETriggerEvent::Started, this, &ACharacterBase::R_Skill);
-
-	EnhancedInputComponent->BindAction(LeftClickAction, ETriggerEvent::Started, this, &ACharacterBase::OnAttackStart);
+	EnhancedInputComponent->BindAction(ExchangeWeaponAction, ETriggerEvent::Started, this, &ACharacterBase::OpenWeaponChoiceUI);
 	
 }
 
@@ -312,6 +315,72 @@ void ACharacterBase::UpdateRotate()
 	{
 		GetWorld()->GetTimerManager().ClearTimer(RotateTimer);
 	}
+}
+
+void ACharacterBase::OpenWeaponChoiceUI()
+{
+	if (!WeaponChoiceUIPtr->IsInViewport())
+	{
+		WeaponChoiceUIPtr->AddToViewport();
+	}
+}
+
+void ACharacterBase::CloseWeaponChoiceUI()
+{
+	WeaponChoiceUIPtr->RemoveFromViewport();
+}
+
+void ACharacterBase::TakeWeapon(EWeaponType WeaponType)
+{
+	TakeItemDelegateArray[(uint8)WeaponType].TakeItemDelegate.ExecuteIfBound();
+}
+
+void ACharacterBase::EquipSword()
+{
+	UE_LOG(LogTemp, Display, TEXT("Equip Sword"));
+
+	if (WeaponBase)
+	{
+		WeaponBase->Destroy();
+	}
+	
+	FVector SpawnLocation = GetMesh()->GetSocketLocation(TEXT("hand_rSocket"));
+	FRotator SpawnRotation = GetMesh()->GetSocketRotation(TEXT("hand_rSocket"));
+
+	WeaponBase = GetWorld()->SpawnActor<ASword>(SwordClass, SpawnLocation, SpawnRotation);
+	WeaponBase->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("hand_rSocket"));
+}
+
+void ACharacterBase::EquipBow()
+{
+	UE_LOG(LogTemp, Display, TEXT("Equip Bow"));
+
+	if (WeaponBase)
+	{
+		WeaponBase->Destroy();
+	}
+
+	FVector SpawnLocation = GetMesh()->GetSocketLocation(TEXT("hand_rSocket"));
+	FRotator SpawnRotation = GetMesh()->GetSocketRotation(TEXT("hand_rSocket"));
+
+	WeaponBase = GetWorld()->SpawnActor<ABow>(BowClass, SpawnLocation, SpawnRotation);
+	WeaponBase->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("hand_rSocket"));
+}
+
+void ACharacterBase::EquipStaff()
+{
+	UE_LOG(LogTemp, Display, TEXT("Equip Staff"));
+
+	if (WeaponBase)
+	{
+		WeaponBase->Destroy();
+	}
+
+	FVector SpawnLocation = GetMesh()->GetSocketLocation(TEXT("hand_rSocket"));
+	FRotator SpawnRotation = GetMesh()->GetSocketRotation(TEXT("hand_rSocket"));
+
+	WeaponBase = GetWorld()->SpawnActor<AStaff>(StaffClass, SpawnLocation, SpawnRotation);
+	WeaponBase->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("hand_rSocket"));
 }
 
 ACPlayerController* ACharacterBase::GetPlayerController() const
