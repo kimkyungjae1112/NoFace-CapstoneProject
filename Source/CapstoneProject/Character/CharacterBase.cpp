@@ -10,7 +10,6 @@
 #include "InputMappingContext.h"
 #include "Player/CPlayerController.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
-#include "SkillHeader/CSkillHeader.h"
 #include "Stat/CharacterStatComponent.h"
 #include "Animation/AnimInstance.h"
 #include "Animation/AnimMontage.h"
@@ -101,11 +100,6 @@ ACharacterBase::ACharacterBase()
 	GetMesh()->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 
-	/* 스킬 기본 타입 */
-	CurrentQSkillType = EQSkillType::Double;
-	CurrentWSkillType = EWSkillType::UnConfirmed;
-	CurrentESkillType = EESkillType::UnConfirmed;
-	CurrentRSkillType = ERSkillType::UnConfirmed;
 
 	/* 스텟 */
 	Stat = CreateDefaultSubobject<UCharacterStatComponent>(TEXT("Stat"));
@@ -127,12 +121,6 @@ void ACharacterBase::BeginPlay()
 		Subsystem->AddMappingContext(InputMappingContext, 0);
 	}
 
-	/* 스킬 */
-	Q_SkillMap.Add(EQSkillType::Double, NewObject<USkill_Q_DoubleAttack>(this));
-	Q_SkillMap.Add(EQSkillType::Charge, NewObject<USkill_Q_ChargeAttack>(this));
-	W_SkillMap.Add(EWSkillType::UnConfirmed, NewObject<USkill_W_UnConfirmed>(this));
-	E_SkillMap.Add(EESkillType::UnConfirmed, NewObject<USkill_E_UnConfirmed>(this));
-	R_SkillMap.Add(ERSkillType::UnConfirmed, NewObject<USkill_R_UnConfirmed>(this));
 }
 
 void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -166,25 +154,21 @@ float ACharacterBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, 
 void ACharacterBase::Q_Skill()
 {
 	UE_LOG(LogTemp, Display, TEXT("Base Q Skill"));
-	Q_SkillMap[CurrentQSkillType]->ExecuteSkill();
 }
 
 void ACharacterBase::W_Skill()
 {
 	UE_LOG(LogTemp, Display, TEXT("Base W Skill"));
-	W_SkillMap[CurrentWSkillType]->ExecuteSkill();
 }
 
 void ACharacterBase::E_Skill()
 {
 	UE_LOG(LogTemp, Display, TEXT("Base E Skill"));
-	E_SkillMap[CurrentESkillType]->ExecuteSkill();
 }
 
 void ACharacterBase::R_Skill()
 {
 	UE_LOG(LogTemp, Display, TEXT("Base R Skill"));
-	R_SkillMap[CurrentRSkillType]->ExecuteSkill();
 }
 
 void ACharacterBase::OnClickStart()

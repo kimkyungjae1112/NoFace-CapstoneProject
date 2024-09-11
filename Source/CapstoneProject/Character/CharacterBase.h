@@ -6,31 +6,6 @@
 #include "GameFramework/Character.h"
 #include "CharacterBase.generated.h"
 
-UENUM(BlueprintType)
-enum class EQSkillType : uint8
-{
-	Charge = 0,
-	Double
-};
-
-UENUM(BlueprintType)
-enum class EWSkillType : uint8
-{
-	UnConfirmed = 0
-};
-
-UENUM(BlueprintType)
-enum class EESkillType : uint8
-{
-	UnConfirmed = 0
-};
-
-UENUM(BlueprintType)
-enum class ERSkillType : uint8
-{
-	UnConfirmed = 0
-};
-
 DECLARE_DELEGATE(FTakeItemDelegate)
 
 USTRUCT()
@@ -77,25 +52,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	TObjectPtr<class UCameraComponent> Camera;
 
-/* 스킬 섹션 */
-protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill", meta = (AllowPrivateAccess = "true"))
-	EQSkillType CurrentQSkillType;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill", meta = (AllowPrivateAccess = "true"))
-	EWSkillType CurrentWSkillType;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill", meta = (AllowPrivateAccess = "true"))
-	EESkillType CurrentESkillType;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill", meta = (AllowPrivateAccess = "true"))
-	ERSkillType CurrentRSkillType;
-
-	
-	TMap<EQSkillType, class USkill_Q_Base*> Q_SkillMap;
-	TMap<EWSkillType, class USkill_W_Base*> W_SkillMap;
-	TMap<EESkillType, class USkill_E_Base*> E_SkillMap;
-	TMap<ERSkillType, class USkill_R_Base*> R_SkillMap;
 
 
 /* Enhanced Input */
@@ -148,7 +105,7 @@ private:
 	FTimerHandle RotateTimer;
 	int32 CurrentCombo = 0;
 	bool HasNextComboCommand = false;
-	FHitResult AttackHitResult;
+	FHitResult AttackHitResult;	//공격하는 방향을 알기 위한 변수
 
 	UPROPERTY(EditAnywhere, Category = "Combo")
 	TObjectPtr<class UCharacterComboAttackData> ComboData;
@@ -160,9 +117,9 @@ private:
 	void NextWeapon();
 	void PrevWeapon();
 
-	void EquipSword();
-	void EquipBow();
-	void EquipStaff();
+	void EquipSword();	//무기 장착할 때 호출되는 함수
+	void EquipBow();	//무기 장착할 때 호출되는 함수
+	void EquipStaff();	//무기 장착할 때 호출되는 함수
 
 	UPROPERTY()
 	TArray<FTakeItemDelegateWrapper> TakeItemDelegateArray;
