@@ -79,10 +79,15 @@ ACharacterBase::ACharacterBase()
 	{
 		LeftClickAction = LeftClickActionRef.Object;
 	}
-	static ConstructorHelpers::FObjectFinder<UInputAction> ExchangeWeaponActionRef(TEXT("/Script/EnhancedInput.InputAction'/Game/No-Face/Input/InputAction/IA_ExchangeWeapon.IA_ExchangeWeapon'"));
-	if (ExchangeWeaponActionRef.Object)
+	static ConstructorHelpers::FObjectFinder<UInputAction> NextWeaponActionRef(TEXT("/Script/EnhancedInput.InputAction'/Game/No-Face/Input/InputAction/IA_NextWeapon.IA_NextWeapon'"));
+	if (NextWeaponActionRef.Object)
 	{
-		ExchangeWeaponAction = ExchangeWeaponActionRef.Object;
+		NextWeaponAction = NextWeaponActionRef.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UInputAction> PrevWeaponActionRef(TEXT("/Script/EnhancedInput.InputAction'/Game/No-Face/Input/InputAction/IA_PrevWeapon.IA_PrevWeapon'"));
+	if (PrevWeaponActionRef.Object)
+	{
+		PrevWeaponAction = PrevWeaponActionRef.Object;
 	}
 	
 	/* Mesh */
@@ -109,7 +114,6 @@ ACharacterBase::ACharacterBase()
 	TakeItemDelegateArray.Add(FTakeItemDelegateWrapper(FTakeItemDelegate::CreateUObject(this, &ACharacterBase::EquipSword)));
 	TakeItemDelegateArray.Add(FTakeItemDelegateWrapper(FTakeItemDelegate::CreateUObject(this, &ACharacterBase::EquipBow)));
 	TakeItemDelegateArray.Add(FTakeItemDelegateWrapper(FTakeItemDelegate::CreateUObject(this, &ACharacterBase::EquipStaff)));
-
 	
 }
 
@@ -129,9 +133,6 @@ void ACharacterBase::BeginPlay()
 	W_SkillMap.Add(EWSkillType::UnConfirmed, NewObject<USkill_W_UnConfirmed>(this));
 	E_SkillMap.Add(EESkillType::UnConfirmed, NewObject<USkill_E_UnConfirmed>(this));
 	R_SkillMap.Add(ERSkillType::UnConfirmed, NewObject<USkill_R_UnConfirmed>(this));
-	
-	/* UI 등록 */
-	WeaponChoiceUIPtr = CreateWidget<UWeaponChoiceUI>(GetWorld(), WeaponChoiceUIClass);
 }
 
 void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -148,7 +149,8 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	EnhancedInputComponent->BindAction(W_SkillAction, ETriggerEvent::Started, this, &ACharacterBase::W_Skill);
 	EnhancedInputComponent->BindAction(E_SkillAction, ETriggerEvent::Started, this, &ACharacterBase::E_Skill);
 	EnhancedInputComponent->BindAction(R_SkillAction, ETriggerEvent::Started, this, &ACharacterBase::R_Skill);
-	EnhancedInputComponent->BindAction(ExchangeWeaponAction, ETriggerEvent::Started, this, &ACharacterBase::OpenWeaponChoiceUI);
+	EnhancedInputComponent->BindAction(NextWeaponAction, ETriggerEvent::Started, this, &ACharacterBase::NextWeapon);
+	EnhancedInputComponent->BindAction(PrevWeaponAction, ETriggerEvent::Started, this, &ACharacterBase::PrevWeapon);
 	
 }
 
@@ -317,22 +319,26 @@ void ACharacterBase::UpdateRotate()
 	}
 }
 
-void ACharacterBase::OpenWeaponChoiceUI()
+void ACharacterBase::NextWeapon()
 {
-	if (!WeaponChoiceUIPtr->IsInViewport())
+	WeaponIndex += 1;
+	if (WeaponIndex > 2)
 	{
-		WeaponChoiceUIPtr->AddToViewport();
+		WeaponIndex = 0;
 	}
+
+	TakeItemDelegateArray[WeaponIndex].TakeItemDelegate.ExecuteIfBound();
 }
 
-void ACharacterBase::CloseWeaponChoiceUI()
+void ACharacterBase::PrevWeapon()
 {
-	WeaponChoiceUIPtr->RemoveFromViewport();
-}
+	WeaponIndex -= 1;
+	if (WeaponIndex < 0)
+	{
+		WeaponIndex = 2;
+	}
 
-void ACharacterBase::TakeWeapon(EWeaponType WeaponType)
-{
-	TakeItemDelegateArray[(uint8)WeaponType].TakeItemDelegate.ExecuteIfBound();
+	TakeItemDelegateArray[WeaponIndex].TakeItemDelegate.ExecuteIfBound();
 }
 
 void ACharacterBase::EquipSword()

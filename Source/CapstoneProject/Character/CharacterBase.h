@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "Interface/TakeWeaponInterface.h"
 #include "CharacterBase.generated.h"
 
 UENUM(BlueprintType)
@@ -46,7 +45,7 @@ struct FTakeItemDelegateWrapper
 };
 
 UCLASS()
-class CAPSTONEPROJECT_API ACharacterBase : public ACharacter, public ITakeWeaponInterface
+class CAPSTONEPROJECT_API ACharacterBase : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -123,8 +122,10 @@ private:
 	TObjectPtr<class UInputAction> LeftClickAction;
 
 	UPROPERTY(VisibleAnywhere, Category = "Input")
-	TObjectPtr<class UInputAction> ExchangeWeaponAction;
-
+	TObjectPtr<class UInputAction> NextWeaponAction; // X키
+	
+	UPROPERTY(VisibleAnywhere, Category = "Input")
+	TObjectPtr<class UInputAction> PrevWeaponAction; // Z키
 
 /* 마우스 우클릭을 통해 캐릭터 이동 기능을 실현하는 함수와 변수 */
 	void OnClickStart();	//Mouse Right Click Started
@@ -156,23 +157,17 @@ private:
 	TObjectPtr<class UAnimMontage> DefaultAttackMontage;
 
 /* 무기 교체 */
-	void OpenWeaponChoiceUI();
-	virtual void CloseWeaponChoiceUI() override;
-	virtual void TakeWeapon(EWeaponType WeaponType) override;
+	void NextWeapon();
+	void PrevWeapon();
 
 	void EquipSword();
 	void EquipBow();
 	void EquipStaff();
 
-	UPROPERTY(EditAnywhere, Category = "UI")
-	TSubclassOf<class UWeaponChoiceUI> WeaponChoiceUIClass;
-
-	UPROPERTY(EditAnywhere, Category = "UI")
-	TObjectPtr<class UWeaponChoiceUI> WeaponChoiceUIPtr;
-
 	UPROPERTY()
 	TArray<FTakeItemDelegateWrapper> TakeItemDelegateArray;
 
+	int32 WeaponIndex = 0;
 	
 /* 무기 데이터 섹션 */
 private:
