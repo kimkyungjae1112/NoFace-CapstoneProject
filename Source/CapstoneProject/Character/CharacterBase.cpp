@@ -18,6 +18,7 @@
 #include "Weapon/Bow.h"
 #include "Weapon/Staff.h"
 #include "UI/WeaponChoiceUI.h"
+#include "SkillHeader/SkillHeader.h"
 
 ACharacterBase::ACharacterBase()
 {
@@ -140,6 +141,12 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	EnhancedInputComponent->BindAction(NextWeaponAction, ETriggerEvent::Started, this, &ACharacterBase::NextWeapon);
 	EnhancedInputComponent->BindAction(PrevWeaponAction, ETriggerEvent::Started, this, &ACharacterBase::PrevWeapon);
 	
+}
+
+void ACharacterBase::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
 }
 
 float ACharacterBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

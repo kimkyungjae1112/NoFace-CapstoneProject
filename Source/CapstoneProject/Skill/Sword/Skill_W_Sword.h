@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Skill/Skill_W_Base.h"
+#include "Skill/SkillSword.h"
 #include "Skill_W_Sword.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CAPSTONEPROJECT_API USkill_W_Sword : public USkill_W_Base
+class CAPSTONEPROJECT_API USkill_W_Sword : public USkillSword
 {
 	GENERATED_BODY()
 	

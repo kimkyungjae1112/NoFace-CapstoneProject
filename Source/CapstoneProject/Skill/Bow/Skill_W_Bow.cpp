@@ -10,4 +10,6 @@ USkill_W_Bow::USkill_W_Bow()
 void USkill_W_Bow::ExecuteSkill()
 {
 	Super::ExecuteSkill();
+
+	UE_LOG(LogTemp, Display, TEXT("Bow Skill W"));
 }

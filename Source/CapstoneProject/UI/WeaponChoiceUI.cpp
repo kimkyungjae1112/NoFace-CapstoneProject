@@ -36,8 +36,7 @@ void UWeaponChoiceUI::OnClickButtonSword()
 	ITakeWeaponInterface* Interface = Cast<ITakeWeaponInterface>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	if (Interface)
 	{
-		Interface->TakeWeapon(EWeaponType::Sword);
-		Interface->CloseWeaponChoiceUI();
+	
 	}
 }
 
@@ -47,8 +46,7 @@ void UWeaponChoiceUI::OnClickButtonBow()
 	ITakeWeaponInterface* Interface = Cast<ITakeWeaponInterface>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	if (Interface)
 	{
-		Interface->TakeWeapon(EWeaponType::Bow);
-		Interface->CloseWeaponChoiceUI();
+
 	}
 }
 
@@ -58,8 +56,7 @@ void UWeaponChoiceUI::OnClickButtonStaff()
 	ITakeWeaponInterface* Interface = Cast<ITakeWeaponInterface>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	if (Interface)
 	{
-		Interface->TakeWeapon(EWeaponType::Staff);
-		Interface->CloseWeaponChoiceUI();
+		
 	}
 }
 

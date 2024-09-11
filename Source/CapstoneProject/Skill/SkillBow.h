@@ -4,18 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "Skill/SkillBase.h"
-#include "Skill_E_Base.generated.h"
+#include "SkillBow.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CAPSTONEPROJECT_API USkill_E_Base : public USkillBase
+class CAPSTONEPROJECT_API USkillBow : public USkillBase
 {
 	GENERATED_BODY()
-	
+
 public:
-	USkill_E_Base();
+	USkillBow();
 
 	virtual void ExecuteSkill() override;
+
+
 };

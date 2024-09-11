@@ -11,4 +11,5 @@ void USkill_Q_Sword::ExecuteSkill()
 {
 	Super::ExecuteSkill();
 
+	UE_LOG(LogTemp, Display, TEXT("Sword Skill Q"));
 }

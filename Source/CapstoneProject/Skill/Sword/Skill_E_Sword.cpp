@@ -10,4 +10,6 @@ USkill_E_Sword::USkill_E_Sword()
 void USkill_E_Sword::ExecuteSkill()
 {
 	Super::ExecuteSkill();
+
+	UE_LOG(LogTemp, Display, TEXT("Sword Skill E"));
 }

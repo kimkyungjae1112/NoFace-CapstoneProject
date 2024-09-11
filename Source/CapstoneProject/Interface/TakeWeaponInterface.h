@@ -6,14 +6,6 @@
 #include "UObject/Interface.h"
 #include "TakeWeaponInterface.generated.h"
 
-UENUM()
-enum class EWeaponType : uint8
-{
-	Sword = 0,
-	Bow,
-	Staff
-};
-
 UINTERFACE(MinimalAPI)
 class UTakeWeaponInterface : public UInterface
 {
@@ -28,6 +20,5 @@ class CAPSTONEPROJECT_API ITakeWeaponInterface
 	GENERATED_BODY()
 
 public:
-	virtual void TakeWeapon(EWeaponType WeaponType) = 0;
-	virtual void CloseWeaponChoiceUI() = 0;
+
 };

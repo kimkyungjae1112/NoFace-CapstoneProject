@@ -10,4 +10,6 @@ USkill_R_Staff::USkill_R_Staff()
 void USkill_R_Staff::ExecuteSkill()
 {
 	Super::ExecuteSkill();
+
+	UE_LOG(LogTemp, Display, TEXT("Staff Skill R"));
 }
