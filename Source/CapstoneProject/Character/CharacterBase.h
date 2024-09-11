@@ -139,7 +139,7 @@ private:
 	UPROPERTY()
 	TArray<FTakeItemDelegateWrapper> TakeItemDelegateArray;
 
-	int32 WeaponIndex = 0;
+	int32 WeaponIndex = 0;	//무기 인덱스
 	
 
 /* 무기 데이터 섹션 */
@@ -159,11 +159,19 @@ private:
 
 /* 스킬 섹션 */
 private:
-	UPROPERTY(VisibleAnywhere, Category = "Skill")
-	TMap<EWeaponType, class USkillBase*> SkillMap;
+	UPROPERTY()
+	TArray<TObjectPtr<class USkillBase>> SwordSkillArray;
 
+	UPROPERTY()
+	TArray<TObjectPtr<class USkillBase>> BowSkillArray;
+	
+	UPROPERTY()
+	TArray<TObjectPtr<class USkillBase>> StaffSkillArray;
 
-
+	//아니 UPROPERTY() 붙이면 왜 안되냐 
+	//가비지 콜렉션 충돌 뭐 이런건가
+	TMap<EWeaponType, TArray<TObjectPtr<class USkillBase>>> Skills;
+	
 
 /* 스텟 섹션 */
 private:

@@ -147,6 +147,24 @@ void ACharacterBase::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
+	CurrentWeaponType = EWeaponType::Sword;
+
+	SwordSkillArray.Add(NewObject<USkill_Q_Sword>(this));
+	SwordSkillArray.Add(NewObject<USkill_W_Sword>(this));
+	SwordSkillArray.Add(NewObject<USkill_E_Sword>(this));
+	SwordSkillArray.Add(NewObject<USkill_R_Sword>(this));
+	BowSkillArray.Add(NewObject<USkill_Q_Bow>(this));
+	BowSkillArray.Add(NewObject<USkill_W_Bow>(this));
+	BowSkillArray.Add(NewObject<USkill_E_Bow>(this));
+	BowSkillArray.Add(NewObject<USkill_R_Bow>(this));
+	StaffSkillArray.Add(NewObject<USkill_Q_Staff>(this));
+	StaffSkillArray.Add(NewObject<USkill_W_Staff>(this));
+	StaffSkillArray.Add(NewObject<USkill_E_Staff>(this));
+	StaffSkillArray.Add(NewObject<USkill_R_Staff>(this));
+
+	Skills.Add(EWeaponType::Sword, SwordSkillArray);
+	Skills.Add(EWeaponType::Bow, BowSkillArray);
+	Skills.Add(EWeaponType::Staff, StaffSkillArray);
 }
 
 float ACharacterBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -161,21 +179,25 @@ float ACharacterBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, 
 void ACharacterBase::Q_Skill()
 {
 	UE_LOG(LogTemp, Display, TEXT("Base Q Skill"));
+	Skills[CurrentWeaponType][0]->ExecuteSkill();
 }
 
 void ACharacterBase::W_Skill()
 {
 	UE_LOG(LogTemp, Display, TEXT("Base W Skill"));
+	Skills[CurrentWeaponType][1]->ExecuteSkill();
 }
 
 void ACharacterBase::E_Skill()
 {
 	UE_LOG(LogTemp, Display, TEXT("Base E Skill"));
+	Skills[CurrentWeaponType][2]->ExecuteSkill();
 }
 
 void ACharacterBase::R_Skill()
 {
 	UE_LOG(LogTemp, Display, TEXT("Base R Skill"));
+	Skills[CurrentWeaponType][3]->ExecuteSkill();
 }
 
 void ACharacterBase::OnClickStart()
@@ -319,6 +341,7 @@ void ACharacterBase::NextWeapon()
 	}
 
 	TakeItemDelegateArray[WeaponIndex].TakeItemDelegate.ExecuteIfBound();
+	CurrentWeaponType = static_cast<EWeaponType>(WeaponIndex);
 }
 
 void ACharacterBase::PrevWeapon()
@@ -330,6 +353,7 @@ void ACharacterBase::PrevWeapon()
 	}
 
 	TakeItemDelegateArray[WeaponIndex].TakeItemDelegate.ExecuteIfBound();
+	CurrentWeaponType = static_cast<EWeaponType>(WeaponIndex);
 }
 
 void ACharacterBase::EquipSword()
