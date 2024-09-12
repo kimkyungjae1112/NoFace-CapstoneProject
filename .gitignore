@@ -25,6 +25,7 @@
 /Content/ParagonAurora
 /Content/InfinityBladeWeapons
 /Content/SKnight_modular
+/Content/MRPGT
 
 # Allow any files from /RawContent dir.
 # Any file in /RawContent dir will be managed by git lfs.
