@@ -122,6 +122,8 @@ void ACharacterBase::BeginPlay()
 		Subsystem->AddMappingContext(InputMappingContext, 0);
 	}
 
+	//초반에 칼들고 시작
+	EquipSword();
 }
 
 void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
