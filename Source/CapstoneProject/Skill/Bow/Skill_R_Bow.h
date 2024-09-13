@@ -10,12 +10,12 @@
  * 
  */
 UCLASS()
-class CAPSTONEPROJECT_API USkill_R_Bow : public USkillBow
+class CAPSTONEPROJECT_API ASkill_R_Bow : public ASkillBow
 {
 	GENERATED_BODY()
 
 public:
-	USkill_R_Bow();
+	ASkill_R_Bow();
 
 	virtual void ExecuteSkill() override;
 	

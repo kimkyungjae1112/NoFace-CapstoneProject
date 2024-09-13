@@ -10,12 +10,12 @@
  * 
  */
 UCLASS()
-class CAPSTONEPROJECT_API USkillStaff : public USkillBase
+class CAPSTONEPROJECT_API ASkillStaff : public ASkillBase
 {
 	GENERATED_BODY()
 
 public:
-	USkillStaff();
+	ASkillStaff();
 
 	virtual void ExecuteSkill() override;
 	

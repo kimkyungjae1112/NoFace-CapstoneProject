@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
+#include "GameFramework/Actor.h"
 #include "SkillBase.generated.h"
 
 UENUM(BlueprintType)
@@ -19,7 +19,7 @@ enum class EShortcutkey : uint8
  * 
  */
 UCLASS()
-class CAPSTONEPROJECT_API USkillBase : public UObject
+class CAPSTONEPROJECT_API ASkillBase : public AActor
 {
 	GENERATED_BODY()
 
@@ -30,4 +30,6 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ShortcutKey")
 	EShortcutkey CurrentShortcutKey;
+
+
 };

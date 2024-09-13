@@ -10,12 +10,12 @@
  * 
  */
 UCLASS()
-class CAPSTONEPROJECT_API USkill_E_Sword : public USkillSword
+class CAPSTONEPROJECT_API ASkill_E_Sword : public ASkillSword
 {
 	GENERATED_BODY()
 
 public:
-	USkill_E_Sword();
+	ASkill_E_Sword();
 
 	virtual void ExecuteSkill() override;
 };

@@ -19,6 +19,7 @@
 #include "Weapon/Staff.h"
 #include "UI/WeaponChoiceUI.h"
 #include "SkillHeader/SkillHeader.h"
+#include "Skill/SkillComponent.h"
 
 ACharacterBase::ACharacterBase()
 {
@@ -91,7 +92,7 @@ ACharacterBase::ACharacterBase()
 	}
 	
 	/* Mesh */
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MainMeshRef(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequins/Meshes/SKM_Manny.SKM_Manny'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MainMeshRef(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequins/Meshes/SKM_Quinn.SKM_Quinn'"));
 	if (MainMeshRef.Object)
 	{
 		GetMesh()->SetSkeletalMesh(MainMeshRef.Object);
@@ -109,6 +110,9 @@ ACharacterBase::ACharacterBase()
 	TakeItemDelegateArray.Add(FTakeItemDelegateWrapper(FTakeItemDelegate::CreateUObject(this, &ACharacterBase::EquipSword)));
 	TakeItemDelegateArray.Add(FTakeItemDelegateWrapper(FTakeItemDelegate::CreateUObject(this, &ACharacterBase::EquipBow)));
 	TakeItemDelegateArray.Add(FTakeItemDelegateWrapper(FTakeItemDelegate::CreateUObject(this, &ACharacterBase::EquipStaff)));
+
+	/* 스킬 */
+	SkillComponent = CreateDefaultSubobject<USkillComponent>(TEXT("Skill"));
 	
 }
 
@@ -151,22 +155,23 @@ void ACharacterBase::PostInitializeComponents()
 
 	CurrentWeaponType = EWeaponType::Sword;
 
-	SwordSkillArray.Add(NewObject<USkill_Q_Sword>(this));
-	SwordSkillArray.Add(NewObject<USkill_W_Sword>(this));
-	SwordSkillArray.Add(NewObject<USkill_E_Sword>(this));
-	SwordSkillArray.Add(NewObject<USkill_R_Sword>(this));
-	BowSkillArray.Add(NewObject<USkill_Q_Bow>(this));
-	BowSkillArray.Add(NewObject<USkill_W_Bow>(this));
-	BowSkillArray.Add(NewObject<USkill_E_Bow>(this));
-	BowSkillArray.Add(NewObject<USkill_R_Bow>(this));
-	StaffSkillArray.Add(NewObject<USkill_Q_Staff>(this));
-	StaffSkillArray.Add(NewObject<USkill_W_Staff>(this));
-	StaffSkillArray.Add(NewObject<USkill_E_Staff>(this));
-	StaffSkillArray.Add(NewObject<USkill_R_Staff>(this));
+	SwordSkillArray.Add(NewObject<ASkill_Q_Sword>(this));
+	SwordSkillArray.Add(NewObject<ASkill_W_Sword>(this));
+	SwordSkillArray.Add(NewObject<ASkill_E_Sword>(this));
+	SwordSkillArray.Add(NewObject<ASkill_R_Sword>(this));
+	BowSkillArray.Add(NewObject<ASkill_Q_Bow>(this));
+	BowSkillArray.Add(NewObject<ASkill_W_Bow>(this));
+	BowSkillArray.Add(NewObject<ASkill_E_Bow>(this));
+	BowSkillArray.Add(NewObject<ASkill_R_Bow>(this));
+	StaffSkillArray.Add(NewObject<ASkill_Q_Staff>(this));
+	StaffSkillArray.Add(NewObject<ASkill_W_Staff>(this));
+	StaffSkillArray.Add(NewObject<ASkill_E_Staff>(this));
+	StaffSkillArray.Add(NewObject<ASkill_R_Staff>(this));
 
 	Skills.Add(EWeaponType::Sword, SwordSkillArray);
 	Skills.Add(EWeaponType::Bow, BowSkillArray);
 	Skills.Add(EWeaponType::Staff, StaffSkillArray);
+
 }
 
 float ACharacterBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -182,6 +187,7 @@ void ACharacterBase::Q_Skill()
 {
 	UE_LOG(LogTemp, Display, TEXT("Base Q Skill"));
 	Skills[CurrentWeaponType][0]->ExecuteSkill();
+	SkillComponent->BeginStingMontage();
 }
 
 void ACharacterBase::W_Skill()

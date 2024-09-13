@@ -3,11 +3,11 @@
 
 #include "Skill/SkillSword.h"
 
-USkillSword::USkillSword()
+ASkillSword::ASkillSword()
 {
 }
 
-void USkillSword::ExecuteSkill()
+void ASkillSword::ExecuteSkill()
 {
 	Super::ExecuteSkill();
 }

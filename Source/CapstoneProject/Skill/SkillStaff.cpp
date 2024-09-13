@@ -3,11 +3,11 @@
 
 #include "Skill/SkillStaff.h"
 
-USkillStaff::USkillStaff()
+ASkillStaff::ASkillStaff()
 {
 }
 
-void USkillStaff::ExecuteSkill()
+void ASkillStaff::ExecuteSkill()
 {
 	Super::ExecuteSkill();
 }

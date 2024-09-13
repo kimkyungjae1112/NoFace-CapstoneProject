@@ -3,6 +3,6 @@
 
 #include "Skill/SkillBase.h"
 
-void USkillBase::ExecuteSkill()
+void ASkillBase::ExecuteSkill()
 {
 }

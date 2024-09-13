@@ -3,11 +3,11 @@
 
 #include "Skill/Bow/Skill_E_Bow.h"
 
-USkill_E_Bow::USkill_E_Bow()
+ASkill_E_Bow::ASkill_E_Bow()
 {
 }
 
-void USkill_E_Bow::ExecuteSkill()
+void ASkill_E_Bow::ExecuteSkill()
 {
 	Super::ExecuteSkill();
 

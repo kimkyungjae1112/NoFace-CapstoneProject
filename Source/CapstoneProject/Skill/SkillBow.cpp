@@ -3,11 +3,11 @@
 
 #include "Skill/SkillBow.h"
 
-USkillBow::USkillBow()
+ASkillBow::ASkillBow()
 {
 }
 
-void USkillBow::ExecuteSkill()
+void ASkillBow::ExecuteSkill()
 {
 	Super::ExecuteSkill();
 }
