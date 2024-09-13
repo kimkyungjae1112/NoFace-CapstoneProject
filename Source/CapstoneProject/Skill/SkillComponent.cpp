@@ -6,6 +6,7 @@
 #include "Animation/AnimMontage.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Character/CharacterSkillMontageData.h"
 
 USkillComponent::USkillComponent()
 {
@@ -21,17 +22,22 @@ void USkillComponent::BeginPlay()
 	
 }
 
-void USkillComponent::BeginStingMontage()
+void USkillComponent::PlaySkill(int32 Index)
+{
+	BeginStingMontage(Index);
+}
+
+void USkillComponent::BeginStingMontage(int32 Index)
 {
 	ACharacter* Character = Cast<ACharacter>(GetOwner());
 	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
-	AnimInstance->Montage_Play(SwordStingMontage);
+	AnimInstance->Montage_Play(SkillMontageData->SwordMontages[Index]);
 
 	FOnMontageEnded MontageEnd;
 	MontageEnd.BindUObject(this, &USkillComponent::EndStingMontage);
-	AnimInstance->Montage_SetEndDelegate(MontageEnd, SwordStingMontage);
+	AnimInstance->Montage_SetEndDelegate(MontageEnd, SkillMontageData->SwordMontages[Index]);
 }
 
 void USkillComponent::EndStingMontage(UAnimMontage* Target, bool IsProperlyEnded)

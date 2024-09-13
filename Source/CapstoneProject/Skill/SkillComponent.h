@@ -19,13 +19,17 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	void BeginStingMontage();
-
+	void PlaySkill(int32 Index);
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Montage")
 	TObjectPtr<class UAnimMontage> SwordStingMontage;
 
+	void BeginStingMontage(int32 Index);
+
 	void EndStingMontage(class UAnimMontage* Target, bool IsProperlyEnded);
+
+	UPROPERTY(EditAnywhere, Category = "Montage")
+	TObjectPtr<class UCharacterSkillMontageData> SkillMontageData;
 		
 };

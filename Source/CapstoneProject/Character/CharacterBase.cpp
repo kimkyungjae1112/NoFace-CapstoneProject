@@ -185,26 +185,26 @@ float ACharacterBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, 
 
 void ACharacterBase::Q_Skill()
 {
-	UE_LOG(LogTemp, Display, TEXT("Base Q Skill"));
+	RotateToTarget();
 	Skills[CurrentWeaponType][0]->ExecuteSkill();
-	SkillComponent->BeginStingMontage();
+	SkillComponent->PlaySkill(0);
 }
 
 void ACharacterBase::W_Skill()
 {
-	UE_LOG(LogTemp, Display, TEXT("Base W Skill"));
+	RotateToTarget();
 	Skills[CurrentWeaponType][1]->ExecuteSkill();
 }
 
 void ACharacterBase::E_Skill()
 {
-	UE_LOG(LogTemp, Display, TEXT("Base E Skill"));
+	RotateToTarget();
 	Skills[CurrentWeaponType][2]->ExecuteSkill();
 }
 
 void ACharacterBase::R_Skill()
 {
-	UE_LOG(LogTemp, Display, TEXT("Base R Skill"));
+	RotateToTarget();
 	Skills[CurrentWeaponType][3]->ExecuteSkill();
 }
 
@@ -330,7 +330,10 @@ void ACharacterBase::RotateToTarget()
 
 void ACharacterBase::UpdateRotate()
 {
-	FRotator TargetRotation = (AttackHitResult.Location - GetActorLocation()).Rotation();
+	FHitResult TargetHitResult;
+	bool bHit = GetPlayerController()->GetHitResultUnderCursor(ECC_Visibility, true, TargetHitResult);
+
+	FRotator TargetRotation = (TargetHitResult.Location - GetActorLocation()).Rotation();
 	TargetRotation.Pitch = 0;
 	SetActorRelativeRotation(FMath::RInterpTo(GetActorRotation(), TargetRotation, GetWorld()->GetDeltaSeconds(), 15.0f));
 
