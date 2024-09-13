@@ -176,6 +176,10 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Skill")
 	TObjectPtr<class USkillComponent> SkillComponent;
 
+	UPROPERTY(EditAnywhere, Category = "Skill")
+	TObjectPtr<class USkillHitCheckComponent> SkillHitCheckComponent;
+
+
 /* 스텟 섹션 */
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Stat")
