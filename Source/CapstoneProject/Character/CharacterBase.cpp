@@ -187,25 +187,28 @@ void ACharacterBase::Q_Skill()
 {
 	RotateToTarget();
 	Skills[CurrentWeaponType][0]->ExecuteSkill();
-	SkillComponent->PlaySkill(0);
+	SkillComponent->PlaySkill_Q();
 }
 
 void ACharacterBase::W_Skill()
 {
 	RotateToTarget();
 	Skills[CurrentWeaponType][1]->ExecuteSkill();
+	SkillComponent->PlaySkill_W();
 }
 
 void ACharacterBase::E_Skill()
 {
 	RotateToTarget();
 	Skills[CurrentWeaponType][2]->ExecuteSkill();
+	SkillComponent->PlaySkill_E();
 }
 
 void ACharacterBase::R_Skill()
 {
 	RotateToTarget();
 	Skills[CurrentWeaponType][3]->ExecuteSkill();
+	SkillComponent->PlaySkill_R();
 }
 
 void ACharacterBase::OnClickStart()
@@ -351,6 +354,7 @@ void ACharacterBase::NextWeapon()
 		WeaponIndex = 0;
 	}
 
+	SkillComponent->SetWeaponType(WeaponIndex);
 	TakeItemDelegateArray[WeaponIndex].TakeItemDelegate.ExecuteIfBound();
 	CurrentWeaponType = static_cast<EWeaponType>(WeaponIndex);
 }
@@ -363,6 +367,7 @@ void ACharacterBase::PrevWeapon()
 		WeaponIndex = 2;
 	}
 
+	SkillComponent->SetWeaponType(WeaponIndex);
 	TakeItemDelegateArray[WeaponIndex].TakeItemDelegate.ExecuteIfBound();
 	CurrentWeaponType = static_cast<EWeaponType>(WeaponIndex);
 }

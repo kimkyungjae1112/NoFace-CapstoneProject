@@ -46,6 +46,7 @@ public:
 
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
+/* Getter */
 
 /* 스킬 섹션 */
 protected:

@@ -4,7 +4,6 @@
 #include "UI/WeaponChoiceUI.h"
 #include "Components/Button.h"
 #include "Player/CPlayerController.h"
-#include "Interface/TakeWeaponInterface.h"
 
 UWeaponChoiceUI::UWeaponChoiceUI(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -32,31 +31,13 @@ void UWeaponChoiceUI::NativeConstruct()
 
 void UWeaponChoiceUI::OnClickButtonSword()
 {
-	UE_LOG(LogTemp, Display, TEXT("ClickButton Sword"));
-	ITakeWeaponInterface* Interface = Cast<ITakeWeaponInterface>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	if (Interface)
-	{
-	
-	}
 }
 
 void UWeaponChoiceUI::OnClickButtonBow()
 {
-	UE_LOG(LogTemp, Display, TEXT("ClickButton Bow"));
-	ITakeWeaponInterface* Interface = Cast<ITakeWeaponInterface>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	if (Interface)
-	{
-
-	}
 }
 
 void UWeaponChoiceUI::OnClickButtonStaff()
 {
-	UE_LOG(LogTemp, Display, TEXT("ClickButton Staff"));
-	ITakeWeaponInterface* Interface = Cast<ITakeWeaponInterface>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	if (Interface)
-	{
-		
-	}
 }
 
