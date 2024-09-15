@@ -186,6 +186,7 @@ float ACharacterBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, 
 void ACharacterBase::Q_Skill()
 {
 	RotateToTarget();
+	OnClickStart();
 	Skills[CurrentWeaponType][0]->ExecuteSkill();
 	SkillComponent->PlaySkill_Q();
 }
@@ -193,6 +194,7 @@ void ACharacterBase::Q_Skill()
 void ACharacterBase::W_Skill()
 {
 	RotateToTarget();
+	OnClickStart();
 	Skills[CurrentWeaponType][1]->ExecuteSkill();
 	SkillComponent->PlaySkill_W();
 }
@@ -200,6 +202,7 @@ void ACharacterBase::W_Skill()
 void ACharacterBase::E_Skill()
 {
 	RotateToTarget();
+	OnClickStart();
 	Skills[CurrentWeaponType][2]->ExecuteSkill();
 	SkillComponent->PlaySkill_E();
 }
@@ -207,6 +210,7 @@ void ACharacterBase::E_Skill()
 void ACharacterBase::R_Skill()
 {
 	RotateToTarget();
+	OnClickStart();
 	Skills[CurrentWeaponType][3]->ExecuteSkill();
 	SkillComponent->PlaySkill_R();
 }

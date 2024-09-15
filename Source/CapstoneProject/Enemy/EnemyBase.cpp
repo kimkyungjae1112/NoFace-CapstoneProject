@@ -8,13 +8,7 @@
 
 AEnemyBase::AEnemyBase()
 {
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MainMeshRef(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequins/Meshes/SKM_Manny.SKM_Manny'"));
-	if (MainMeshRef.Object)
-	{
-		GetMesh()->SetSkeletalMesh(MainMeshRef.Object);
-	}
-
-	GetMesh()->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
+	
 }
 
 void AEnemyBase::BeginPlay()
@@ -51,28 +45,9 @@ void AEnemyBase::SetMonsterAttackDelegate(FMonsterAttackFinished InMonsterAttack
 void AEnemyBase::AttackByAI()
 {
 	UE_LOG(LogTemp, Display, TEXT("몬스터 공격"));
-	BeginAttack();
+
 }
 
-void AEnemyBase::BeginAttack()
-{
-	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-
-	AAIControllerBase* AIController = Cast<AAIControllerBase>(GetController());
-	AIController->StopAI();
-	AnimInstance->Montage_Play(AttackMontage);
-
-
-	FOnMontageEnded MontageEnd;
-	MontageEnd.BindUObject(this, &AEnemyBase::EndAttack);
-	AnimInstance->Montage_SetEndDelegate(MontageEnd, AttackMontage);
-}
-
-void AEnemyBase::EndAttack(class UAnimMontage* Target, bool IsProperlyEnded)
-{
-	AAIControllerBase* AIController = Cast<AAIControllerBase>(GetController());
-	AIController->RunAI();
-}
 
 
 

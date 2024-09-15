@@ -29,12 +29,4 @@ public:
 	virtual void SetMonsterAttackDelegate(FMonsterAttackFinished InMonsterAttackFinished) override;
 	virtual void AttackByAI() override;
 
-
-/* 임시로 만든 공격 코드 차후 수정 예정 */
-private:
-	void BeginAttack();
-	void EndAttack(class UAnimMontage* Target, bool IsProperlyEnded);
-
-	UPROPERTY(EditAnywhere, Category = "Montage")
-	TObjectPtr<class UAnimMontage> AttackMontage;
 };
