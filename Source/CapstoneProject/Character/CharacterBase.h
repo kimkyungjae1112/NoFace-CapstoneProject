@@ -164,7 +164,7 @@ private:
 	TObjectPtr<class USkillComponent> SkillComponent;
 
 	UPROPERTY(EditAnywhere, Category = "Skill")
-	TObjectPtr<class USkillHitCheckComponent> SkillHitCheckComponent;
+	TObjectPtr<class UCharacterHitCheckComponent> HitCheckComponent;
 
 
 /* 스텟 섹션 */

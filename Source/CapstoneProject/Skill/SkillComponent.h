@@ -19,6 +19,8 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+	FORCEINLINE void SetHitCheckComponent(class UCharacterHitCheckComponent* InHitCheckComponent) { HitCheckComponent = InHitCheckComponent; }
+
 	void PlaySkill_Q();
 	void PlaySkill_W();
 	void PlaySkill_E();
@@ -64,4 +66,8 @@ private:
 	TObjectPtr<class ACharacter> Character;
 	
 	int32 CurrentWeaponType = 0;
+
+private:
+	UPROPERTY(VisibleAnywhere, Category = "Hit Check")
+	TObjectPtr<class UCharacterHitCheckComponent> HitCheckComponent;
 };

@@ -19,6 +19,7 @@
 #include "Weapon/Staff.h"
 #include "UI/WeaponChoiceUI.h"
 #include "Skill/SkillComponent.h"
+#include "Character/CharacterHitCheckComponent.h"
 
 ACharacterBase::ACharacterBase()
 {
@@ -112,7 +113,7 @@ ACharacterBase::ACharacterBase()
 
 	/* 스킬 */
 	SkillComponent = CreateDefaultSubobject<USkillComponent>(TEXT("Skill"));
-	
+	HitCheckComponent = CreateDefaultSubobject<UCharacterHitCheckComponent>(TEXT("Hit Checker"));
 }
 
 void ACharacterBase::BeginPlay()
@@ -125,8 +126,6 @@ void ACharacterBase::BeginPlay()
 		Subsystem->AddMappingContext(InputMappingContext, 0);
 	}
 
-	//초반에 칼들고 시작
-	EquipSword();
 }
 
 void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -152,8 +151,11 @@ void ACharacterBase::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
+	//초반에 칼들고 시작
+	EquipSword();
 	CurrentWeaponType = EWeaponType::Sword;
 
+	SkillComponent->SetHitCheckComponent(HitCheckComponent);
 }
 
 float ACharacterBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
