@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Character/CharacterSkillMontageData.h"
+#include "Kismet/GameplayStatics.h"
 
 USkillComponent::USkillComponent()
 {
@@ -105,7 +106,7 @@ void USkillComponent::BeginSwordSting()
 	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
-	AnimInstance->Montage_Play(SkillMontageData->SwordMontages[0]);
+	AnimInstance->Montage_Play(SkillMontageData->SwordMontages[0], 1.0f);
 
 	FOnMontageEnded MontageEnd;
 	MontageEnd.BindUObject(this, &USkillComponent::EndSwordSting);
@@ -122,7 +123,7 @@ void USkillComponent::BeginSwordWhirlwind()
 	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
-	AnimInstance->Montage_Play(SkillMontageData->SwordMontages[1]);
+	AnimInstance->Montage_Play(SkillMontageData->SwordMontages[1], 1.0f);
 
 	FOnMontageEnded MontageEnd;
 	MontageEnd.BindUObject(this, &USkillComponent::EndSwordWhirlwind);
@@ -139,7 +140,7 @@ void USkillComponent::BeginSwordParrying()
 	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
-	AnimInstance->Montage_Play(SkillMontageData->SwordMontages[2]);
+	AnimInstance->Montage_Play(SkillMontageData->SwordMontages[2], 1.0f);
 
 	FOnMontageEnded MontageEnd;
 	MontageEnd.BindUObject(this, &USkillComponent::EndSwordParrying);
