@@ -19,6 +19,7 @@ AEnemyTest::AEnemyTest()
 
 	/* 스텟 컴포넌트 초기화 */
 	Stat = CreateDefaultSubobject<UCharacterStatComponent>(TEXT("Stat"));
+	Stat->OnHpZero.AddUObject(this, &AEnemyTest::SetDead);
 }
 
 void AEnemyTest::AttackByAI()
@@ -59,4 +60,18 @@ void AEnemyTest::BeingHitAction()
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 
 	AnimInstance->Montage_Play(HitMontage);
+
+	//피격 위치 및 피격 대미지, 무기 종류에 따라 다른 Hit 애니메이션이 나오는 것을 목표.
+}
+
+void AEnemyTest::SetDead()
+{
+	AAIControllerBase* AIController = Cast<AAIControllerBase>(GetController());
+	if (AIController)
+	{
+		AIController->StopAI();
+	}
+
+	SetActorEnableCollision(false);
+
 }

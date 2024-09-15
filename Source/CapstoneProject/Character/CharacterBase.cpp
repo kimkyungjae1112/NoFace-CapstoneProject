@@ -18,7 +18,6 @@
 #include "Weapon/Bow.h"
 #include "Weapon/Staff.h"
 #include "UI/WeaponChoiceUI.h"
-#include "SkillHeader/SkillHeader.h"
 #include "Skill/SkillComponent.h"
 
 ACharacterBase::ACharacterBase()
@@ -155,23 +154,6 @@ void ACharacterBase::PostInitializeComponents()
 
 	CurrentWeaponType = EWeaponType::Sword;
 
-	SwordSkillArray.Add(NewObject<ASkill_Q_Sword>(this));
-	SwordSkillArray.Add(NewObject<ASkill_W_Sword>(this));
-	SwordSkillArray.Add(NewObject<ASkill_E_Sword>(this));
-	SwordSkillArray.Add(NewObject<ASkill_R_Sword>(this));
-	BowSkillArray.Add(NewObject<ASkill_Q_Bow>(this));
-	BowSkillArray.Add(NewObject<ASkill_W_Bow>(this));
-	BowSkillArray.Add(NewObject<ASkill_E_Bow>(this));
-	BowSkillArray.Add(NewObject<ASkill_R_Bow>(this));
-	StaffSkillArray.Add(NewObject<ASkill_Q_Staff>(this));
-	StaffSkillArray.Add(NewObject<ASkill_W_Staff>(this));
-	StaffSkillArray.Add(NewObject<ASkill_E_Staff>(this));
-	StaffSkillArray.Add(NewObject<ASkill_R_Staff>(this));
-
-	Skills.Add(EWeaponType::Sword, SwordSkillArray);
-	Skills.Add(EWeaponType::Bow, BowSkillArray);
-	Skills.Add(EWeaponType::Staff, StaffSkillArray);
-
 }
 
 float ACharacterBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -187,7 +169,6 @@ void ACharacterBase::Q_Skill()
 {
 	RotateToTarget();
 	OnClickStart();
-	Skills[CurrentWeaponType][0]->ExecuteSkill();
 	SkillComponent->PlaySkill_Q();
 }
 
@@ -195,7 +176,6 @@ void ACharacterBase::W_Skill()
 {
 	RotateToTarget();
 	OnClickStart();
-	Skills[CurrentWeaponType][1]->ExecuteSkill();
 	SkillComponent->PlaySkill_W();
 }
 
@@ -203,7 +183,6 @@ void ACharacterBase::E_Skill()
 {
 	RotateToTarget();
 	OnClickStart();
-	Skills[CurrentWeaponType][2]->ExecuteSkill();
 	SkillComponent->PlaySkill_E();
 }
 
@@ -211,7 +190,6 @@ void ACharacterBase::R_Skill()
 {
 	RotateToTarget();
 	OnClickStart();
-	Skills[CurrentWeaponType][3]->ExecuteSkill();
 	SkillComponent->PlaySkill_R();
 }
 

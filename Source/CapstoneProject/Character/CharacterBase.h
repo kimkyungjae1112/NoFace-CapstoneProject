@@ -160,19 +160,6 @@ private:
 
 /* 스킬 섹션 */
 private:
-	UPROPERTY()
-	TArray<TObjectPtr<class ASkillBase>> SwordSkillArray;
-
-	UPROPERTY()
-	TArray<TObjectPtr<class ASkillBase>> BowSkillArray;
-	
-	UPROPERTY()
-	TArray<TObjectPtr<class ASkillBase>> StaffSkillArray;
-
-	//아니 UPROPERTY() 붙이면 왜 안되냐 
-	//가비지 콜렉션 충돌 뭐 이런건가
-	TMap<EWeaponType, TArray<TObjectPtr<class ASkillBase>>> Skills;
-	
 	UPROPERTY(EditAnywhere, Category = "Skill")
 	TObjectPtr<class USkillComponent> SkillComponent;
 

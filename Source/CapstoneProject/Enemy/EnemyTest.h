@@ -26,6 +26,8 @@ private:
 	
 	void BeingHitAction();
 
+	void SetDead();
+
 /* 몽타주 섹션 */
 private:
 	UPROPERTY(EditAnywhere, Category = "Montage")
