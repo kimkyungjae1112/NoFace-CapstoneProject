@@ -37,7 +37,16 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Stat")
 	TObjectPtr<class UCharacterDataStat> DataStat;
 
+	UPROPERTY(EditAnywhere, Category = "Stat")
 	float CurrentHp;
+
+	UPROPERTY(EditAnywhere, Category = "Stat")
 	float CurrentMp;
+
+	UPROPERTY(EditAnywhere, Category = "Stat")
 	float CurrentDamage;
+
+	UPROPERTY(EditAnywhere, Category = "Stat")
+	float CurrentRange;
+
 };

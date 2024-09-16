@@ -18,6 +18,7 @@ UCharacterStatComponent::UCharacterStatComponent()
 	CurrentHp = DataStat->Hp;
 	CurrentMp = DataStat->Mp;
 	CurrentDamage = DataStat->Damage;
+	CurrentRange = DataStat->Range;
 }
 
 
