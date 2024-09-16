@@ -19,13 +19,17 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+/* 유틸리티 */
 public:
 	void SetWeaponType(int32& InCurrentWeaponType);
 
+
+/* 검 히트 체크 */
+public:
 	virtual void SwordDefaultAttackHitCheck() override;
+	virtual void Sword_Q_SkillHitCheck() override;
 
-
-
+/* 검 히트 체크 */
 private:
 	bool SwordDefaultAttackRadialRange(AActor* Player, AActor* Target, float Radius, float RadialAngle);
 	void SwordDefaultAttackHitDebug(UWorld* World, const FVector& Start, const FVector& ForwardVector, const float AttackRange, const FColor& Color);

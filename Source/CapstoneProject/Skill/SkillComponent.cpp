@@ -8,6 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Character/CharacterSkillMontageData.h"
 #include "Kismet/GameplayStatics.h"
+#include "Character/CharacterHitCheckComponent.h"
 
 USkillComponent::USkillComponent()
 {
