@@ -27,7 +27,7 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 		return EBTNodeResult::Failed;
 	}
 
-	FMonsterAttackFinished MonsterAttackFinished;
+	FEnemyAttackFinished MonsterAttackFinished;
 	MonsterAttackFinished.BindLambda(
 		[&]()
 		{

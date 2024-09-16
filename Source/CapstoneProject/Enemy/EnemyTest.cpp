@@ -6,6 +6,7 @@
 #include "Animation/AnimInstance.h"
 #include "Animation/AnimMontage.h"
 #include "Stat/CharacterStatComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 AEnemyTest::AEnemyTest()
 {
@@ -39,20 +40,24 @@ float AEnemyTest::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACon
 void AEnemyTest::BeginAttack()
 {
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-
 	AAIControllerBase* AIController = Cast<AAIControllerBase>(GetController());
-	AIController->StopAI();
-	AnimInstance->Montage_Play(AttackMontage);
+	
+	if (AnimInstance && AIController)
+	{
+		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+		AnimInstance->Montage_Play(AttackMontage);
 
-	FOnMontageEnded MontageEnd;
-	MontageEnd.BindUObject(this, &AEnemyTest::EndAttack);
-	AnimInstance->Montage_SetEndDelegate(MontageEnd, AttackMontage);
+		FOnMontageEnded MontageEnd;
+		MontageEnd.BindUObject(this, &AEnemyTest::EndAttack);
+		AnimInstance->Montage_SetEndDelegate(MontageEnd, AttackMontage);
+	}
 }
 
 void AEnemyTest::EndAttack(UAnimMontage* Target, bool IsProperlyEnded)
 {
-	AAIControllerBase* AIController = Cast<AAIControllerBase>(GetController());
-	AIController->RunAI();
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+
+	EnemyAttackFinished.ExecuteIfBound();
 }
 
 void AEnemyTest::BeingHitAction()
@@ -67,11 +72,13 @@ void AEnemyTest::BeingHitAction()
 void AEnemyTest::SetDead()
 {
 	AAIControllerBase* AIController = Cast<AAIControllerBase>(GetController());
-	if (AIController)
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AIController && AnimInstance)
 	{
 		AIController->StopAI();
+
+		AnimInstance->StopAllMontages(1.0f);
+		AnimInstance->Montage_Play(DeadMontage);
+		SetActorEnableCollision(false);
 	}
-
-	SetActorEnableCollision(false);
-
 }

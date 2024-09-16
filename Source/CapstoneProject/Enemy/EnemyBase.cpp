@@ -37,9 +37,9 @@ float AEnemyBase::GetTurnSpeed()
 	return 10.0f;
 }
 
-void AEnemyBase::SetMonsterAttackDelegate(FMonsterAttackFinished InMonsterAttackFinished)
+void AEnemyBase::SetMonsterAttackDelegate(FEnemyAttackFinished InMonsterAttackFinished)
 {
-	MonsterAttackFinished = InMonsterAttackFinished;
+	EnemyAttackFinished = InMonsterAttackFinished;
 }
 
 void AEnemyBase::AttackByAI()

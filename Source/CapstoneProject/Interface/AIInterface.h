@@ -6,7 +6,7 @@
 #include "UObject/Interface.h"
 #include "AIInterface.generated.h"
 
-DECLARE_DELEGATE(FMonsterAttackFinished)
+DECLARE_DELEGATE(FEnemyAttackFinished)
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
@@ -28,6 +28,6 @@ public:
 	virtual float GetAttackInRange() = 0;
 	virtual float GetTurnSpeed() = 0;
 
-	virtual void SetMonsterAttackDelegate(FMonsterAttackFinished InMonsterAttackFinished) = 0;
+	virtual void SetMonsterAttackDelegate(FEnemyAttackFinished InEnemyAttackFinished) = 0;
 	virtual void AttackByAI() = 0;
 };

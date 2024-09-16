@@ -88,7 +88,7 @@ void UCharacterHitCheckComponent::Sword_Q_SkillHitCheck()
 
 	DrawDebugCapsule(GetWorld(),
 		(Origin + End) * 0.5f,  
-		CapsuleExtend.X * 0.5f,
+		(End - Origin).Size() * 0.5f,
 		CapsuleExtend.Y,        
 		FRotationMatrix::MakeFromZ(Owner->GetActorForwardVector()).ToQuat(),
 		Color,

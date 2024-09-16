@@ -19,14 +19,14 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	FMonsterAttackFinished MonsterAttackFinished;
+	FEnemyAttackFinished EnemyAttackFinished;
 	
 	virtual float GetPatrolRadius() override;
 	virtual float GetDetectRadius() override;
 	virtual float GetAttackInRange() override;
 	virtual float GetTurnSpeed() override;
 
-	virtual void SetMonsterAttackDelegate(FMonsterAttackFinished InMonsterAttackFinished) override;
+	virtual void SetMonsterAttackDelegate(FEnemyAttackFinished InEnemyAttackFinished) override;
 	virtual void AttackByAI() override;
 
 };

@@ -36,6 +36,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Montage")
 	TObjectPtr<class UAnimMontage> HitMontage;
 
+	UPROPERTY(EditAnywhere, Category = "Montage")
+	TObjectPtr<class UAnimMontage> DeadMontage;
+
 /* 스텟 섹션 */
 private:
 	UPROPERTY(EditAnywhere, Category = "Stat")
