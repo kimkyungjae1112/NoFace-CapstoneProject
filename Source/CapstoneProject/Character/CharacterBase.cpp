@@ -113,6 +113,8 @@ ACharacterBase::ACharacterBase()
 
 	/* 스킬 */
 	SkillComponent = CreateDefaultSubobject<USkillComponent>(TEXT("Skill"));
+	SkillComponent->ParryingSign.BindUObject(this, &ACharacterBase::ToggleParrying);
+
 	HitCheckComponent = CreateDefaultSubobject<UCharacterHitCheckComponent>(TEXT("Hit Checker"));
 }
 
@@ -162,9 +164,15 @@ float ACharacterBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, 
 {
 	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 	
+	if (bIsParrying)
+	{
+		SkillComponent->ParryingSuccess(DamageCauser);
+		return 0.f;
+	}
+
 	Stat->ApplyDamage(Damage);
 
-	return 0.0f;
+	return Damage;
 }
 
 void ACharacterBase::Q_Skill()
@@ -402,6 +410,12 @@ void ACharacterBase::EquipStaff()
 
 	WeaponBase = GetWorld()->SpawnActor<AStaff>(StaffClass, SpawnLocation, SpawnRotation);
 	WeaponBase->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("hand_rSocket"));
+}
+
+void ACharacterBase::ToggleParrying()
+{
+	if (bIsParrying == false) bIsParrying = true;
+	else bIsParrying = false;
 }
 
 ACPlayerController* ACharacterBase::GetPlayerController() const

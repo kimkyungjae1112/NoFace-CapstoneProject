@@ -18,6 +18,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+/* AI 인터페이스 구현 섹션 */
 public:
 	FEnemyAttackFinished EnemyAttackFinished;
 	
@@ -28,5 +29,9 @@ public:
 
 	virtual void SetMonsterAttackDelegate(FEnemyAttackFinished InEnemyAttackFinished) override;
 	virtual void AttackByAI() override;
+	virtual void DefaultAttackHitCheck() override;
+
+public:
+	void Stun();
 
 };

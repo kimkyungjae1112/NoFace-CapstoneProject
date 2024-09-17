@@ -30,4 +30,5 @@ public:
 
 	virtual void SetMonsterAttackDelegate(FEnemyAttackFinished InEnemyAttackFinished) = 0;
 	virtual void AttackByAI() = 0;
+	virtual void DefaultAttackHitCheck() = 0;
 };

@@ -7,6 +7,8 @@
 #include "Animation/AnimMontage.h"
 #include "Stat/CharacterStatComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Engine/OverlapResult.h"
+#include "Engine/DamageEvents.h"
 
 AEnemyTest::AEnemyTest()
 {
@@ -35,6 +37,30 @@ float AEnemyTest::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACon
 	Stat->ApplyDamage(Damage);
 	BeingHitAction();
 	return 0.0f;
+}
+
+void AEnemyTest::DefaultAttackHitCheck()
+{
+	float Damage = 50.f;
+	float Range = 200.f;
+
+	FColor Color(FColor::Red);
+	FVector Origin = GetActorLocation();
+	FCollisionQueryParams Params(NAME_None, true, this);
+	TArray<FOverlapResult> OverlapResults;
+
+	bool bHit = GetWorld()->OverlapMultiByChannel(OverlapResults, Origin, FQuat::Identity, ECC_GameTraceChannel1, FCollisionShape::MakeSphere(Range / 2.f), Params);
+	if (bHit)
+	{
+		FDamageEvent DamageEvent;
+		for (const auto& OverlapResult : OverlapResults)
+		{
+			OverlapResult.GetActor()->TakeDamage(50.f, DamageEvent, GetController(), this);
+			Color = FColor::Green;
+		}
+	}
+
+	DrawDebugSphere(GetWorld(), Origin, Range / 2.f, 16, Color, false, 3.f);
 }
 
 void AEnemyTest::BeginAttack()

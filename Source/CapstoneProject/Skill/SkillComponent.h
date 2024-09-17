@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "SkillComponent.generated.h"
 
+DECLARE_DELEGATE(FParryingSign)
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class CAPSTONEPROJECT_API USkillComponent : public UActorComponent
@@ -20,6 +21,9 @@ protected:
 
 public:
 	FORCEINLINE void SetHitCheckComponent(class UCharacterHitCheckComponent* InHitCheckComponent) { HitCheckComponent = InHitCheckComponent; }
+
+	FParryingSign ParryingSign;
+	void ParryingSuccess(AActor* Attacker);
 
 	void PlaySkill_Q();
 	void PlaySkill_W();

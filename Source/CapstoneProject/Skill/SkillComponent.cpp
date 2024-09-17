@@ -9,6 +9,7 @@
 #include "Character/CharacterSkillMontageData.h"
 #include "Kismet/GameplayStatics.h"
 #include "Character/CharacterHitCheckComponent.h"
+#include "Enemy/EnemyBase.h"
 
 USkillComponent::USkillComponent()
 {
@@ -142,6 +143,7 @@ void USkillComponent::BeginSwordParrying()
 
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 	AnimInstance->Montage_Play(SkillMontageData->SwordMontages[2], 1.0f);
+	ParryingSign.ExecuteIfBound();
 
 	FOnMontageEnded MontageEnd;
 	MontageEnd.BindUObject(this, &USkillComponent::EndSwordParrying);
@@ -151,6 +153,16 @@ void USkillComponent::BeginSwordParrying()
 void USkillComponent::EndSwordParrying(UAnimMontage* Target, bool IsProperlyEnded)
 {
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+	ParryingSign.ExecuteIfBound();
+}
+
+void USkillComponent::ParryingSuccess(AActor* Attacker)
+{
+	if (AEnemyBase* Enemy = Cast<AEnemyBase>(Attacker))
+	{
+		Enemy->Stun();
+		//반격 애니메이션 혹은 추가 공격;
+	}
 }
 
 void USkillComponent::BeginSwordAura()

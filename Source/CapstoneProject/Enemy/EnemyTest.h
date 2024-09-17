@@ -19,6 +19,7 @@ public:
 
 	virtual void AttackByAI() override;
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	virtual void DefaultAttackHitCheck() override;
 
 private:
 	void BeginAttack();

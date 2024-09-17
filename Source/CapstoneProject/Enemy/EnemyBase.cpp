@@ -48,6 +48,16 @@ void AEnemyBase::AttackByAI()
 
 }
 
+void AEnemyBase::DefaultAttackHitCheck()
+{
+}
+
+void AEnemyBase::Stun()
+{
+	UE_LOG(LogTemp, Display, TEXT("스턴상태!!!!!!!!!!!"));
+}
+
+
 
 
 

@@ -50,10 +50,10 @@ public:
 
 /* 스킬 섹션 */
 protected:
-	virtual void Q_Skill();
-	virtual void W_Skill();
-	virtual void E_Skill();
-	virtual void R_Skill();
+	void Q_Skill();
+	void W_Skill();
+	void E_Skill();
+	void R_Skill();
 
 
 /* 카메라 섹션 */
@@ -166,6 +166,8 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Skill")
 	TObjectPtr<class UCharacterHitCheckComponent> HitCheckComponent;
 
+	void ToggleParrying();
+	bool bIsParrying = false;;
 
 /* 스텟 섹션 */
 private:
