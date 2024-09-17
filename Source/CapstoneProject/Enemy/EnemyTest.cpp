@@ -36,7 +36,7 @@ float AEnemyTest::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACon
 	
 	Stat->ApplyDamage(Damage);
 	BeingHitAction();
-	return 0.0f;
+	return Damage;
 }
 
 void AEnemyTest::DefaultAttackHitCheck()
@@ -61,6 +61,26 @@ void AEnemyTest::DefaultAttackHitCheck()
 	}
 
 	DrawDebugSphere(GetWorld(), Origin, Range / 2.f, 16, Color, false, 3.f);
+}
+
+void AEnemyTest::Stun()
+{
+	Super::Stun();
+
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	AAIControllerBase* AIController = Cast<AAIControllerBase>(GetController());
+
+	if (AnimInstance && AIController)
+	{
+		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+		AIController->StopAI();
+		AnimInstance->Montage_Play(StunMontage);
+
+		FOnMontageEnded MontageEnd;
+		MontageEnd.BindUObject(this, &AEnemyTest::EndStun);
+		AnimInstance->Montage_SetEndDelegate(MontageEnd, StunMontage);
+	}
+
 }
 
 void AEnemyTest::BeginAttack()
@@ -107,4 +127,12 @@ void AEnemyTest::SetDead()
 		AnimInstance->Montage_Play(DeadMontage);
 		SetActorEnableCollision(false);
 	}
+}
+
+void AEnemyTest::EndStun(UAnimMontage* Target, bool IsProperlyEnded)
+{
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+	
+	AAIControllerBase* AIController = Cast<AAIControllerBase>(GetController());
+	AIController->RunAI();
 }

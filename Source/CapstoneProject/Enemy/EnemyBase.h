@@ -31,7 +31,8 @@ public:
 	virtual void AttackByAI() override;
 	virtual void DefaultAttackHitCheck() override;
 
+/* Stun 은 보스 몬스터 말고 있을 것 같으니 상속받아 구현하자. */
 public:
-	void Stun();
+	virtual void Stun();
 
 };
