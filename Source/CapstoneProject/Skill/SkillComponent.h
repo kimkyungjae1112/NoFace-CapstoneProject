@@ -71,7 +71,12 @@ private:
 	
 	int32 CurrentWeaponType = 0;
 
+/* 히트 체크 컴포넌트 */
 private:
+	//나중에 필요 없어지면 버릴 수도 있음
 	UPROPERTY(VisibleAnywhere, Category = "Hit Check")
 	TObjectPtr<class UCharacterHitCheckComponent> HitCheckComponent;
+
+
+
 };

@@ -28,6 +28,7 @@ public:
 public:
 	virtual void SwordDefaultAttackHitCheck() override;
 	virtual void Sword_Q_SkillHitCheck() override;
+	virtual void Sword_R_SkillHitCheck() override;
 
 /* 검 히트 체크 */
 private:
@@ -39,5 +40,9 @@ private:
 	TObjectPtr<class UCharacterDataStat> Stat;
 
 	int32 CurrentWeaponType = 0;
+
+private:
+	UPROPERTY(EditAnywhere, Category = "SwordAura")
+	TSubclassOf<class ASwordAura> SwordAuraClass;
 
 };

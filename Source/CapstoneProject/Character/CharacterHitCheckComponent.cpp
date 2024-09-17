@@ -7,6 +7,7 @@
 #include "Engine/DamageEvents.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/Character.h"
+#include "Skill/SwordAura.h"
 
 UCharacterHitCheckComponent::UCharacterHitCheckComponent()
 {
@@ -95,6 +96,19 @@ void UCharacterHitCheckComponent::Sword_Q_SkillHitCheck()
 		false,                 
 		3.f                  
 	);
+}
+
+void UCharacterHitCheckComponent::Sword_R_SkillHitCheck()
+{
+	AActor* Owner = GetOwner();
+	if (Owner == nullptr) return;
+
+	FVector SpawnLocation = Owner->GetActorLocation() + Owner->GetActorForwardVector() * 100.f;
+	FRotator SpawnRotation = Owner->GetActorRotation();
+
+	ASwordAura* SwordAura = GetWorld()->SpawnActor<ASwordAura>(SwordAuraClass, SpawnLocation, SpawnRotation);
+	SwordAura->SetOwner(Owner);
+	SwordAura->Init(Owner->GetActorForwardVector());
 }
 
 bool UCharacterHitCheckComponent::SwordDefaultAttackRadialRange(AActor* Player, AActor* Target, float Radius, float RadialAngle)
