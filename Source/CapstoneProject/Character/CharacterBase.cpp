@@ -20,6 +20,7 @@
 #include "UI/WeaponChoiceUI.h"
 #include "Skill/SkillComponent.h"
 #include "Character/CharacterHitCheckComponent.h"
+#include "Character/CharacterDefaultAttackComponent.h"
 
 ACharacterBase::ACharacterBase()
 {
@@ -111,11 +112,13 @@ ACharacterBase::ACharacterBase()
 	TakeItemDelegateArray.Add(FTakeItemDelegateWrapper(FTakeItemDelegate::CreateUObject(this, &ACharacterBase::EquipBow)));
 	TakeItemDelegateArray.Add(FTakeItemDelegateWrapper(FTakeItemDelegate::CreateUObject(this, &ACharacterBase::EquipStaff)));
 
-	/* 스킬 */
+	/* 컴포넌트 */
 	SkillComponent = CreateDefaultSubobject<USkillComponent>(TEXT("Skill"));
 	SkillComponent->ParryingSign.BindUObject(this, &ACharacterBase::ToggleParrying);
 
 	HitCheckComponent = CreateDefaultSubobject<UCharacterHitCheckComponent>(TEXT("Hit Checker"));
+
+	AttackComponent = CreateDefaultSubobject<UCharacterDefaultAttackComponent>(TEXT("Attack"));
 }
 
 void ACharacterBase::BeginPlay()
@@ -236,80 +239,14 @@ void ACharacterBase::OnAttackStart()
 		return;
 	}
 
-	if (CurrentCombo == 0)
-	{
-		OnClickStart();
-		BeginDefaultAttack();
-		return;
-	}
-
-	if (!ComboTimer.IsValid())
-	{
-		HasNextComboCommand = false;
-	}
-	else
-	{
-		HasNextComboCommand = true;
-	}
+	OnClickStart();
+	RotateToTarget();
+	AttackComponent->BeginAttack();
 }
 
 bool ACharacterBase::TraceAttack()
 {
 	return GetPlayerController()->GetHitResultUnderCursor(ECC_Visibility, true, AttackHitResult);
-}
-
-void ACharacterBase::BeginDefaultAttack()
-{
-	CurrentCombo = 1;
-	RotateToTarget();
-
-	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
-
-	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-	AnimInstance->Montage_Play(DefaultAttackMontage);
-
-	FOnMontageEnded MontageEnded;
-	MontageEnded.BindUObject(this, &ACharacterBase::EndDefaultAttack);
-	AnimInstance->Montage_SetEndDelegate(MontageEnded, DefaultAttackMontage);
-	
-	ComboTimer.Invalidate();
-	SetComboTimer();
-}
-
-void ACharacterBase::EndDefaultAttack(UAnimMontage* Target, bool IsProperlyEnded)
-{
-	ensure(CurrentCombo != 0);
-	CurrentCombo = 0;
-	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
-}
-
-void ACharacterBase::SetComboTimer()
-{
-	int32 ComboIndex = CurrentCombo - 1;
-	ensure(ComboData->EffectiveFrameCount.IsValidIndex(ComboIndex));
-
-	float ComboEffectiveTime = (ComboData->EffectiveFrameCount[ComboIndex] / ComboData->FrameRate);
-	if (ComboEffectiveTime > 0.0f)
-	{
-		GetWorld()->GetTimerManager().SetTimer(ComboTimer, this, &ACharacterBase::CheckCombo, ComboEffectiveTime, false);
-	}
-}
-
-void ACharacterBase::CheckCombo()
-{
-	ComboTimer.Invalidate();
-	if (HasNextComboCommand)
-	{
-		RotateToTarget();
-
-		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-
-		CurrentCombo = FMath::Clamp(CurrentCombo + 1, 1, ComboData->MaxComboCount);
-		FName NextSection = *FString::Printf(TEXT("%s%d"), *ComboData->MontageSectionNamePrefix, CurrentCombo);
-		AnimInstance->Montage_JumpToSection(NextSection, DefaultAttackMontage);
-		SetComboTimer();
-		HasNextComboCommand = false;
-	}
 }
 
 void ACharacterBase::RotateToTarget()

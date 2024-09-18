@@ -106,25 +106,11 @@ private:
 /* 마우스 좌클릭을 이용한 콤보공격 구현 */
 	void OnAttackStart();
 	bool TraceAttack();
-	void BeginDefaultAttack();
-	void EndDefaultAttack(class UAnimMontage* Target, bool IsProperlyEnded);
-	void SetComboTimer();
-	void CheckCombo();
-	void RotateToTarget();
-	void UpdateRotate();
-
-	FTimerHandle ComboTimer;
-	FTimerHandle RotateTimer;
-	int32 CurrentCombo = 0;
-	bool HasNextComboCommand = false;
+	
 	FHitResult AttackHitResult;	//공격하는 방향을 알기 위한 변수
 
-	UPROPERTY(EditAnywhere, Category = "Combo")
-	TObjectPtr<class UCharacterComboAttackData> ComboData;
-
-	UPROPERTY(EditAnywhere, Category = "Montage")
-	TObjectPtr<class UAnimMontage> DefaultAttackMontage;
-
+	UPROPERTY(VisibleAnywhere, Category = "Component")
+	TObjectPtr<class UCharacterDefaultAttackComponent> AttackComponent;
 
 /* 무기 교체 */
 	void NextWeapon();
@@ -160,22 +146,28 @@ private:
 
 /* 스킬 섹션 */
 private:
-	UPROPERTY(EditAnywhere, Category = "Skill")
+	UPROPERTY(EditAnywhere, Category = "Component")
 	TObjectPtr<class USkillComponent> SkillComponent;
 
-	UPROPERTY(EditAnywhere, Category = "Skill")
+	UPROPERTY(EditAnywhere, Category = "Component")
 	TObjectPtr<class UCharacterHitCheckComponent> HitCheckComponent;
 
+	//패링을 위한 함수와 변수
 	void ToggleParrying();
 	bool bIsParrying = false;
 
 /* 스텟 섹션 */
 private:
-	UPROPERTY(VisibleAnywhere, Category = "Stat")
+	UPROPERTY(VisibleAnywhere, Category = "Component")
 	TObjectPtr<class UCharacterStatComponent> Stat;
 
 
 /* 유틸리티 섹션 */
 private:
 	class ACPlayerController* GetPlayerController() const;
+
+	void RotateToTarget();	//캐릭터 회전을 도와줌
+	void UpdateRotate();
+	FTimerHandle RotateTimer;
+
 };
