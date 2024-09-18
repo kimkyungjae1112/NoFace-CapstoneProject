@@ -389,11 +389,11 @@ void ACharacterBase::EquipBow()
 		WeaponBase->Destroy();
 	}
 
-	FVector SpawnLocation = GetMesh()->GetSocketLocation(TEXT("hand_rSocket"));
-	FRotator SpawnRotation = GetMesh()->GetSocketRotation(TEXT("hand_rSocket"));
+	FVector SpawnLocation = GetMesh()->GetSocketLocation(TEXT("hand_rSocket_Bow"));
+	FRotator SpawnRotation = GetMesh()->GetSocketRotation(TEXT("hand_rSocket_Bow"));
 
 	WeaponBase = GetWorld()->SpawnActor<ABow>(BowClass, SpawnLocation, SpawnRotation);
-	WeaponBase->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("hand_rSocket"));
+	WeaponBase->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("hand_rSocket_Bow"));
 }
 
 void ACharacterBase::EquipStaff()

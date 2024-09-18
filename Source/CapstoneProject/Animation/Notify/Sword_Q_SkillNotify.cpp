@@ -13,6 +13,7 @@ void USword_Q_SkillNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenc
 {
 	Super::Notify(MeshComp, Animation, EventReference);
 
+	//해당 인터페이스는 Sword 공격 및 스킬에 대해 모든 공격 판정을 관리하는 인터페이스이다.
 	ISwordDefaultAttackInterface* Interface = Cast<ISwordDefaultAttackInterface>(MeshComp->GetOwner()->GetComponentByClass<UCharacterHitCheckComponent>());
 	if (Interface)
 	{

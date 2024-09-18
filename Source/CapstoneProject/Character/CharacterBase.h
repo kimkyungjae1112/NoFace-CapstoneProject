@@ -167,7 +167,7 @@ private:
 	TObjectPtr<class UCharacterHitCheckComponent> HitCheckComponent;
 
 	void ToggleParrying();
-	bool bIsParrying = false;;
+	bool bIsParrying = false;
 
 /* 스텟 섹션 */
 private:
