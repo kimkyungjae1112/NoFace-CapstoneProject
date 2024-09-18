@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "SwordDefaultAttackInterface.generated.h"
+#include "SwordInterface.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class USwordDefaultAttackInterface : public UInterface
+class USwordInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -16,7 +16,7 @@ class USwordDefaultAttackInterface : public UInterface
 /**
  * 
  */
-class CAPSTONEPROJECT_API ISwordDefaultAttackInterface
+class CAPSTONEPROJECT_API ISwordInterface
 {
 	GENERATED_BODY()
 

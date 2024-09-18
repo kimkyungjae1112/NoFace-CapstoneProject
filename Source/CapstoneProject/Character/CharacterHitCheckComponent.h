@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Interface/SwordDefaultAttackInterface.h"
+#include "Interface/SwordInterface.h"
 #include "CharacterHitCheckComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class CAPSTONEPROJECT_API UCharacterHitCheckComponent : public UActorComponent, public ISwordDefaultAttackInterface
+class CAPSTONEPROJECT_API UCharacterHitCheckComponent : public UActorComponent, public ISwordInterface
 {
 	GENERATED_BODY()
 
