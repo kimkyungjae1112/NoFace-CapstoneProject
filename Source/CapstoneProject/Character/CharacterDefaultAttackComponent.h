@@ -44,18 +44,11 @@ private:
 private:
 	void BeginBowDefaultAttack();
 	void EndBowDefaultAttack(class UAnimMontage* Target, bool IsProperlyEnded);
-	void SetBowComboTimer();
-	void CheckBowCombo();
-
-	FTimerHandle BowComboTimer;
-
-	UPROPERTY(EditAnywhere, Category = "Weapon")
-	TObjectPtr<class UCharacterComboAttackData> BowComboData;
 
 	UPROPERTY(EditAnywhere, Category = "Montage")
 	TObjectPtr<class UAnimMontage> BowDefaultAttackMontage;
 
-/* Bow 기본 공격 */
+/* Staff 기본 공격 */
 private:
 	void BeginStaffDefaultAttack();
 	void EndStaffDefaultAttack(class UAnimMontage* Target, bool IsProperlyEnded);

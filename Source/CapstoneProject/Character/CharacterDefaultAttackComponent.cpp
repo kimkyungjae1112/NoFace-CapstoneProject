@@ -116,21 +116,22 @@ void UCharacterDefaultAttackComponent::CheckSwordCombo()
 
 void UCharacterDefaultAttackComponent::BeginBowDefaultAttack()
 {
-	UE_LOG(LogTemp, Display, TEXT("활 기본 공격"));
+	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
+	
+	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+	AnimInstance->Montage_Play(BowDefaultAttackMontage);
 
+	FOnMontageEnded MontageEnd;
+	MontageEnd.BindUObject(this, &UCharacterDefaultAttackComponent::EndBowDefaultAttack);
+	AnimInstance->Montage_SetEndDelegate(MontageEnd, BowDefaultAttackMontage);
 }
 
 void UCharacterDefaultAttackComponent::EndBowDefaultAttack(UAnimMontage* Target, bool IsProperlyEnded)
 {
+	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 }
 
-void UCharacterDefaultAttackComponent::SetBowComboTimer()
-{
-}
 
-void UCharacterDefaultAttackComponent::CheckBowCombo()
-{
-}
 
 void UCharacterDefaultAttackComponent::BeginStaffDefaultAttack()
 {

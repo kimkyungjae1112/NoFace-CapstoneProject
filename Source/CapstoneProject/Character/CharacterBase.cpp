@@ -318,8 +318,6 @@ void ACharacterBase::ChangeWeapon()
 
 void ACharacterBase::EquipSword()
 {
-	UE_LOG(LogTemp, Display, TEXT("Equip Sword"));
-
 	if (WeaponBase)
 	{
 		WeaponBase->Destroy();
@@ -334,24 +332,20 @@ void ACharacterBase::EquipSword()
 
 void ACharacterBase::EquipBow()
 {
-	UE_LOG(LogTemp, Display, TEXT("Equip Bow"));
-
 	if (WeaponBase)
 	{
 		WeaponBase->Destroy();
 	}
 
-	FVector SpawnLocation = GetMesh()->GetSocketLocation(TEXT("hand_rSocket_Bow"));
-	FRotator SpawnRotation = GetMesh()->GetSocketRotation(TEXT("hand_rSocket_Bow"));
+	FVector SpawnLocation = GetMesh()->GetSocketLocation(TEXT("hand_lSocket_Bow"));
+	FRotator SpawnRotation = GetMesh()->GetSocketRotation(TEXT("hand_lSocket_Bow"));
 
 	WeaponBase = GetWorld()->SpawnActor<ABow>(BowClass, SpawnLocation, SpawnRotation);
-	WeaponBase->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("hand_rSocket_Bow"));
+	WeaponBase->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("hand_lSocket_Bow"));
 }
 
 void ACharacterBase::EquipStaff()
 {
-	UE_LOG(LogTemp, Display, TEXT("Equip Staff"));
-
 	if (WeaponBase)
 	{
 		WeaponBase->Destroy();
