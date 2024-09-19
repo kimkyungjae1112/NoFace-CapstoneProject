@@ -8,6 +8,7 @@
 UCharacterAnimInstance::UCharacterAnimInstance()
 {
 	MovingThreshould = 3.f;
+	WeaponIndex = 0;
 }
 
 void UCharacterAnimInstance::NativeInitializeAnimation()

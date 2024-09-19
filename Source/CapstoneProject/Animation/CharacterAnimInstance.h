@@ -29,6 +29,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Var")
 	uint8 bIsIdle : 1;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Var")
+	int32 WeaponIndex;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Var")
 	float GroundSpeed; 
 

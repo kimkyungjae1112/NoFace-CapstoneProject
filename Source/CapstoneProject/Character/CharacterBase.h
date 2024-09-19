@@ -6,12 +6,12 @@
 #include "GameFramework/Character.h"
 #include "CharacterBase.generated.h"
 
-UENUM()
+UENUM(BlueprintType)
 enum class EWeaponType : uint8
 {
-	Sword = 0,
-	Bow,
-	Staff
+	Sword = 0 UMETA(DisplayName = "Sword"),
+	Bow UMETA(DisplayName = "Bow"),
+	Staff UMETA(DisplayName = "Staff")
 };
 
 DECLARE_DELEGATE(FTakeItemDelegate)
@@ -115,6 +115,8 @@ private:
 /* 무기 교체 */
 	void NextWeapon();
 	void PrevWeapon();
+	void AnimWeaponIndex();
+	void ChangeWeapon();
 
 	void EquipSword();	//무기 장착할 때 호출되는 함수
 	void EquipBow();	//무기 장착할 때 호출되는 함수

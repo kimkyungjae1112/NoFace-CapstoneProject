@@ -11,7 +11,7 @@
 #include "Player/CPlayerController.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Stat/CharacterStatComponent.h"
-#include "Animation/AnimInstance.h"
+#include "Animation/CharacterAnimInstance.h"
 #include "Animation/AnimMontage.h"
 #include "Character/CharacterComboAttackData.h"
 #include "Weapon/Sword.h"
@@ -283,9 +283,8 @@ void ACharacterBase::NextWeapon()
 		WeaponIndex = 0;
 	}
 
-	SkillComponent->SetWeaponType(WeaponIndex);
-	TakeItemDelegateArray[WeaponIndex].TakeItemDelegate.ExecuteIfBound();
-	CurrentWeaponType = static_cast<EWeaponType>(WeaponIndex);
+	ChangeWeapon();
+	AnimWeaponIndex();
 }
 
 void ACharacterBase::PrevWeapon()
@@ -295,7 +294,22 @@ void ACharacterBase::PrevWeapon()
 	{
 		WeaponIndex = 2;
 	}
+	
+	ChangeWeapon();
+	AnimWeaponIndex();
+}
 
+void ACharacterBase::AnimWeaponIndex()
+{
+	UCharacterAnimInstance* AnimInstance = Cast<UCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	if (AnimInstance)
+	{
+		AnimInstance->WeaponIndex = WeaponIndex;
+	}
+}
+
+void ACharacterBase::ChangeWeapon()
+{
 	SkillComponent->SetWeaponType(WeaponIndex);
 	TakeItemDelegateArray[WeaponIndex].TakeItemDelegate.ExecuteIfBound();
 	CurrentWeaponType = static_cast<EWeaponType>(WeaponIndex);
