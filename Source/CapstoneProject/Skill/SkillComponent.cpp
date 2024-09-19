@@ -97,7 +97,7 @@ void USkillComponent::PlaySkill_R()
 	}
 }
 
-void USkillComponent::SetWeaponType(int32& InCurrentWeaponType)
+void USkillComponent::SetWeaponType(const int32& InCurrentWeaponType)
 {
 	CurrentWeaponType = InCurrentWeaponType;
 	UE_LOG(LogTemp, Display, TEXT("Current Weapon Type : %d"), CurrentWeaponType);

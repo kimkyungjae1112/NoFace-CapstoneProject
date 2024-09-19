@@ -10,6 +10,7 @@ UCharacterDefaultAttackComponent::UCharacterDefaultAttackComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
+	CurrentWeaponType = 0;
 }
 
 
@@ -27,15 +28,32 @@ void UCharacterDefaultAttackComponent::TickComponent(float DeltaTime, ELevelTick
 
 }
 
+void UCharacterDefaultAttackComponent::SetWeaponType(const int32& InCurrentWeaponType)
+{
+	CurrentWeaponType = InCurrentWeaponType;
+}
+
 void UCharacterDefaultAttackComponent::BeginAttack()
 {
 	if (CurrentCombo == 0)
 	{
-		BeginDefaultAttack();
-		return;
+		switch (CurrentWeaponType)
+		{
+		case 0:
+			BeginSwordDefaultAttack();
+			return;
+		case 1:
+			BeginBowDefaultAttack();
+			return;
+		case 2:
+			BeginStaffDefaultAttack();
+			return;
+		default:
+			return;
+		}
 	}
 
-	if (!ComboTimer.IsValid())
+	if (!SwordComboTimer.IsValid())
 	{
 		HasNextComboCommand = false;
 	}
@@ -45,54 +63,89 @@ void UCharacterDefaultAttackComponent::BeginAttack()
 	}
 }
 
-void UCharacterDefaultAttackComponent::BeginDefaultAttack()
+void UCharacterDefaultAttackComponent::BeginSwordDefaultAttack()
 {
 	CurrentCombo = 1;
 
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 
 	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
-	AnimInstance->Montage_Play(DefaultAttackMontage);
+	AnimInstance->Montage_Play(SwordDefaultAttackMontage);
 
 	FOnMontageEnded MontageEnded;
-	MontageEnded.BindUObject(this, &UCharacterDefaultAttackComponent::EndDefaultAttack);
-	AnimInstance->Montage_SetEndDelegate(MontageEnded, DefaultAttackMontage);
+	MontageEnded.BindUObject(this, &UCharacterDefaultAttackComponent::EndSwordDefaultAttack);
+	AnimInstance->Montage_SetEndDelegate(MontageEnded, SwordDefaultAttackMontage);
 
-	ComboTimer.Invalidate();
-	SetComboTimer();
+	SwordComboTimer.Invalidate();
+	SetSwordComboTimer();
 }
 
-void UCharacterDefaultAttackComponent::EndDefaultAttack(UAnimMontage* Target, bool IsProperlyEnded)
+void UCharacterDefaultAttackComponent::EndSwordDefaultAttack(UAnimMontage* Target, bool IsProperlyEnded)
 {
 	ensure(CurrentCombo != 0);
 	CurrentCombo = 0;
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 }
 
-void UCharacterDefaultAttackComponent::SetComboTimer()
+void UCharacterDefaultAttackComponent::SetSwordComboTimer()
 {
 	int32 ComboIndex = CurrentCombo - 1;
-	ensure(ComboData->EffectiveFrameCount.IsValidIndex(ComboIndex));
+	ensure(SwordComboData->EffectiveFrameCount.IsValidIndex(ComboIndex));
 
-	float ComboEffectiveTime = (ComboData->EffectiveFrameCount[ComboIndex] / ComboData->FrameRate);
+	float ComboEffectiveTime = (SwordComboData->EffectiveFrameCount[ComboIndex] / SwordComboData->FrameRate);
 	if (ComboEffectiveTime > 0.0f)
 	{
-		GetWorld()->GetTimerManager().SetTimer(ComboTimer, this, &UCharacterDefaultAttackComponent::CheckCombo, ComboEffectiveTime, false);
+		GetWorld()->GetTimerManager().SetTimer(SwordComboTimer, this, &UCharacterDefaultAttackComponent::CheckSwordCombo, ComboEffectiveTime, false);
 	}
 }
 
-void UCharacterDefaultAttackComponent::CheckCombo()
+void UCharacterDefaultAttackComponent::CheckSwordCombo()
 {
-	ComboTimer.Invalidate();
+	SwordComboTimer.Invalidate();
 	if (HasNextComboCommand)
 	{
 		UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 
-		CurrentCombo = FMath::Clamp(CurrentCombo + 1, 1, ComboData->MaxComboCount);
-		FName NextSection = *FString::Printf(TEXT("%s%d"), *ComboData->MontageSectionNamePrefix, CurrentCombo);
-		AnimInstance->Montage_JumpToSection(NextSection, DefaultAttackMontage);
-		SetComboTimer();
+		CurrentCombo = FMath::Clamp(CurrentCombo + 1, 1, SwordComboData->MaxComboCount);
+		FName NextSection = *FString::Printf(TEXT("%s%d"), *SwordComboData->MontageSectionNamePrefix, CurrentCombo);
+		AnimInstance->Montage_JumpToSection(NextSection, SwordDefaultAttackMontage);
+		SetSwordComboTimer();
 		HasNextComboCommand = false;
 	}
+}
+
+void UCharacterDefaultAttackComponent::BeginBowDefaultAttack()
+{
+	UE_LOG(LogTemp, Display, TEXT("활 기본 공격"));
+
+}
+
+void UCharacterDefaultAttackComponent::EndBowDefaultAttack(UAnimMontage* Target, bool IsProperlyEnded)
+{
+}
+
+void UCharacterDefaultAttackComponent::SetBowComboTimer()
+{
+}
+
+void UCharacterDefaultAttackComponent::CheckBowCombo()
+{
+}
+
+void UCharacterDefaultAttackComponent::BeginStaffDefaultAttack()
+{
+	UE_LOG(LogTemp, Display, TEXT("지팡이 기본 공격"));
+}
+
+void UCharacterDefaultAttackComponent::EndStaffDefaultAttack(UAnimMontage* Target, bool IsProperlyEnded)
+{
+}
+
+void UCharacterDefaultAttackComponent::SetStaffComboTimer()
+{
+}
+
+void UCharacterDefaultAttackComponent::CheckStaffCombo()
+{
 }
 

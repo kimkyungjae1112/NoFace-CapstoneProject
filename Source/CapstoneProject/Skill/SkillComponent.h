@@ -30,7 +30,7 @@ public:
 	void PlaySkill_E();
 	void PlaySkill_R();
 
-	void SetWeaponType(int32& InCurrentWeaponType);
+	void SetWeaponType(const int32& InCurrentWeaponType);
 
 private:
 	//Sword Skill Montage
@@ -65,9 +65,6 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Montage")
 	TObjectPtr<class UCharacterSkillMontageData> SkillMontageData;
-
-	UPROPERTY(VisibleAnywhere, Category = "Character")
-	TObjectPtr<class ACharacter> Character;
 	
 	int32 CurrentWeaponType = 0;
 
@@ -77,6 +74,9 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Hit Check")
 	TObjectPtr<class UCharacterHitCheckComponent> HitCheckComponent;
 
-
+/* 유틸리티 */
+private:
+	UPROPERTY(VisibleAnywhere, Category = "Character")
+	TObjectPtr<class ACharacter> Character;
 
 };

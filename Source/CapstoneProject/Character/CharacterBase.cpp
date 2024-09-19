@@ -311,6 +311,7 @@ void ACharacterBase::AnimWeaponIndex()
 void ACharacterBase::ChangeWeapon()
 {
 	SkillComponent->SetWeaponType(WeaponIndex);
+	AttackComponent->SetWeaponType(WeaponIndex);
 	TakeItemDelegateArray[WeaponIndex].TakeItemDelegate.ExecuteIfBound();
 	CurrentWeaponType = static_cast<EWeaponType>(WeaponIndex);
 }
