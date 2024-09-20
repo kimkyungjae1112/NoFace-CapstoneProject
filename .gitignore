@@ -30,6 +30,8 @@
 /Content/DF_DRAGON_KNIGHT
 /Content/ParagonKwang
 /Content/ParagonSparrow
+/Content/ParagonSerath
+/Content/ParagonGideon
 
 # Allow any files from /RawContent dir.
 # Any file in /RawContent dir will be managed by git lfs.

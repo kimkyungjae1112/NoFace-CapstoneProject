@@ -5,10 +5,10 @@
 #include "Animation/AnimInstance.h"
 #include "Animation/AnimMontage.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/PlayerController.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Character/CharacterSkillMontageData.h"
 #include "Kismet/GameplayStatics.h"
-#include "Character/CharacterHitCheckComponent.h"
 #include "Enemy/EnemyBase.h"
 
 USkillComponent::USkillComponent()
@@ -22,7 +22,19 @@ void USkillComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Character = Cast<ACharacter>(GetOwner());
+	Character = CastChecked<ACharacter>(GetOwner());
+	PlayerController = CastChecked<APlayerController>(Character->GetController());
+}
+
+void USkillComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	if (bCasting)
+	{
+		PlayerController->GetHitResultUnderCursor(ECC_Visibility, true, Cursor);
+		DrawDebugSphere(GetWorld(), Cursor.Location, 20.f, 32, FColor::Red, false);
+	}
 }
 
 void USkillComponent::PlaySkill_Q()
@@ -192,6 +204,7 @@ void USkillComponent::EndBowSeveralArrows(UAnimMontage* Target, bool IsProperlyE
 
 void USkillComponent::BeginBowExplosionArrow()
 {
+	bCasting = true;
 }
 
 void USkillComponent::EndBowExplosionArrow(UAnimMontage* Target, bool IsProperlyEnded)
@@ -216,6 +229,7 @@ void USkillComponent::EndBowAutoTargeting(UAnimMontage* Target, bool IsProperlyE
 
 void USkillComponent::BeginStaffFireball()
 {
+	bCasting = true;
 }
 
 void USkillComponent::EndStaffFireball(UAnimMontage* Target, bool IsProperlyEnded)
@@ -224,6 +238,7 @@ void USkillComponent::EndStaffFireball(UAnimMontage* Target, bool IsProperlyEnde
 
 void USkillComponent::BeginStaffArea()
 {
+	bCasting = true;
 }
 
 void USkillComponent::EndStaffArea(UAnimMontage* Target, bool IsProperlyEnded)
@@ -232,6 +247,7 @@ void USkillComponent::EndStaffArea(UAnimMontage* Target, bool IsProperlyEnded)
 
 void USkillComponent::BeginStaffUpGround()
 {
+	bCasting = true;
 }
 
 void USkillComponent::EndStaffUpGround(UAnimMontage* Target, bool IsProperlyEnded)

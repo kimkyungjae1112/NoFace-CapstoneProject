@@ -93,7 +93,9 @@ private:
 	
 	UPROPERTY(VisibleAnywhere, Category = "Input")
 	TObjectPtr<class UInputAction> PrevWeaponAction; 
-
+	
+	UPROPERTY(VisibleAnywhere, Category = "Input")
+	TObjectPtr<class UInputAction> CancelAction;
 
 /* 마우스 우클릭을 통해 캐릭터 이동 기능을 실현하는 함수와 변수 */
 	void OnClickStart();	//Mouse Right Click Started
@@ -111,6 +113,10 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Component")
 	TObjectPtr<class UCharacterDefaultAttackComponent> AttackComponent;
+
+/* 캐스팅 스킬 */
+	void CancelCasting();
+
 
 /* 무기 교체 */
 	void NextWeapon();

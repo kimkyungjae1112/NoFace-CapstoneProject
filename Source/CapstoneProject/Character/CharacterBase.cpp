@@ -91,6 +91,11 @@ ACharacterBase::ACharacterBase()
 	{
 		PrevWeaponAction = PrevWeaponActionRef.Object;
 	}
+	static ConstructorHelpers::FObjectFinder<UInputAction> CancelActionRef(TEXT("/Script/EnhancedInput.InputAction'/Game/No-Face/Input/InputAction/IA_Cancel.IA_Cancel'"));
+	if (CancelActionRef.Object)
+	{
+		CancelAction = CancelActionRef.Object;
+	}
 	
 	/* Mesh */
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MainMeshRef(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequins/Meshes/SKM_Quinn.SKM_Quinn'"));
@@ -150,6 +155,7 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	EnhancedInputComponent->BindAction(NextWeaponAction, ETriggerEvent::Started, this, &ACharacterBase::NextWeapon);
 	EnhancedInputComponent->BindAction(PrevWeaponAction, ETriggerEvent::Started, this, &ACharacterBase::PrevWeapon);
 	
+	EnhancedInputComponent->BindAction(CancelAction, ETriggerEvent::Started, this, &ACharacterBase::CancelCasting);
 }
 
 void ACharacterBase::PostInitializeComponents()
@@ -159,8 +165,6 @@ void ACharacterBase::PostInitializeComponents()
 	//초반에 칼들고 시작
 	EquipSword();
 	CurrentWeaponType = EWeaponType::Sword;
-
-	SkillComponent->SetHitCheckComponent(HitCheckComponent);
 }
 
 float ACharacterBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -272,6 +276,14 @@ void ACharacterBase::UpdateRotate()
 	if (FMath::Abs((TargetRotation - GetActorRotation()).Yaw) < 5.0f)
 	{
 		GetWorld()->GetTimerManager().ClearTimer(RotateTimer);
+	}
+}
+
+void ACharacterBase::CancelCasting()
+{
+	if (SkillComponent->GetCastingFlag())
+	{
+		SkillComponent->SetCastingFlag(false);
 	}
 }
 

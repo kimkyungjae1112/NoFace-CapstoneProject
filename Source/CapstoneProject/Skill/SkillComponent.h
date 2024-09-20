@@ -18,10 +18,13 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-
+	
 public:
-	FORCEINLINE void SetHitCheckComponent(class UCharacterHitCheckComponent* InHitCheckComponent) { HitCheckComponent = InHitCheckComponent; }
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	FORCEINLINE bool GetCastingFlag() { return bCasting; }
+	FORCEINLINE void SetCastingFlag(bool InCasting) { bCasting = InCasting; }
+public:
 	FParryingSign ParryingSign;
 	void ParryingSuccess(AActor* Attacker);
 
@@ -66,17 +69,21 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Montage")
 	TObjectPtr<class UCharacterSkillMontageData> SkillMontageData;
 	
-	int32 CurrentWeaponType = 0;
 
-/* 히트 체크 컴포넌트 */
+/* Staff 데이터 */
 private:
-	//나중에 필요 없어지면 버릴 수도 있음
-	UPROPERTY(VisibleAnywhere, Category = "Hit Check")
-	TObjectPtr<class UCharacterHitCheckComponent> HitCheckComponent;
+	bool bCasting = false;
+
+	FHitResult Cursor;
 
 /* 유틸리티 */
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Character")
 	TObjectPtr<class ACharacter> Character;
 
+	UPROPERTY(VisibleAnywhere, Category = "Character")
+	TObjectPtr<class APlayerController> PlayerController;
+
+	int32 CurrentWeaponType = 0;
+	
 };
