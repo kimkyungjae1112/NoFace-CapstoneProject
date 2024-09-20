@@ -10,6 +10,7 @@
 #include "Character/CharacterSkillMontageData.h"
 #include "Kismet/GameplayStatics.h"
 #include "Enemy/EnemyBase.h"
+#include "Skill/StaffMeteor.h"
 
 USkillComponent::USkillComponent()
 {
@@ -32,6 +33,7 @@ void USkillComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 	if (bCasting)
 	{
+		//Cursor가 멤버변수니까 해당 위치 정보를 가지고 각 스킬 함수에서 Cursor의 위치를 참조하여 시전 범위를 생성하면됨.
 		PlayerController->GetHitResultUnderCursor(ECC_Visibility, true, Cursor);
 		DrawDebugSphere(GetWorld(), Cursor.Location, 20.f, 32, FColor::Red, false);
 	}
@@ -48,7 +50,7 @@ void USkillComponent::PlaySkill_Q()
 		BeginBowSeveralArrows();
 		break;
 	case 2:
-		BeginStaffFireball();
+		BeginStaffMeteor();
 		break;
 	default:
 		break;
@@ -227,12 +229,29 @@ void USkillComponent::EndBowAutoTargeting(UAnimMontage* Target, bool IsProperlyE
 {
 }
 
-void USkillComponent::BeginStaffFireball()
+void USkillComponent::BeginStaffMeteor()
 {
-	bCasting = true;
+	if (bCasting)
+	{
+		FVector SpawnLocation = Character->GetActorLocation() + FVector(0.f, 0.f, 150.f);
+		FRotator SpawnRotation = Character->GetActorRotation();
+		AStaffMeteor* Meteor = GetWorld()->SpawnActor<AStaffMeteor>(MeteorClass, SpawnLocation, SpawnRotation);
+		Meteor->Init(Cursor.Location);
+
+		bCasting = false;
+	}
+	else
+	{
+		bCasting = true;
+		
+		//컨테이너에 람다형식으로 함수 등록
+		SkillQueue.Enqueue([this]() {
+			BeginStaffMeteor();
+        });
+	}
 }
 
-void USkillComponent::EndStaffFireball(UAnimMontage* Target, bool IsProperlyEnded)
+void USkillComponent::EndStaffMeteor(UAnimMontage* Target, bool IsProperlyEnded)
 {
 }
 

@@ -243,6 +243,16 @@ void ACharacterBase::OnAttackStart()
 		return;
 	}
 
+	if (SkillComponent->GetCastingFlag())
+	{
+		TFunction<void()> SkillAction;
+		if (SkillComponent->SkillQueue.Dequeue(SkillAction))
+		{
+			SkillAction();
+			return;
+		}
+	}
+
 	OnClickStart();
 	RotateToTarget();
 	AttackComponent->BeginAttack();

@@ -57,8 +57,8 @@ private:
 	void EndBowAutoTargeting(class UAnimMontage* Target, bool IsProperlyEnded);
 
 	//Staff Skill Montage
-	void BeginStaffFireball();
-	void EndStaffFireball(class UAnimMontage* Target, bool IsProperlyEnded);
+	void BeginStaffMeteor();
+	void EndStaffMeteor(class UAnimMontage* Target, bool IsProperlyEnded);
 	void BeginStaffArea();
 	void EndStaffArea(class UAnimMontage* Target, bool IsProperlyEnded);
 	void BeginStaffUpGround();
@@ -68,13 +68,19 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Montage")
 	TObjectPtr<class UCharacterSkillMontageData> SkillMontageData;
-	
+
+	FHitResult Cursor;
+	bool bCasting = false;
+
+public:
+	//현재 캐스팅되는 스킬을 담을 컨테이너
+	TQueue<TFunction<void()>> SkillQueue;
 
 /* Staff 데이터 */
 private:
-	bool bCasting = false;
+	UPROPERTY(EditAnywhere, Category = "Staff")
+	TSubclassOf<class AStaffMeteor> MeteorClass;
 
-	FHitResult Cursor;
 
 /* 유틸리티 */
 private:
