@@ -28,6 +28,7 @@ public:
 public:
 	virtual void SwordDefaultAttackHitCheck() override;
 	virtual void Sword_Q_SkillHitCheck() override;
+	virtual void Sword_W_SkillHitCheck() override;
 	virtual void Sword_R_SkillHitCheck() override;
 
 /* 검 히트 체크 */
@@ -44,5 +45,9 @@ private:
 private:
 	UPROPERTY(EditAnywhere, Category = "SwordAura")
 	TSubclassOf<class ASwordAura> SwordAuraClass;
+
+private:
+	UPROPERTY(VisibleAnywhere, Category = "Character")
+	TObjectPtr<class ACharacter> Character;
 
 };

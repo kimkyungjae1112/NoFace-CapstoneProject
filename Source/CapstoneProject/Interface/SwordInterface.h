@@ -24,5 +24,6 @@ class CAPSTONEPROJECT_API ISwordInterface
 public:
 	virtual void SwordDefaultAttackHitCheck() = 0;
 	virtual void Sword_Q_SkillHitCheck() = 0;
+	virtual void Sword_W_SkillHitCheck() = 0;
 	virtual void Sword_R_SkillHitCheck() = 0;
 };

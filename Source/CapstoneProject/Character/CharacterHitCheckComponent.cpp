@@ -24,7 +24,7 @@ void UCharacterHitCheckComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	
+	Character = CastChecked<ACharacter>(GetOwner());
 }
 
 void UCharacterHitCheckComponent::SwordDefaultAttackHitCheck()
@@ -65,24 +65,21 @@ void UCharacterHitCheckComponent::SwordDefaultAttackHitCheck()
 
 void UCharacterHitCheckComponent::Sword_Q_SkillHitCheck()
 {
-	ACharacter* Owner = Cast<ACharacter>(GetOwner());
-	if (Owner == nullptr) return;
-	
 	FColor Color = FColor::Red;
 
-	FVector Origin = Owner->GetActorLocation() + Owner->GetActorForwardVector() * Owner->GetCapsuleComponent()->GetScaledCapsuleRadius();
-	FVector End = Origin + (Owner->GetActorForwardVector() * Stat->Range);
+	FVector Origin = Character->GetActorLocation() + Character->GetActorForwardVector() * Character->GetCapsuleComponent()->GetScaledCapsuleRadius();
+	FVector End = Origin + (Character->GetActorForwardVector() * Stat->Range);
 	FVector CapsuleExtend = FVector(200.f, 50.f, 50.f);
-	FCollisionQueryParams Params(NAME_None, false, Owner);
+	FCollisionQueryParams Params(NAME_None, false, Character);
 	TArray<FHitResult> HitResults;
 
-	bool bHit = GetWorld()->SweepMultiByChannel(HitResults, Origin, End, FRotationMatrix::MakeFromZ(Owner->GetActorForwardVector()).ToQuat(), ECC_GameTraceChannel2, FCollisionShape::MakeCapsule(CapsuleExtend), Params);
+	bool bHit = GetWorld()->SweepMultiByChannel(HitResults, Origin, End, FRotationMatrix::MakeFromZ(Character->GetActorForwardVector()).ToQuat(), ECC_GameTraceChannel2, FCollisionShape::MakeCapsule(CapsuleExtend), Params);
 	if (bHit)
 	{
 		FDamageEvent DamageEvent;
 		for (const auto& HitResult : HitResults)
 		{
-			HitResult.GetActor()->TakeDamage(100.f, DamageEvent, GetWorld()->GetFirstPlayerController(), Owner);
+			HitResult.GetActor()->TakeDamage(100.f, DamageEvent, GetWorld()->GetFirstPlayerController(), Character);
 			Color = FColor::Green;
 		}
 	}
@@ -91,11 +88,33 @@ void UCharacterHitCheckComponent::Sword_Q_SkillHitCheck()
 		(Origin + End) * 0.5f,  
 		(End - Origin).Size() * 0.5f,
 		CapsuleExtend.Y,        
-		FRotationMatrix::MakeFromZ(Owner->GetActorForwardVector()).ToQuat(),
+		FRotationMatrix::MakeFromZ(Character->GetActorForwardVector()).ToQuat(),
 		Color,
 		false,                 
 		3.f                  
 	);
+}
+
+void UCharacterHitCheckComponent::Sword_W_SkillHitCheck()
+{
+	FColor Color = FColor::Red;
+
+	FVector Origin = Character->GetActorLocation();
+	FCollisionQueryParams Params(NAME_None, true, Character);
+	TArray<FOverlapResult> OverlapResults;
+	const float Radius = 300.f;
+
+	bool bHit = GetWorld()->OverlapMultiByChannel(OverlapResults, Origin, FQuat::Identity, ECC_GameTraceChannel2, FCollisionShape::MakeSphere(Radius), Params);
+	if (bHit)
+	{
+		FDamageEvent DamageEvent;
+		for (const auto& OverlapResult : OverlapResults)
+		{
+			OverlapResult.GetActor()->TakeDamage(100.f, DamageEvent, GetWorld()->GetFirstPlayerController(), Character);
+			Color = FColor::Green;
+		}
+	}
+	DrawDebugSphere(GetWorld(), Origin, Radius, 32, Color, false, 3.f);
 }
 
 void UCharacterHitCheckComponent::Sword_R_SkillHitCheck()
