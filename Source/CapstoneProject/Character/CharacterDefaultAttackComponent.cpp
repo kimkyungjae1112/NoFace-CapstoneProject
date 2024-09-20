@@ -5,6 +5,7 @@
 #include "Character/CharacterComboAttackData.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Weapon/Arrow.h"
 
 UCharacterDefaultAttackComponent::UCharacterDefaultAttackComponent()
 {
@@ -117,9 +118,14 @@ void UCharacterDefaultAttackComponent::CheckSwordCombo()
 void UCharacterDefaultAttackComponent::BeginBowDefaultAttack()
 {
 	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
+
+	FVector SpawnLocation = Character->GetMesh()->GetSocketLocation(TEXT("Arrow_Socket"));
 	
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 	AnimInstance->Montage_Play(BowDefaultAttackMontage);
+
+	Arrow = GetWorld()->SpawnActor<AArrow>(ArrowClass, SpawnLocation, Character->GetActorRotation());
+	Arrow->AttachToComponent(Character->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("Arrow_Socket"));
 
 	FOnMontageEnded MontageEnd;
 	MontageEnd.BindUObject(this, &UCharacterDefaultAttackComponent::EndBowDefaultAttack);
@@ -128,10 +134,14 @@ void UCharacterDefaultAttackComponent::BeginBowDefaultAttack()
 
 void UCharacterDefaultAttackComponent::EndBowDefaultAttack(UAnimMontage* Target, bool IsProperlyEnded)
 {
+	FVector SpawnLocation = Character->GetMesh()->GetSocketLocation(TEXT("Arrow_Socket")) + Character->GetActorForwardVector() * 50.f;
+	FRotator SpawnRotation = Character->GetActorForwardVector().Rotation();
+
+	Arrow->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	Arrow->Init(Character->GetActorForwardVector(), SpawnLocation, SpawnRotation);
+
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 }
-
-
 
 void UCharacterDefaultAttackComponent::BeginStaffDefaultAttack()
 {

@@ -48,6 +48,12 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Montage")
 	TObjectPtr<class UAnimMontage> BowDefaultAttackMontage;
 
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	TSubclassOf<class AArrow> ArrowClass;
+
+	UPROPERTY(VisibleAnywhere, Category = "Weapon")
+	TObjectPtr<class AArrow> Arrow;
+
 /* Staff 기본 공격 */
 private:
 	void BeginStaffDefaultAttack();
