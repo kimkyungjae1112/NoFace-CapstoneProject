@@ -81,6 +81,8 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Staff")
 	TSubclassOf<class AStaffMeteor> MeteorClass;
 
+	UPROPERTY(EditAnywhere, Category = "Staff")
+	TSubclassOf<class AStaffArea> AreaClass;
 
 /* 유틸리티 */
 private:

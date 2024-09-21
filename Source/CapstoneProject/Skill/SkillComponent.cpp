@@ -11,6 +11,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Enemy/EnemyBase.h"
 #include "Skill/StaffMeteor.h"
+#include "Skill/StaffArea.h"
 
 USkillComponent::USkillComponent()
 {
@@ -257,7 +258,24 @@ void USkillComponent::EndStaffMeteor(UAnimMontage* Target, bool IsProperlyEnded)
 
 void USkillComponent::BeginStaffArea()
 {
-	bCasting = true;
+	if (bCasting)
+	{
+		FVector SpawnLocation = Cursor.Location;
+		FRotator SpawnRotation = Character->GetActorRotation();
+		AStaffArea* Area = GetWorld()->SpawnActor<AStaffArea>(AreaClass, SpawnLocation, SpawnRotation);
+
+		bCasting = false;
+	}
+	else
+	{
+		bCasting = true;
+
+		//컨테이너에 람다형식으로 함수 등록
+		SkillQueue.Enqueue([this]()
+			{
+				BeginStaffArea();
+			});
+	}
 }
 
 void USkillComponent::EndStaffArea(UAnimMontage* Target, bool IsProperlyEnded)
