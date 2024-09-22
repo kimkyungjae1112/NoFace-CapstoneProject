@@ -44,8 +44,8 @@ void AStaffUpGround::ActiveGroundUp()
 			AEnemyBase* Enemy = Cast<AEnemyBase>(OverlapResult.GetActor());
 			float Distance = FVector::Dist(Enemy->GetActorLocation(), GetActorLocation());
 
-			//Enemy->LaunchCharacter(FVector(0.f, 0.f, 1500.f * (1 / Distance)), false, true);
-			Enemy->OnLaunched(FVector(0.f, 0.f, 1500.f * (1 / Distance)), false, true);
+			Enemy->LaunchCharacter(FVector(0.f, 0.f, 1500.f * (1 / Distance)), false, true);
+			//Enemy->OnLaunched(FVector(0.f, 0.f, 1500.f * (1 / Distance)), false, true);
 			UE_LOG(LogTemp, Display, TEXT("Enemy Name : %s"), *Enemy->GetActorNameOrLabel());
 			UE_LOG(LogTemp, Display, TEXT("Enemy Location : %f"), Enemy->GetActorLocation().Z);
 		}

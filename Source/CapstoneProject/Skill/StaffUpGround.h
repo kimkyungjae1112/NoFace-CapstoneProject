@@ -29,7 +29,7 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Root")
 	TObjectPtr<class USceneComponent> Root;
 
-	UPROPERTY(VisibleAnywhere, Category = "Root")
+	UPROPERTY(VisibleAnywhere, Category = "Mesh")
 	TObjectPtr<class UStaticMeshComponent> Mesh;
 
 	TArray<FOverlapResult> OverlapResults;
