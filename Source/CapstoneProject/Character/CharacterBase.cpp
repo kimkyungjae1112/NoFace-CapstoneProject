@@ -294,6 +294,7 @@ void ACharacterBase::CancelCasting()
 	if (SkillComponent->GetCastingFlag())
 	{
 		SkillComponent->SetCastingFlag(false);
+		SkillComponent->SkillQueue.Pop();
 	}
 }
 
