@@ -13,6 +13,7 @@
 #include "Skill/StaffMeteor.h"
 #include "Skill/StaffArea.h"
 #include "Skill/StaffUpGround.h"
+#include "Skill/StaffThunderbolt.h"
 
 USkillComponent::USkillComponent()
 {
@@ -208,7 +209,21 @@ void USkillComponent::EndBowSeveralArrows(UAnimMontage* Target, bool IsProperlyE
 
 void USkillComponent::BeginBowExplosionArrow()
 {
-	bCasting = true;
+	if (bCasting)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), RainArrows, Cursor.Location, FRotator::ZeroRotator);
+
+		bCasting = false;
+	}
+	else
+	{
+		bCasting = true;
+
+		SkillQueue.Enqueue([this]()
+			{
+				BeginBowExplosionArrow();
+			});
+	}
 }
 
 void USkillComponent::EndBowExplosionArrow(UAnimMontage* Target, bool IsProperlyEnded)
@@ -314,6 +329,9 @@ void USkillComponent::EndStaffUpGround(UAnimMontage* Target, bool IsProperlyEnde
 
 void USkillComponent::BeginStaffThunderbolt()
 {
+	FVector SpawnLocation = Character->GetActorLocation();
+	FRotator SpawnRotation = Character->GetActorRotation();
+	AStaffThunderbolt* Thunderbolt = GetWorld()->SpawnActor<AStaffThunderbolt>(ThunderboltClass, SpawnLocation, SpawnRotation);
 }
 
 void USkillComponent::EndStaffThunderbolt(UAnimMontage* Target, bool IsProperlyEnded)

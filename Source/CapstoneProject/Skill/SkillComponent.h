@@ -76,6 +76,11 @@ public:
 	//현재 캐스팅되는 스킬을 담을 컨테이너
 	TQueue<TFunction<void()>> SkillQueue;
 
+/* Bow 데이터 */
+private:
+	UPROPERTY(EditAnywhere, Category = "Bow")
+	TObjectPtr<class UParticleSystem> RainArrows;
+
 /* Staff 데이터 */
 private:
 	UPROPERTY(EditAnywhere, Category = "Staff")
@@ -86,6 +91,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Staff")
 	TSubclassOf<class AStaffUpGround> UpGroundClass;
+
+	UPROPERTY(EditAnywhere, Category = "Staff")
+	TSubclassOf<class AStaffThunderbolt> ThunderboltClass;
 
 /* 유틸리티 */
 private:
