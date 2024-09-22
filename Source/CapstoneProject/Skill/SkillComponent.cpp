@@ -12,6 +12,7 @@
 #include "Enemy/EnemyBase.h"
 #include "Skill/StaffMeteor.h"
 #include "Skill/StaffArea.h"
+#include "Skill/StaffUpGround.h"
 
 USkillComponent::USkillComponent()
 {
@@ -263,6 +264,7 @@ void USkillComponent::BeginStaffArea()
 		FVector SpawnLocation = Cursor.Location;
 		FRotator SpawnRotation = Character->GetActorRotation();
 		AStaffArea* Area = GetWorld()->SpawnActor<AStaffArea>(AreaClass, SpawnLocation, SpawnRotation);
+		Area->SetOwner(Character);
 
 		bCasting = false;
 	}
@@ -284,7 +286,26 @@ void USkillComponent::EndStaffArea(UAnimMontage* Target, bool IsProperlyEnded)
 
 void USkillComponent::BeginStaffUpGround()
 {
-	bCasting = true;
+	if (bCasting)
+	{
+		FVector SpawnLocation = Cursor.Location;
+		FRotator SpawnRotation = Character->GetActorRotation();
+		AStaffUpGround* UpGround = GetWorld()->SpawnActor<AStaffUpGround>(UpGroundClass, SpawnLocation, SpawnRotation);
+		UpGround->SetOwner(Character);
+		UpGround->ActiveGroundUp();
+
+		bCasting = false;
+	}
+	else
+	{
+		bCasting = true;
+
+		//컨테이너에 람다형식으로 함수 등록
+		SkillQueue.Enqueue([this]()
+			{
+				BeginStaffUpGround();
+			});
+	}
 }
 
 void USkillComponent::EndStaffUpGround(UAnimMontage* Target, bool IsProperlyEnded)

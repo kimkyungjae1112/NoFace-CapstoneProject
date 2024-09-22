@@ -84,6 +84,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Staff")
 	TSubclassOf<class AStaffArea> AreaClass;
 
+	UPROPERTY(EditAnywhere, Category = "Staff")
+	TSubclassOf<class AStaffUpGround> UpGroundClass;
+
 /* 유틸리티 */
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Character")

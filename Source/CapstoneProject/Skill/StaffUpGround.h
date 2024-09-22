@@ -4,15 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "StaffArea.generated.h"
+#include "StaffUpGround.generated.h"
 
 UCLASS()
-class CAPSTONEPROJECT_API AStaffArea : public AActor
+class CAPSTONEPROJECT_API AStaffUpGround : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
-	AStaffArea();
+	AStaffUpGround();
 
 protected:
 	virtual void BeginPlay() override;
@@ -20,17 +20,17 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
+	void ActiveGroundUp();
 
 private:
 	bool CheckInArea();
-	void PullToCenter(float DeltaTime);
 
 private:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Root")
 	TObjectPtr<class USceneComponent> Root;
 
-	UPROPERTY(VisibleAnywhere, Category = "Mesh")
-	TObjectPtr<class UStaticMeshComponent> Area;
+	UPROPERTY(VisibleAnywhere, Category = "Root")
+	TObjectPtr<class UStaticMeshComponent> Mesh;
 
 	TArray<FOverlapResult> OverlapResults;
 

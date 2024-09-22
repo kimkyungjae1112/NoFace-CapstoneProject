@@ -20,6 +20,8 @@ AStaffArea::AStaffArea()
 	{
 		Area->SetStaticMesh(AreaRef.Object);
 	}
+
+	LifeTime = 5.f;
 }
 
 void AStaffArea::BeginPlay()
@@ -32,23 +34,36 @@ void AStaffArea::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//CheckInArea를 해
-		//true면
-		//PullToCenter를 호출해서 몬스터를 중앙으로 모으고 대미지를 줘
+	if (CheckInArea())
+	{
+		PullToCenter(DeltaTime);
+	}
+
+	LifeTime -= DeltaTime;
+	if (LifeTime <= 0.f)
+	{
+		Destroy();
+	}
 }
 
 bool AStaffArea::CheckInArea()
 {
-	const float Radius = 100.f;
+	const float Radius = 200.f;
 
 	FVector Origin = GetActorLocation();
 	FCollisionQueryParams Params(NAME_None, true, GetOwner()); //GetOwner 꼭 설정해주기
-	TArray<FOverlapResult> OverlapResults;
+	DrawDebugSphere(GetWorld(), Origin, Radius, 32, FColor::Red, false);
 
 	return GetWorld()->OverlapMultiByChannel(OverlapResults, Origin, FQuat::Identity, ECC_GameTraceChannel2, FCollisionShape::MakeSphere(Radius), Params);
 }
 
-void AStaffArea::PullToCenter()
+void AStaffArea::PullToCenter(float DeltaTime)
 {
+	for (const auto& OverlapResult : OverlapResults)
+	{
+		FVector Target = GetActorLocation();
+		AActor* Actor = OverlapResult.GetActor();
+		Actor->SetActorLocation(FMath::VInterpTo(Actor->GetActorLocation(), Target, DeltaTime, 0.25f));
+	}
 }
 
