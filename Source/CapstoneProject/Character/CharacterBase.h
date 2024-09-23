@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "InputActionValue.h"
 #include "CharacterBase.generated.h"
 
 UENUM(BlueprintType)
@@ -97,6 +98,9 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Input")
 	TObjectPtr<class UInputAction> CancelAction;
 
+	UPROPERTY(VisibleAnywhere, Category = "Input")
+	TObjectPtr<class UInputAction> ZoomInOutAction;
+
 /* 마우스 우클릭을 통해 캐릭터 이동 기능을 실현하는 함수와 변수 */
 	void OnClickStart();	//Mouse Right Click Started
 	void OnClicking();	//Mouse Right Click Triggered
@@ -113,6 +117,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Component")
 	TObjectPtr<class UCharacterDefaultAttackComponent> AttackComponent;
+
+/* 마우스 휠을 이용한 줌 인아웃 */
+	void ZoomInOut(const FInputActionValue& Value);
 
 /* 캐스팅 스킬 */
 	void CancelCasting();

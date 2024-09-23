@@ -96,6 +96,11 @@ ACharacterBase::ACharacterBase()
 	{
 		CancelAction = CancelActionRef.Object;
 	}
+	static ConstructorHelpers::FObjectFinder<UInputAction> ZoomInOutActionRef(TEXT("/Script/EnhancedInput.InputAction'/Game/No-Face/Input/InputAction/IA_ZoomInOut.IA_ZoomInOut'"));
+	if (ZoomInOutActionRef.Object)
+	{
+		ZoomInOutAction = ZoomInOutActionRef.Object;
+	}
 	
 	/* Mesh */
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MainMeshRef(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequins/Meshes/SKM_Quinn.SKM_Quinn'"));
@@ -154,7 +159,8 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	EnhancedInputComponent->BindAction(R_SkillAction, ETriggerEvent::Started, this, &ACharacterBase::R_Skill);
 	EnhancedInputComponent->BindAction(NextWeaponAction, ETriggerEvent::Started, this, &ACharacterBase::NextWeapon);
 	EnhancedInputComponent->BindAction(PrevWeaponAction, ETriggerEvent::Started, this, &ACharacterBase::PrevWeapon);
-	
+	EnhancedInputComponent->BindAction(ZoomInOutAction, ETriggerEvent::Triggered, this, &ACharacterBase::ZoomInOut);
+
 	EnhancedInputComponent->BindAction(CancelAction, ETriggerEvent::Started, this, &ACharacterBase::CancelCasting);
 }
 
@@ -287,6 +293,13 @@ void ACharacterBase::UpdateRotate()
 	{
 		GetWorld()->GetTimerManager().ClearTimer(RotateTimer);
 	}
+}
+
+void ACharacterBase::ZoomInOut(const FInputActionValue& Value)
+{
+	const float WheelValue = Value.Get<float>() * -50.f;
+
+	SpringArm->TargetArmLength = FMath::Clamp(SpringArm->TargetArmLength + WheelValue, 200.f, 1000.f);
 }
 
 void ACharacterBase::CancelCasting()
