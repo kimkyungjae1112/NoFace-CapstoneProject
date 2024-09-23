@@ -22,6 +22,7 @@ AStaffArea::AStaffArea()
 	}
 
 	LifeTime = 5.f;
+	DamageTime = 0.f;
 }
 
 void AStaffArea::BeginPlay()
@@ -52,18 +53,27 @@ bool AStaffArea::CheckInArea()
 
 	FVector Origin = GetActorLocation();
 	FCollisionQueryParams Params(NAME_None, true, GetOwner()); //GetOwner 꼭 설정해주기
-	DrawDebugSphere(GetWorld(), Origin, Radius, 32, FColor::Red, false);
 
 	return GetWorld()->OverlapMultiByChannel(OverlapResults, Origin, FQuat::Identity, ECC_GameTraceChannel2, FCollisionShape::MakeSphere(Radius), Params);
 }
 
 void AStaffArea::PullToCenter(float DeltaTime)
 {
+	FDamageEvent DamageEvent;
 	for (const auto& OverlapResult : OverlapResults)
 	{
 		FVector Target = GetActorLocation();
 		AActor* Actor = OverlapResult.GetActor();
+		Target.Z = Actor->GetActorLocation().Z;
 		Actor->SetActorLocation(FMath::VInterpTo(Actor->GetActorLocation(), Target, DeltaTime, 0.25f));
+
+		DamageTime += DeltaTime;
+		if (DamageTime >= 10.f)
+		{
+			Actor->TakeDamage(10.f, DamageEvent, Actor->GetInstigatorController(), GetOwner());
+			DamageTime = 0.f;
+		}
+		DrawDebugSphere(GetWorld(), GetActorLocation(), 200.f, 32, FColor::Green, false);
 	}
 }
 

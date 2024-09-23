@@ -18,6 +18,6 @@ void ASword::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimi
 {
 	UE_LOG(LogTemp, Display, TEXT("Sword On Hit"));
 	
-	FDamageEvent DamageEvent;
-	OtherActor->TakeDamage(50.f, DamageEvent, GetWorld()->GetFirstPlayerController(), GetWorld()->GetFirstPlayerController()->GetPawn());
+	/*FDamageEvent DamageEvent;
+	OtherActor->TakeDamage(50.f, DamageEvent, GetWorld()->GetFirstPlayerController(), GetWorld()->GetFirstPlayerController()->GetPawn());*/
 }

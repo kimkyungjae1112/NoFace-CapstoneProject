@@ -36,4 +36,7 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "LifeTime")
 	float LifeTime;
+
+	float DamageTime;
+
 };

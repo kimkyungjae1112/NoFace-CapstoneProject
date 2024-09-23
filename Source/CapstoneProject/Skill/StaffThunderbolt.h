@@ -37,6 +37,6 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Mesh")
 	TObjectPtr<class UStaticMeshComponent> DownPlane;
 
-	UPROPERTY(EditAnywhere Category = "LifeTime")
+	UPROPERTY(EditAnywhere, Category = "LifeTime")
 	float LifeTime;
 };
