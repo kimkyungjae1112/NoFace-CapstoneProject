@@ -18,6 +18,7 @@
 # files if adding them here.
 !/Content/**/*.uasset
 !/Content/**/*.umap
+!/*.txt
 
 # 임시 ignore
 /Content/Characters
