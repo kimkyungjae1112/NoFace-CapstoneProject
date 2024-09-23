@@ -20,6 +20,14 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
+	void ActiveThunderbolt();
+
+private:
+	bool CheckInArea();
+
+	TArray<FOverlapResult> OverlapResults;
+
+private:
 	UPROPERTY(VisibleAnywhere, Category = "Root")
 	TObjectPtr<class USceneComponent> Root;
 
@@ -28,4 +36,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = "Mesh")
 	TObjectPtr<class UStaticMeshComponent> DownPlane;
+
+	UPROPERTY(EditAnywhere Category = "LifeTime")
+	float LifeTime;
 };

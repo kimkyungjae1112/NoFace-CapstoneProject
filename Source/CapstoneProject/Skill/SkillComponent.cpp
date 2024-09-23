@@ -329,9 +329,11 @@ void USkillComponent::EndStaffUpGround(UAnimMontage* Target, bool IsProperlyEnde
 
 void USkillComponent::BeginStaffThunderbolt()
 {
-	FVector SpawnLocation = Character->GetActorLocation();
+	FVector SpawnLocation = Character->GetMesh()->GetSocketLocation(TEXT("root")) + FVector(0.f, 0.f, 5.f);
 	FRotator SpawnRotation = Character->GetActorRotation();
 	AStaffThunderbolt* Thunderbolt = GetWorld()->SpawnActor<AStaffThunderbolt>(ThunderboltClass, SpawnLocation, SpawnRotation);
+	Thunderbolt->SetOwner(Character);
+	Thunderbolt->ActiveThunderbolt();
 }
 
 void USkillComponent::EndStaffThunderbolt(UAnimMontage* Target, bool IsProperlyEnded)
