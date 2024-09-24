@@ -16,5 +16,5 @@ class CAPSTONEPROJECT_API AStaff : public AWeaponBase
 
 public:
 	AStaff();
-	
+
 };

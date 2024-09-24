@@ -21,6 +21,7 @@
 #include "Skill/SkillComponent.h"
 #include "Character/CharacterHitCheckComponent.h"
 #include "Character/CharacterDefaultAttackComponent.h"
+#include "Interface/BowInterface.h"
 
 ACharacterBase::ACharacterBase()
 {
@@ -378,6 +379,11 @@ void ACharacterBase::EquipBow()
 
 	WeaponBase = GetWorld()->SpawnActor<ABow>(BowClass, SpawnLocation, SpawnRotation);
 	WeaponBase->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("hand_lSocket_Bow"));
+	IBowInterface* Interface = Cast<IBowInterface>(AttackComponent);
+	if (Interface)
+	{
+		Interface->SetBow(Cast<ABow>(WeaponBase));
+	}
 }
 
 void ACharacterBase::EquipStaff()

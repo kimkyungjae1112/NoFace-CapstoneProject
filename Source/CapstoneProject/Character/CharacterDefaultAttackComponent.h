@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Interface/BowInterface.h"
 #include "CharacterDefaultAttackComponent.generated.h"
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class CAPSTONEPROJECT_API UCharacterDefaultAttackComponent : public UActorComponent
+class CAPSTONEPROJECT_API UCharacterDefaultAttackComponent : public UActorComponent, public IBowInterface
 {
 	GENERATED_BODY()
 
@@ -44,15 +45,29 @@ private:
 private:
 	void BeginBowDefaultAttack();
 	void EndBowDefaultAttack(class UAnimMontage* Target, bool IsProperlyEnded);
+	virtual void SetBow(class ABow* InBow) override;
+	virtual void StartAnimation() override;
+	virtual void EndAnimation() override;
 
 	UPROPERTY(EditAnywhere, Category = "Montage")
 	TObjectPtr<class UAnimMontage> BowDefaultAttackMontage;
+
+	UPROPERTY(VisibleAnywhere, Category = "Weapon")
+	TObjectPtr<class ABow> Bow;
 
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	TSubclassOf<class AArrow> ArrowClass;
 
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 	TObjectPtr<class AArrow> Arrow;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	TObjectPtr<class UAnimationAsset> BowPullAnim;
+	
+	
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	TObjectPtr<class UAnimationAsset> BowIdleAnim;
+
 
 /* Staff 기본 공격 */
 private:

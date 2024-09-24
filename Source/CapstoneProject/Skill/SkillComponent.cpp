@@ -212,6 +212,7 @@ void USkillComponent::BeginBowExplosionArrow()
 	if (bCasting)
 	{
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), RainArrows, Cursor.Location, FRotator::ZeroRotator);
+		UGameplayStatics::ApplyRadialDamage(GetOwner(), 50.f, Cursor.Location, 200.f, UDamageType::StaticClass(), TArray<AActor*>(), GetOwner());
 
 		bCasting = false;
 	}

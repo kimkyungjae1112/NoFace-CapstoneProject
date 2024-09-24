@@ -13,7 +13,8 @@ UCLASS()
 class CAPSTONEPROJECT_API ABow : public AWeaponBase
 {
 	GENERATED_BODY()
-	
+
 public:
 	ABow();
+
 };

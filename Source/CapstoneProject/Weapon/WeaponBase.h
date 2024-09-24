@@ -17,12 +17,13 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+public:
+	FORCEINLINE USkeletalMeshComponent* GetMesh() { return Mesh; }
+
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Root")
 	TObjectPtr<class USceneComponent> Root;
 
-	UPROPERTY(VisibleAnywhere, Category = "Box")
-	TObjectPtr<class UBoxComponent> Box;
 
 	UPROPERTY(EditAnywhere, Category = "Mesh")
 	TObjectPtr<class USkeletalMeshComponent> Mesh;
