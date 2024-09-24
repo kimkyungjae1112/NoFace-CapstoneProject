@@ -7,6 +7,7 @@
 #include "InputActionValue.h"
 #include "CharacterBase.generated.h"
 
+//Animation Blueprint 에서 무기 애니메이션 값을 바꿀 때 쓰는 ENUM 값
 UENUM(BlueprintType)
 enum class EWeaponType : uint8
 {

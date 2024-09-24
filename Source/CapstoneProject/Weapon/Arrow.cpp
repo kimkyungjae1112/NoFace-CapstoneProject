@@ -16,7 +16,6 @@ AArrow::AArrow()
 	Box->SetupAttachment(Root);
 	Box->SetCollisionProfileName(TEXT("Arrow"));
 	Box->OnComponentHit.AddDynamic(this, &AArrow::OnHit);
-	Box->OnComponentBeginOverlap.AddDynamic(this, &AArrow::OnBeginOverlap);
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(Root);
@@ -30,7 +29,7 @@ AArrow::AArrow()
 
 	Direction = FVector::ZeroVector;
 	Damage = 50.f;
-	MoveSpeed = 500.f;
+	MoveSpeed = 1500.f;
 	LifeTime = 5.f;
 }
 
@@ -73,14 +72,5 @@ void AArrow::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimi
 	}
 }
 
-void AArrow::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	if (OtherActor && OtherActor != this)
-	{
-		FDamageEvent DamageEvent;
-		OtherActor->TakeDamage(Damage, DamageEvent, GetWorld()->GetFirstPlayerController(), this);
-		UE_LOG(LogTemp, Display, TEXT("화살 오버랩"));
-		Destroy();
-	}
-}
+
 

@@ -288,9 +288,9 @@ void ACharacterBase::UpdateRotate()
 
 	FRotator TargetRotation = (TargetHitResult.Location - GetActorLocation()).Rotation();
 	TargetRotation.Pitch = 0;
-	SetActorRelativeRotation(FMath::RInterpTo(GetActorRotation(), TargetRotation, GetWorld()->GetDeltaSeconds(), 15.0f));
+	SetActorRelativeRotation(FMath::RInterpTo(GetActorRotation(), TargetRotation, GetWorld()->GetDeltaSeconds(), 20.0f));
 
-	if (FMath::Abs((TargetRotation - GetActorRotation()).Yaw) < 5.0f)
+	if (FMath::Abs((TargetRotation - GetActorRotation()).Yaw) < 1.0f)
 	{
 		GetWorld()->GetTimerManager().ClearTimer(RotateTimer);
 	}

@@ -5,6 +5,7 @@
 #include "Character/CharacterComboAttackData.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/PlayerController.h"
 #include "Weapon/Arrow.h"
 #include "Weapon/Bow.h"
 
