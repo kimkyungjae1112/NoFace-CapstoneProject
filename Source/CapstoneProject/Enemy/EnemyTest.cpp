@@ -19,6 +19,7 @@ AEnemyTest::AEnemyTest()
 	}
 
 	GetMesh()->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
+	GetMesh()->SetCollisionProfileName(TEXT("NoCollision"));
 
 	/* 스텟 컴포넌트 초기화 */
 	Stat = CreateDefaultSubobject<UCharacterStatComponent>(TEXT("Stat"));

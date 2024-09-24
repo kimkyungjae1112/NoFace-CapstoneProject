@@ -29,21 +29,17 @@ void UCharacterHitCheckComponent::BeginPlay()
 
 void UCharacterHitCheckComponent::SwordDefaultAttackHitCheck()
 {
-	AActor* Owner = GetOwner();
-	if (Owner == nullptr) return;
-
 	float AttackDamage = Stat->Damage;
 	float AttackRange = Stat->Range;
 	FColor Color = FColor::Red;
 
-	FVector Origin = Owner->GetActorLocation();
-	FVector ForwardVector = Owner->GetActorForwardVector();
-	FCollisionQueryParams Params(NAME_None, false, Owner);
+	FVector Origin = Character->GetActorLocation();
+	FVector ForwardVector = Character->GetActorForwardVector();
+	FCollisionQueryParams Params(NAME_None, false, Character); 
 	TArray<FOverlapResult> OverlapResults;
 
 	//Range를 반지름으로 하고 캐릭터가 중심인 원 안에 Enemy Trace에 대해 Block으로 설정된 폰들을 찾는다.
-	bool bHit = GetWorld()->OverlapMultiByChannel(OverlapResults, Origin, FQuat::Identity, ECC_GameTraceChannel2,
-		FCollisionShape::MakeSphere(AttackRange), Params);
+	bool bHit = GetWorld()->OverlapMultiByChannel(OverlapResults, Origin, FQuat::Identity, ECC_GameTraceChannel2, FCollisionShape::MakeSphere(AttackRange), Params);
 	if (bHit) //원 안에 들어 왔다면
 	{
 		for (const auto& OverlapResult : OverlapResults)
@@ -51,16 +47,16 @@ void UCharacterHitCheckComponent::SwordDefaultAttackHitCheck()
 			FDamageEvent DamageEvent;
 			//설정된 Degree 값 안에 있는지 한번 더 확인을 거친다.
 			//부채꼴의 공격 판정이 만들어짐
-			if (SwordDefaultAttackRadialRange(Owner, OverlapResult.GetActor(), AttackRange, 60.f)) 
-			{
-				OverlapResult.GetActor()->TakeDamage(AttackDamage, DamageEvent, GetWorld()->GetFirstPlayerController(), Owner);
+			if (SwordDefaultAttackRadialRange(GetOwner(), OverlapResult.GetActor(), AttackRange, 60.f))
+			{   
+				OverlapResult.GetActor()->TakeDamage(AttackDamage, DamageEvent, GetWorld()->GetFirstPlayerController(), Character);
 				Color = FColor::Green;
 			}
 		}
 	}
 
 	//공격 범위 라인으로 나타내기
-	SwordDefaultAttackHitDebug(Owner->GetWorld(), Origin, ForwardVector, AttackRange, Color);
+	SwordDefaultAttackHitDebug(Character->GetWorld(), Origin, ForwardVector, AttackRange, Color);
 }
 
 void UCharacterHitCheckComponent::Sword_Q_SkillHitCheck()
