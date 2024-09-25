@@ -21,7 +21,7 @@ AArrow::AArrow()
 	Mesh->SetupAttachment(Root);
 	Mesh->SetCollisionProfileName(TEXT("NoCollision"));
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshRef(TEXT("/Script/Engine.StaticMesh'/Game/MRPGT/StaticMeshes/Weapons/SM_Arrow_A.SM_Arrow_A'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshRef(TEXT("/Script/Engine.StaticMesh'/Game/No-Face/Weapon/Bow/Mesh/SM_Arrow_A.SM_Arrow_A'"));
 	if (MeshRef.Object)
 	{
 		Mesh->SetStaticMesh(MeshRef.Object);

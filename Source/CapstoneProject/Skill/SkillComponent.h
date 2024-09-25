@@ -4,12 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Interface/BowSkillInterface.h"
 #include "SkillComponent.generated.h"
 
 DECLARE_DELEGATE(FParryingSign)
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class CAPSTONEPROJECT_API USkillComponent : public UActorComponent
+class CAPSTONEPROJECT_API USkillComponent : public UActorComponent, public IBowSkillInterface
 {
 	GENERATED_BODY()
 
@@ -55,6 +56,11 @@ private:
 	void EndBowBackstep(class UAnimMontage* Target, bool IsProperlyEnded);
 	void BeginBowAutoTargeting();
 	void EndBowAutoTargeting(class UAnimMontage* Target, bool IsProperlyEnded);
+	void DisplayTargeting();
+
+	virtual void Bow_Q_Skill() override;
+	virtual void Bow_W_Skill() override;
+
 
 	//Staff Skill Montage
 	void BeginStaffMeteor();
@@ -83,6 +89,14 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Bow")
 	TSubclassOf<class AArrow> ArrowClass;
+
+	UPROPERTY(EditAnywhere, Category = "Bow")
+	TSubclassOf<class ABowAutoTargeting> AutoTargetingClass;
+	
+	UPROPERTY(VisibleAnywhere, Category = "Bow")
+	TObjectPtr<class ABowAutoTargeting> BowAutoTargeting;
+
+	FTimerHandle AutoTargetingTimer;
 
 /* Staff 데이터 */
 private:

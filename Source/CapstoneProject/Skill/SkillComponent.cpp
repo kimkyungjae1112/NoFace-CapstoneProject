@@ -14,6 +14,7 @@
 #include "Skill/StaffArea.h"
 #include "Skill/StaffUpGround.h"
 #include "Skill/StaffThunderbolt.h"
+#include "Skill/BowAutoTargeting.h"
 #include "Weapon/Arrow.h"
 
 USkillComponent::USkillComponent()
@@ -202,6 +203,101 @@ void USkillComponent::EndSwordAura(UAnimMontage* Target, bool IsProperlyEnded)
 
 void USkillComponent::BeginBowSeveralArrows()
 {
+	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
+
+	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+
+	AnimInstance->Montage_Play(SkillMontageData->BowMontages[0]);
+
+	FOnMontageEnded MontageEnd;
+	MontageEnd.BindUObject(this, &USkillComponent::EndBowSeveralArrows);
+	AnimInstance->Montage_SetEndDelegate(MontageEnd, SkillMontageData->BowMontages[0]);
+}
+
+void USkillComponent::EndBowSeveralArrows(UAnimMontage* Target, bool IsProperlyEnded)
+{
+	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+}
+
+void USkillComponent::BeginBowExplosionArrow()
+{
+	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
+
+	if (bCasting)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), RainArrows, Cursor.Location, FRotator::ZeroRotator);
+		UGameplayStatics::ApplyRadialDamage(GetOwner(), 50.f, Cursor.Location, 200.f, UDamageType::StaticClass(), TArray<AActor*>(), GetOwner());
+
+		bCasting = false;
+
+		if (!AnimInstance->Montage_IsPlaying(SkillMontageData->BowMontages[1]))
+		{
+			AnimInstance->Montage_Resume(SkillMontageData->BowMontages[1]);
+		}
+
+		FOnMontageEnded MontageEnd;
+		MontageEnd.BindUObject(this, &USkillComponent::EndBowExplosionArrow);
+		AnimInstance->Montage_SetEndDelegate(MontageEnd, SkillMontageData->BowMontages[1]);
+	}
+	else
+	{
+		bCasting = true;
+
+		SkillQueue.Enqueue([this]()
+			{
+				BeginBowExplosionArrow();
+			});
+
+		Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+		AnimInstance->Montage_Play(SkillMontageData->BowMontages[1], 1.0f);
+	}
+}
+
+void USkillComponent::EndBowExplosionArrow(UAnimMontage* Target, bool IsProperlyEnded)
+{
+	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+}
+
+void USkillComponent::BeginBowBackstep()
+{
+	FVector BackstepDirection = Character->GetActorForwardVector() * -500.f;
+	Character->LaunchCharacter(BackstepDirection + FVector(0.f, 0.f, 100.f), true, true);
+}
+
+void USkillComponent::EndBowBackstep(UAnimMontage* Target, bool IsProperlyEnded)
+{
+}
+
+void USkillComponent::BeginBowAutoTargeting()
+{
+	FVector SpawnLocation = Character->GetActorLocation() + (Character->GetActorForwardVector() * 300.f);
+	FRotator SpawnRotation = Character->GetActorRotation();
+
+	BowAutoTargeting = GetWorld()->SpawnActor<ABowAutoTargeting>(AutoTargetingClass, SpawnLocation, SpawnRotation);
+	BowAutoTargeting->SetOwner(Character);
+	
+	GetWorld()->GetTimerManager().SetTimer(AutoTargetingTimer, this, &USkillComponent::DisplayTargeting, 0.1f, true);
+}
+
+void USkillComponent::EndBowAutoTargeting(UAnimMontage* Target, bool IsProperlyEnded)
+{
+	//애니메이션 끝날 때 실행
+	GetWorld()->GetTimerManager().ClearTimer(AutoTargetingTimer);
+}
+
+void USkillComponent::DisplayTargeting()
+{
+	if (!BowAutoTargeting->GetEnemys().IsEmpty())
+	{
+		for (const auto& Enemy : BowAutoTargeting->GetEnemys())
+		{
+			DrawDebugSphere(GetWorld(), Enemy->GetActorLocation(), 15.f, 12, FColor::Green, false);
+		}
+	}
+}
+
+void USkillComponent::Bow_Q_Skill()
+{
 	FVector ForwardVector = Character->GetActorForwardVector();
 
 	for (int32 Degree = -60; Degree <= 60; Degree += 20)
@@ -215,55 +311,15 @@ void USkillComponent::BeginBowSeveralArrows()
 		Arrow->SetOwner(Character);
 		Arrow->Init(SpawnVector, SpawnLocation, SpawnRotator);
 	}
-
-
-
-
-
 }
 
-void USkillComponent::EndBowSeveralArrows(UAnimMontage* Target, bool IsProperlyEnded)
+void USkillComponent::Bow_W_Skill()
 {
-}
-
-void USkillComponent::BeginBowExplosionArrow()
-{
-	if (bCasting)
+	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
+	if (AnimInstance->Montage_IsPlaying(SkillMontageData->BowMontages[1]))
 	{
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), RainArrows, Cursor.Location, FRotator::ZeroRotator);
-		UGameplayStatics::ApplyRadialDamage(GetOwner(), 50.f, Cursor.Location, 200.f, UDamageType::StaticClass(), TArray<AActor*>(), GetOwner());
-
-		bCasting = false;
+		AnimInstance->Montage_Pause(SkillMontageData->BowMontages[1]);
 	}
-	else
-	{
-		bCasting = true;
-
-		SkillQueue.Enqueue([this]()
-			{
-				BeginBowExplosionArrow();
-			});
-	}
-}
-
-void USkillComponent::EndBowExplosionArrow(UAnimMontage* Target, bool IsProperlyEnded)
-{
-}
-
-void USkillComponent::BeginBowBackstep()
-{
-}
-
-void USkillComponent::EndBowBackstep(UAnimMontage* Target, bool IsProperlyEnded)
-{
-}
-
-void USkillComponent::BeginBowAutoTargeting()
-{
-}
-
-void USkillComponent::EndBowAutoTargeting(UAnimMontage* Target, bool IsProperlyEnded)
-{
 }
 
 void USkillComponent::BeginStaffMeteor()

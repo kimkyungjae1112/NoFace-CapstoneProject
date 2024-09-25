@@ -15,7 +15,7 @@ AStaffUpGround::AStaffUpGround()
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(Root);
 	Mesh->SetCollisionProfileName(TEXT("NoCollision"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshRef(TEXT("/Script/Engine.StaticMesh'/Game/ParagonGideon/FX/Meshes/Heroes/Gideon/SM_Meteor_Cine.SM_Meteor_Cine'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshRef(TEXT("/Script/Engine.StaticMesh'/Game/No-Face/Effect/Staff/Mesh/SM_Meteor_Cine.SM_Meteor_Cine'"));
 	if (MeshRef.Object)
 	{
 		Mesh->SetStaticMesh(MeshRef.Object);
