@@ -144,6 +144,8 @@ private:
 
 	int32 WeaponIndex = 0;	//무기 인덱스
 	
+/* 중복 입력 방지 */
+	void StopInput();
 
 /* 무기 데이터 섹션 */
 private:

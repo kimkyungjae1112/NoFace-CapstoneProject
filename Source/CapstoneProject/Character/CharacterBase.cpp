@@ -400,6 +400,12 @@ void ACharacterBase::EquipStaff()
 	WeaponBase->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("hand_rSocket"));
 }
 
+//구현 보류
+void ACharacterBase::StopInput()
+{
+	GetPlayerController()->DisableInput(GetPlayerController());
+}
+
 void ACharacterBase::ToggleParrying()
 {
 	if (bIsParrying == false) bIsParrying = true;

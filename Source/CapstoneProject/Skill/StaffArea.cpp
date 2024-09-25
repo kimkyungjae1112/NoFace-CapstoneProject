@@ -65,10 +65,10 @@ void AStaffArea::PullToCenter(float DeltaTime)
 		FVector Target = GetActorLocation();
 		AActor* Actor = OverlapResult.GetActor();
 		Target.Z = Actor->GetActorLocation().Z;
-		Actor->SetActorLocation(FMath::VInterpTo(Actor->GetActorLocation(), Target, DeltaTime, 0.25f));
+		Actor->SetActorLocation(FMath::VInterpTo(Actor->GetActorLocation(), Target, DeltaTime, 1.f));
 
 		DamageTime += DeltaTime;
-		if (DamageTime >= 10.f)
+		if (DamageTime >= 1.f)
 		{
 			Actor->TakeDamage(10.f, DamageEvent, Actor->GetInstigatorController(), GetOwner());
 			DamageTime = 0.f;
