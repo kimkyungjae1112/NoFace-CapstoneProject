@@ -81,6 +81,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Bow")
 	TObjectPtr<class UParticleSystem> RainArrows;
 
+	UPROPERTY(EditAnywhere, Category = "Bow")
+	TSubclassOf<class AArrow> ArrowClass;
+
 /* Staff 데이터 */
 private:
 	UPROPERTY(EditAnywhere, Category = "Staff")

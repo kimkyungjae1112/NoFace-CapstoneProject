@@ -14,6 +14,7 @@
 #include "Skill/StaffArea.h"
 #include "Skill/StaffUpGround.h"
 #include "Skill/StaffThunderbolt.h"
+#include "Weapon/Arrow.h"
 
 USkillComponent::USkillComponent()
 {
@@ -201,6 +202,24 @@ void USkillComponent::EndSwordAura(UAnimMontage* Target, bool IsProperlyEnded)
 
 void USkillComponent::BeginBowSeveralArrows()
 {
+	FVector ForwardVector = Character->GetActorForwardVector();
+
+	for (int32 Degree = -60; Degree <= 60; Degree += 20)
+	{
+		FVector SpawnVector = ForwardVector.RotateAngleAxis(Degree, FVector::UpVector);
+
+		FVector SpawnLocation = Character->GetActorLocation() + FVector(10.f, 0.f, 0.f);
+		FRotator SpawnRotator = SpawnVector.Rotation();
+
+		AArrow* Arrow = GetWorld()->SpawnActor<AArrow>(ArrowClass, SpawnLocation, SpawnRotator);
+		Arrow->SetOwner(Character);
+		Arrow->Init(SpawnVector, SpawnLocation, SpawnRotator);
+	}
+
+
+
+
+
 }
 
 void USkillComponent::EndBowSeveralArrows(UAnimMontage* Target, bool IsProperlyEnded)
