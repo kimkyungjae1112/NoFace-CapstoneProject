@@ -5,10 +5,11 @@
 #include "Animation/AnimInstance.h"
 #include "Animation/AnimMontage.h"
 #include "AI/Controller/AIControllerBase.h"
+#include "Components/CapsuleComponent.h"
 
 AEnemyBase::AEnemyBase()
 {
-	
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
 }
 
 void AEnemyBase::BeginPlay()

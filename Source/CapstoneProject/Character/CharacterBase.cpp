@@ -22,6 +22,7 @@
 #include "Character/CharacterHitCheckComponent.h"
 #include "Character/CharacterDefaultAttackComponent.h"
 #include "Interface/BowInterface.h"
+#include "Components/CapsuleComponent.h"
 
 ACharacterBase::ACharacterBase()
 {
@@ -45,6 +46,10 @@ ACharacterBase::ACharacterBase()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 	Camera->bUsePawnControlRotation = false;
+
+	/* 콜리전 설정 */
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Player"));
+	GetMesh()->SetCollisionProfileName(TEXT("NoCollision"));
 
 	/* Enhanced Input 로딩 */
 	static ConstructorHelpers::FObjectFinder<UInputMappingContext> InputMappingContextRef(TEXT("/Script/EnhancedInput.InputMappingContext'/Game/No-Face/Input/InputMappingContext/IMC_Default.IMC_Default'"));
