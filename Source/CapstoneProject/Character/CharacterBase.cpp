@@ -314,6 +314,11 @@ void ACharacterBase::CancelCasting()
 	{
 		SkillComponent->SetCastingFlag(false);
 		SkillComponent->SkillQueue.Pop();
+
+		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+		AnimInstance->StopAllMontages(0.1f);
+
+		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 	}
 }
 
