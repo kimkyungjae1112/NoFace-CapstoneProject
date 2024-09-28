@@ -12,7 +12,7 @@
 
 AEnemyTest::AEnemyTest()
 {
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MainMeshRef(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequins/Meshes/SKM_Manny.SKM_Manny'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MainMeshRef(TEXT("/Script/Engine.SkeletalMesh'/Game/No-Face/Character/Mesh/SKM_Quinn_Simple.SKM_Quinn_Simple'"));
 	if (MainMeshRef.Object)
 	{
 		GetMesh()->SetSkeletalMesh(MainMeshRef.Object);
