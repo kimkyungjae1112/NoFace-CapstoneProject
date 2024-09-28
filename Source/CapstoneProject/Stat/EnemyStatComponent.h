@@ -24,13 +24,14 @@ public:
 	FORCEINLINE float GetCurrentHp() const { return CurrentHp; }
 	FORCEINLINE float GetCurrentMp() const { return CurrentMp; }
 	FORCEINLINE float GetCurrentDamage() const { return CurrentDamage; }
+	FORCEINLINE float GetCurrentRange() const { return CurrentRange; }
 
 	float ApplyDamage(float InDamage);
 	void SetHp(float ChangeHp);
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Stat")
-	TObjectPtr<class UCharacterDataStat> DataStat;
+	TObjectPtr<class UEnemyDataStat> DataStat;
 
 	UPROPERTY(EditAnywhere, Category = "Stat")
 	float CurrentHp;

@@ -41,7 +41,7 @@ float AEnemyTest::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACon
 void AEnemyTest::DefaultAttackHitCheck()
 {
 	float Damage = Stat->GetCurrentDamage();
-	float Range = 200.f;
+	float Range = Stat->GetCurrentRange();
 
 	FColor Color(FColor::Red);
 	FVector Origin = GetActorLocation();

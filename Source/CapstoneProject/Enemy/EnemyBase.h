@@ -35,7 +35,6 @@ public:
 public:
 	virtual void Stun();
 	
-
 protected:
 	UPROPERTY(EditAnywhere, Category = "Stat")
 	TObjectPtr<class UEnemyStatComponent> Stat;

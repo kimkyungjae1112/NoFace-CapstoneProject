@@ -11,7 +11,7 @@
 AEnemyBase::AEnemyBase()
 {
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
-
+	
 	Stat = CreateDefaultSubobject<UEnemyStatComponent>(TEXT("Stat"));
 }
 

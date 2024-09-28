@@ -8,6 +8,11 @@ UEnemyStatComponent::UEnemyStatComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
+	static ConstructorHelpers::FObjectFinder<UEnemyDataStat> EnemyDataStatRef(TEXT("/Script/CapstoneProject.EnemyDataStat'/Game/No-Face/Enemy/Stat/DA_EnemyStatData.DA_EnemyStatData'"));
+	if (EnemyDataStatRef.Object)
+	{
+		DataStat = EnemyDataStatRef.Object;
+	}
 }
 
 
