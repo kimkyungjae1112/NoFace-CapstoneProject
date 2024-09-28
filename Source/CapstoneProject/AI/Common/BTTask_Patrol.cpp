@@ -35,7 +35,7 @@ EBTNodeResult::Type UBTTask_Patrol::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	}
 
 	float Radius = Interface->GetPatrolRadius();
-	FVector Origin = OwnerComp.GetBlackboardComponent()->GetValueAsVector(TEXT("SpawnPos"));
+	FVector Origin = PossessedPawn->GetActorLocation();
 	FNavLocation NextPatrolPos;
 
 

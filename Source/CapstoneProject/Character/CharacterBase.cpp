@@ -147,6 +147,9 @@ void ACharacterBase::BeginPlay()
 		Subsystem->AddMappingContext(InputMappingContext, 0);
 	}
 
+	//초반에 칼들고 시작
+	EquipSword();
+	CurrentWeaponType = EWeaponType::Sword;
 }
 
 void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -174,9 +177,6 @@ void ACharacterBase::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	//초반에 칼들고 시작
-	EquipSword();
-	CurrentWeaponType = EWeaponType::Sword;
 }
 
 float ACharacterBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

@@ -13,5 +13,8 @@ UCLASS()
 class CAPSTONEPROJECT_API AAIControllerTanker : public AAIControllerBase
 {
 	GENERATED_BODY()
-	
+
+public:
+	AAIControllerTanker();
+
 };

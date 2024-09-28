@@ -25,6 +25,7 @@ public:
 	FORCEINLINE float GetCurrentMp() const { return CurrentMp; }
 	FORCEINLINE float GetCurrentDamage() const { return CurrentDamage; }
 	FORCEINLINE float GetCurrentRange() const { return CurrentRange; }
+	FORCEINLINE float GetCurrentMoveSpeed() const { return CurrentMoveSpeed; }
 
 	float ApplyDamage(float InDamage);
 	void SetHp(float ChangeHp);
@@ -44,5 +45,8 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Stat")
 	float CurrentRange;
+
+	UPROPERTY(EditAnywhere, Category = "Stat")
+	float CurrentMoveSpeed;
 		
 };

@@ -14,4 +14,10 @@ class CAPSTONEPROJECT_API AEnemyMelee_Tanker : public AEnemyBase
 {
 	GENERATED_BODY()
 	
+public:
+	AEnemyMelee_Tanker();
+
+protected:
+	virtual void BeginPlay() override;
+
 };

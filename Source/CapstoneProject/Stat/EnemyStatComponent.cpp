@@ -13,6 +13,12 @@ UEnemyStatComponent::UEnemyStatComponent()
 	{
 		DataStat = EnemyDataStatRef.Object;
 	}
+	
+	CurrentHp = DataStat->Hp;
+	CurrentMp = DataStat->Mp;
+	CurrentDamage = DataStat->Damage;
+	CurrentRange = DataStat->Range;
+	CurrentMoveSpeed = DataStat->MoveSpeed;
 }
 
 
