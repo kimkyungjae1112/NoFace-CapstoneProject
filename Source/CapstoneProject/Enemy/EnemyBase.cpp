@@ -6,10 +6,13 @@
 #include "Animation/AnimMontage.h"
 #include "AI/Controller/AIControllerBase.h"
 #include "Components/CapsuleComponent.h"
+#include "Stat/EnemyStatComponent.h"
 
 AEnemyBase::AEnemyBase()
 {
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
+
+	Stat = CreateDefaultSubobject<UEnemyStatComponent>(TEXT("Stat"));
 }
 
 void AEnemyBase::BeginPlay()

@@ -34,5 +34,10 @@ public:
 /* Stun 은 보스 몬스터 말고 있을 것 같으니 상속받아 구현하자. */
 public:
 	virtual void Stun();
+	
+
+protected:
+	UPROPERTY(EditAnywhere, Category = "Stat")
+	TObjectPtr<class UEnemyStatComponent> Stat;
 
 };

@@ -5,10 +5,10 @@
 #include "AI/Controller/AIControllerBase.h"
 #include "Animation/AnimInstance.h"
 #include "Animation/AnimMontage.h"
-#include "Stat/CharacterStatComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Engine/OverlapResult.h"
 #include "Engine/DamageEvents.h"
+#include "Stat/EnemyStatComponent.h"
 
 AEnemyTest::AEnemyTest()
 {
@@ -21,8 +21,6 @@ AEnemyTest::AEnemyTest()
 	GetMesh()->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
 	GetMesh()->SetCollisionProfileName(TEXT("NoCollision"));
 
-	/* 스텟 컴포넌트 초기화 */
-	Stat = CreateDefaultSubobject<UCharacterStatComponent>(TEXT("Stat"));
 	Stat->OnHpZero.AddUObject(this, &AEnemyTest::SetDead);
 }
 
@@ -42,7 +40,7 @@ float AEnemyTest::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACon
 
 void AEnemyTest::DefaultAttackHitCheck()
 {
-	float Damage = 50.f;
+	float Damage = Stat->GetCurrentDamage();
 	float Range = 200.f;
 
 	FColor Color(FColor::Red);

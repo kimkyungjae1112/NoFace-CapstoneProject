@@ -4,15 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "Stat/StatBase.h"
-#include "CharacterStatComponent.generated.h"
+#include "EnemyStatComponent.generated.h"
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class CAPSTONEPROJECT_API UCharacterStatComponent : public UStatBase
+class CAPSTONEPROJECT_API UEnemyStatComponent : public UStatBase
 {
 	GENERATED_BODY()
 
 public:	
-	UCharacterStatComponent();
+	UEnemyStatComponent();
 
 protected:
 	virtual void BeginPlay() override;
@@ -42,5 +43,5 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Stat")
 	float CurrentRange;
-
+		
 };

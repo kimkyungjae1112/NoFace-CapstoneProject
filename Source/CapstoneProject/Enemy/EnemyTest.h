@@ -50,8 +50,4 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Montage")
 	TObjectPtr<class UAnimMontage> StunMontage;
 
-/* 스텟 섹션 */
-private:
-	UPROPERTY(EditAnywhere, Category = "Stat")
-	TObjectPtr<class UCharacterStatComponent> Stat;
 };
