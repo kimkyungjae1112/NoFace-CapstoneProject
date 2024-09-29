@@ -20,7 +20,6 @@
 !/Content/**/*.umap
 
 # 임시 ignore
-/Content/Characters
 /Content/ParagonKallari
 /Content/ParagonAurora
 /Content/InfinityBladeWeapons
