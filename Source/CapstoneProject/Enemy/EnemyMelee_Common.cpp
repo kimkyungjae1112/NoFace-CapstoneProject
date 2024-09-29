@@ -10,6 +10,7 @@
 #include "Engine/OverlapResult.h"
 #include "Engine/DamageEvents.h"
 #include "AI/Controller/AIControllerCommon.h"
+#include "UI/EnemyHpBarWidget.h"
 
 AEnemyMelee_Common::AEnemyMelee_Common()
 {
@@ -23,6 +24,7 @@ AEnemyMelee_Common::AEnemyMelee_Common()
 	/* 콜리전 설정 */
 	GetMesh()->SetCollisionProfileName(TEXT("NoCollision"));
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
+
 }
 
 void AEnemyMelee_Common::BeginPlay()

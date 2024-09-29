@@ -5,10 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Interface/AIInterface.h"
+#include "Interface/EnemyHpBarWidgetInterface.h"
 #include "EnemyBase.generated.h"
 
 UCLASS()
-class CAPSTONEPROJECT_API AEnemyBase : public ACharacter, public IAIInterface
+class CAPSTONEPROJECT_API AEnemyBase : public ACharacter, public IAIInterface, public IEnemyHpBarWidgetInterface
 {
 	GENERATED_BODY()
 
@@ -31,12 +32,20 @@ public:
 	virtual void AttackByAI() override;
 	virtual void DefaultAttackHitCheck() override;
 
+/* Widget */
+	virtual void SetupHpBarWidget(class UEnemyHpBarWidget* InHpBarWidget) override;
+
 /* Stun 은 보스 몬스터 말고 있을 것 같으니 상속받아 구현하자. */
 public:
 	virtual void Stun();
 	
 protected:
-	UPROPERTY(EditAnywhere, Category = "Stat")
+	UPROPERTY(VisibleAnywhere, Category = "Stat")
 	TObjectPtr<class UEnemyStatComponent> Stat;
 
+	UPROPERTY(VisibleAnywhere, Category = "UI")
+	TObjectPtr<class UWidgetComponent> HpBar;
+
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<class UEnemyPtrWidget> HpBarClass;
 };

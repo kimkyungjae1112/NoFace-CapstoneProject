@@ -7,12 +7,28 @@
 #include "AI/Controller/AIControllerBase.h"
 #include "Components/CapsuleComponent.h"
 #include "Stat/EnemyStatComponent.h"
+#include "UI/EnemyHpBarWidget.h"
+#include "UI/EnemyHpBarWidgetComponent.h"
 
 AEnemyBase::AEnemyBase()
 {
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
 	
 	Stat = CreateDefaultSubobject<UEnemyStatComponent>(TEXT("Stat"));
+
+	HpBar = CreateDefaultSubobject<UEnemyHpBarWidgetComponent>(TEXT("Widget"));
+	HpBar->SetupAttachment(GetMesh());
+	HpBar->SetRelativeLocation(FVector(0.f, 0.f, -50.f));
+	static ConstructorHelpers::FClassFinder<UEnemyPtrWidget> HpBarWidgetRef(TEXT("/Game/No-Face/UI/WBP_EenmyHpBar.WBP_EenmyHpBar_C"));
+	if (HpBarWidgetRef.Class)
+	{
+		HpBarClass = HpBarWidgetRef.Class;
+		HpBar->SetWidgetClass(HpBarClass);
+		HpBar->SetWidgetSpace(EWidgetSpace::Screen);
+		HpBar->SetDrawSize(FVector2D(150.f, 15.f));
+		HpBar->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+
 }
 
 void AEnemyBase::BeginPlay()
@@ -54,6 +70,17 @@ void AEnemyBase::AttackByAI()
 
 void AEnemyBase::DefaultAttackHitCheck()
 {
+}
+
+void AEnemyBase::SetupHpBarWidget(UEnemyHpBarWidget* InHpBarWidget)
+{
+	UEnemyHpBarWidget* HpBarWidget = InHpBarWidget;
+	if (HpBarWidget)
+	{
+		HpBarWidget->SetMaxHp(Stat->GetCurrentHp());
+		HpBarWidget->UpdateHpBar(Stat->GetCurrentHp());
+		Stat->OnHpChanged.AddUObject(HpBarWidget, &UEnemyHpBarWidget::UpdateHpBar);
+	}
 }
 
 void AEnemyBase::Stun()
