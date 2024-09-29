@@ -47,7 +47,7 @@ void UCharacterHitCheckComponent::SwordDefaultAttackHitCheck()
 			FDamageEvent DamageEvent;
 			//설정된 Degree 값 안에 있는지 한번 더 확인을 거친다.
 			//부채꼴의 공격 판정이 만들어짐
-			if (SwordDefaultAttackRadialRange(GetOwner(), OverlapResult.GetActor(), AttackRange, 60.f))
+			if (SwordDefaultAttackRadialRange(GetOwner(), OverlapResult.GetActor(), 60.f))
 			{   
 				OverlapResult.GetActor()->TakeDamage(AttackDamage, DamageEvent, GetWorld()->GetFirstPlayerController(), Character);
 				Color = FColor::Green;
@@ -56,7 +56,7 @@ void UCharacterHitCheckComponent::SwordDefaultAttackHitCheck()
 	}
 
 	//공격 범위 라인으로 나타내기
-	SwordDefaultAttackHitDebug(Character->GetWorld(), Origin, ForwardVector, AttackRange, Color);
+	SwordDefaultAttackHitDebug(Origin, ForwardVector, AttackRange, Color);
 }
 
 void UCharacterHitCheckComponent::Sword_Q_SkillHitCheck()
@@ -126,7 +126,7 @@ void UCharacterHitCheckComponent::Sword_R_SkillHitCheck()
 	SwordAura->Init(Owner->GetActorForwardVector());
 }
 
-bool UCharacterHitCheckComponent::SwordDefaultAttackRadialRange(AActor* Player, AActor* Target, float Radius, float RadialAngle)
+bool UCharacterHitCheckComponent::SwordDefaultAttackRadialRange(AActor* Player, AActor* Target, float RadialAngle)
 {
 	if (!Player || !Target) return false;
 
@@ -145,10 +145,8 @@ bool UCharacterHitCheckComponent::SwordDefaultAttackRadialRange(AActor* Player, 
 	return AngleToTargetDegrees <= (RadialAngle / 2.0f);
 }
 
-void UCharacterHitCheckComponent::SwordDefaultAttackHitDebug(UWorld* World, const FVector& Start, const FVector& ForwardVector, const float AttackRange, const FColor& Color)
+void UCharacterHitCheckComponent::SwordDefaultAttackHitDebug(const FVector& Start, const FVector& ForwardVector, const float AttackRange, const FColor& Color)
 {
-	float AngleRadians = FMath::DegreesToRadians(60.f / 2.0f);
-
 	// 부채꼴의 두 끝점 계산
 	FVector LeftVector = ForwardVector.RotateAngleAxis(-60.f / 2.0f, FVector::UpVector);
 	FVector RightVector = ForwardVector.RotateAngleAxis(60.f / 2.0f, FVector::UpVector);

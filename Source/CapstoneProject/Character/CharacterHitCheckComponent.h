@@ -33,8 +33,8 @@ public:
 
 /* 검 히트 체크 */
 private:
-	bool SwordDefaultAttackRadialRange(AActor* Player, AActor* Target, float Radius, float RadialAngle);
-	void SwordDefaultAttackHitDebug(UWorld* World, const FVector& Start, const FVector& ForwardVector, const float AttackRange, const FColor& Color);
+	bool SwordDefaultAttackRadialRange(AActor* Player, AActor* Target, float RadialAngle);
+	void SwordDefaultAttackHitDebug(const FVector& Start, const FVector& ForwardVector, const float AttackRange, const FColor& Color);
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Stat")
