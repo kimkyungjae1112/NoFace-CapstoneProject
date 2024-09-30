@@ -69,6 +69,13 @@ void AEnemyMelee_Common::DefaultAttackHitCheck()
 	}
 	
 	DefaultAttackHitDebug(Origin, GetActorForwardVector(), Range, Degree, Color);
+
+	if (!AttackInRange())
+	{
+		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+		
+		AnimInstance->Montage_Stop(0.5f, DefaultAttackMontage);
+	}
 }
 
 float AEnemyMelee_Common::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -116,6 +123,16 @@ void AEnemyMelee_Common::EndAttack(UAnimMontage* Target, bool IsProperlyEnded)
 	EnemyAttackFinished.ExecuteIfBound();
 }
 
+bool AEnemyMelee_Common::AttackInRange()
+{
+	const float Range = GetAttackInRange();
+	FVector Origin = GetActorLocation();
+	TArray<FOverlapResult> OverlapResults;
+	FCollisionQueryParams Params(NAME_None, false, this);
+
+	return GetWorld()->OverlapMultiByChannel(OverlapResults, Origin, FQuat::Identity, ECC_GameTraceChannel1, FCollisionShape::MakeSphere(Range), Params);
+}
+
 void AEnemyMelee_Common::BeginHitAction()
 {
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
@@ -126,7 +143,7 @@ void AEnemyMelee_Common::BeginHitAction()
 		return;
 	}
 
-	AnimInstance->Montage_Play(HitMontage);
+	AnimInstance->Montage_Play(HitMontage, 0.1f);
 }
 
 void AEnemyMelee_Common::SetDead()

@@ -32,6 +32,7 @@ public:
 private:
 	void BeginAttack();
 	void EndAttack(class UAnimMontage* Target, bool IsProperlyEnded);
+	bool AttackInRange();
 
 	void BeginHitAction();
 
