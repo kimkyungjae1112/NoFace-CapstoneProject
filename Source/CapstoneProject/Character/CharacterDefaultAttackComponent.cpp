@@ -119,6 +119,13 @@ void UCharacterDefaultAttackComponent::CheckSwordCombo()
 	}
 }
 
+void UCharacterDefaultAttackComponent::SwordDefaultAttackEnd()
+{
+	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
+	AnimInstance->Montage_Stop(0.5f, SwordDefaultAttackMontage);
+	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+}
+
 void UCharacterDefaultAttackComponent::BeginBowDefaultAttack()
 {
 	if (Bow == nullptr) return;

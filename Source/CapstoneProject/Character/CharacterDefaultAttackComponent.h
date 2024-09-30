@@ -34,6 +34,7 @@ private:
 	void EndSwordDefaultAttack(class UAnimMontage* Target, bool IsProperlyEnded);
 	void SetSwordComboTimer();
 	void CheckSwordCombo();
+	virtual void SwordDefaultAttackEnd() override;
 
 	FTimerHandle SwordComboTimer;
 

@@ -25,4 +25,5 @@ public:
 	virtual void SetBow(class ABow* InBow) = 0;
 	virtual void StartAnimation() = 0;
 	virtual void EndAnimation() = 0;
+	virtual void SwordDefaultAttackEnd() = 0;
 };
