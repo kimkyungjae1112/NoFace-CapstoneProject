@@ -11,7 +11,7 @@
 
 AEnemyMelee_Tanker::AEnemyMelee_Tanker()
 {
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshRef(TEXT("/Script/Engine.SkeletalMesh'/Game/SKnight_modular/Skeleton_Knight_02/mesh/SK_SKnigh_02_full.SK_SKnigh_02_full'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshRef(TEXT("/Script/Engine.SkeletalMesh'/Game/No-Face/Enemy/Skeleton_Knight_02/mesh/SK_SKnigh_02_full.SK_SKnigh_02_full'"));
 	if (MeshRef.Object)
 	{
 		GetMesh()->SetSkeletalMesh(MeshRef.Object);
@@ -22,7 +22,7 @@ AEnemyMelee_Tanker::AEnemyMelee_Tanker()
 
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
 	WeaponMesh->SetupAttachment(GetMesh(), TEXT("hand_rSocket"));
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> WeaponMeshRef(TEXT("/Script/Engine.SkeletalMesh'/Game/SKnight_modular/Skeleton_Knight_02/mesh/weapon/SK_weapon_02.SK_weapon_02'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> WeaponMeshRef(TEXT("/Script/Engine.SkeletalMesh'/Game/No-Face/Enemy/Skeleton_Knight_02/mesh/weapon/SK_weapon_02.SK_weapon_02'"));
 	if (WeaponMeshRef.Object)
 	{
 		WeaponMesh->SetSkeletalMesh(WeaponMeshRef.Object);
@@ -30,7 +30,7 @@ AEnemyMelee_Tanker::AEnemyMelee_Tanker()
 
 	ShieldMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Shield"));
 	ShieldMesh->SetupAttachment(GetMesh(), TEXT("hand_lSocket"));
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> ShieldMeshRef(TEXT("/Script/Engine.SkeletalMesh'/Game/SKnight_modular/Skeleton_Knight_02/mesh/weapon/SK_shield_02.SK_shield_02'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> ShieldMeshRef(TEXT("/Script/Engine.SkeletalMesh'/Game/No-Face/Enemy/Skeleton_Knight_02/mesh/weapon/SK_shield_02.SK_shield_02'"));
 	if (ShieldMeshRef.Object)
 	{
 		ShieldMesh->SetSkeletalMesh(ShieldMeshRef.Object);
