@@ -119,13 +119,13 @@ void USkillComponent::PlaySkill_R()
 void USkillComponent::SetWeaponType(const int32& InCurrentWeaponType)
 {
 	CurrentWeaponType = InCurrentWeaponType;
-	UE_LOG(LogTemp, Display, TEXT("Current Weapon Type : %d"), CurrentWeaponType);
 }
 
 void USkillComponent::BeginSwordSting()
 {
 	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 
+	bCanChangeWeapon = false;
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 	AnimInstance->Montage_Play(SkillMontageData->SwordMontages[0], 1.0f);
 
@@ -137,12 +137,14 @@ void USkillComponent::BeginSwordSting()
 void USkillComponent::EndSwordSting(UAnimMontage* Target, bool IsProperlyEnded)
 {
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+	bCanChangeWeapon = true;
 }
 
 void USkillComponent::BeginSwordWhirlwind()
 {
 	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 
+	bCanChangeWeapon = false;
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 	AnimInstance->Montage_Play(SkillMontageData->SwordMontages[1], 1.0f);
 
@@ -154,14 +156,18 @@ void USkillComponent::BeginSwordWhirlwind()
 void USkillComponent::EndSwordWhirlwind(UAnimMontage* Target, bool IsProperlyEnded)
 {
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+	bCanChangeWeapon = true;
 }
 
 void USkillComponent::BeginSwordParrying()
 {
 	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 
+	bCanChangeWeapon = false;
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 	AnimInstance->Montage_Play(SkillMontageData->SwordMontages[2], 1.0f);
+
+	//애니메이션의 시작과 끝이 패링 타이밍, Notify 를 사용해 타이밍을 조정할 필요가 있음
 	ParryingSign.ExecuteIfBound();
 
 	FOnMontageEnded MontageEnd;
@@ -173,6 +179,7 @@ void USkillComponent::EndSwordParrying(UAnimMontage* Target, bool IsProperlyEnde
 {
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 	ParryingSign.ExecuteIfBound();
+	bCanChangeWeapon = true;
 }
 
 void USkillComponent::ParryingSuccess(AActor* Attacker)
@@ -188,6 +195,7 @@ void USkillComponent::BeginSwordAura()
 {
 	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 
+	bCanChangeWeapon = false;
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 	AnimInstance->Montage_Play(SkillMontageData->SwordMontages[3], 3.0f);
 
@@ -199,14 +207,15 @@ void USkillComponent::BeginSwordAura()
 void USkillComponent::EndSwordAura(UAnimMontage* Target, bool IsProperlyEnded)
 {
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+	bCanChangeWeapon = true;
 }
 
 void USkillComponent::BeginBowSeveralArrows()
 {
 	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 
+	bCanChangeWeapon = false;
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
-
 	AnimInstance->Montage_Play(SkillMontageData->BowMontages[0]);
 
 	FOnMontageEnded MontageEnd;
@@ -217,11 +226,13 @@ void USkillComponent::BeginBowSeveralArrows()
 void USkillComponent::EndBowSeveralArrows(UAnimMontage* Target, bool IsProperlyEnded)
 {
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+	bCanChangeWeapon = true;
 }
 
 void USkillComponent::BeginBowExplosionArrow()
 {
 	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
+	bCanChangeWeapon = false;
 
 	if (bCasting)
 	{
@@ -234,6 +245,7 @@ void USkillComponent::BeginBowExplosionArrow()
 		{
 			AnimInstance->Montage_Resume(SkillMontageData->BowMontages[1]);
 		}
+		//else 사용자가 입력을 너무 빨리 했을 때 처리 해야함
 
 		FOnMontageEnded MontageEnd;
 		MontageEnd.BindUObject(this, &USkillComponent::EndBowExplosionArrow);
@@ -256,16 +268,19 @@ void USkillComponent::BeginBowExplosionArrow()
 void USkillComponent::EndBowExplosionArrow(UAnimMontage* Target, bool IsProperlyEnded)
 {
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+	bCanChangeWeapon = true;
 }
 
 void USkillComponent::BeginBowBackstep()
 {
+	//bCanChangeWeapon = false;
 	FVector BackstepDirection = Character->GetActorForwardVector() * -500.f;
 	Character->LaunchCharacter(BackstepDirection + FVector(0.f, 0.f, 100.f), true, true);
 }
 
 void USkillComponent::EndBowBackstep(UAnimMontage* Target, bool IsProperlyEnded)
 {
+	//bCanChangeWeapon = true;
 }
 
 void USkillComponent::BeginBowAutoTargeting()

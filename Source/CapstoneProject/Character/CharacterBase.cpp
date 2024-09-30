@@ -41,7 +41,7 @@ ACharacterBase::ACharacterBase()
 	SpringArm->SetUsingAbsoluteRotation(true);
 	SpringArm->bUsePawnControlRotation = false;
 	SpringArm->bDoCollisionTest = false;
-	SpringArm->TargetArmLength = 800.f;
+	SpringArm->TargetArmLength = 1000.f;
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
@@ -254,6 +254,7 @@ void ACharacterBase::OnAttackStart()
 		TFunction<void()> SkillAction;
 		if (SkillComponent->SkillQueue.Dequeue(SkillAction))
 		{
+			RotateToTarget();
 			SkillAction();
 			return;
 		}
@@ -299,7 +300,7 @@ void ACharacterBase::ZoomInOut(const FInputActionValue& Value)
 {
 	const float WheelValue = Value.Get<float>() * -50.f;
 
-	SpringArm->TargetArmLength = FMath::Clamp(SpringArm->TargetArmLength + WheelValue, 200.f, 1000.f);
+	SpringArm->TargetArmLength = FMath::Clamp(SpringArm->TargetArmLength + WheelValue, 200.f, 1200.f);
 }
 
 void ACharacterBase::CancelCasting()
@@ -318,6 +319,11 @@ void ACharacterBase::CancelCasting()
 
 void ACharacterBase::NextWeapon()
 {
+	if (!AttackComponent->CanChangeWeapon() || !SkillComponent->CanChangeWeapon())
+	{
+		return;
+	}
+
 	WeaponIndex += 1;
 	if (WeaponIndex > 2)
 	{
@@ -330,6 +336,11 @@ void ACharacterBase::NextWeapon()
 
 void ACharacterBase::PrevWeapon()
 {
+	if (!AttackComponent->CanChangeWeapon() || !SkillComponent->CanChangeWeapon())
+	{
+		return;
+	}
+
 	WeaponIndex -= 1;
 	if (WeaponIndex < 0)
 	{

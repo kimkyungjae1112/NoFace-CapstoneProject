@@ -68,6 +68,7 @@ void UCharacterDefaultAttackComponent::BeginAttack()
 
 void UCharacterDefaultAttackComponent::BeginSwordDefaultAttack()
 {
+	bCanChangeWeapon = false;
 	CurrentCombo = 1;
 
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
@@ -88,6 +89,7 @@ void UCharacterDefaultAttackComponent::EndSwordDefaultAttack(UAnimMontage* Targe
 	ensure(CurrentCombo != 0);
 	CurrentCombo = 0;
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+	bCanChangeWeapon = true;
 }
 
 void UCharacterDefaultAttackComponent::SetSwordComboTimer()
@@ -119,14 +121,15 @@ void UCharacterDefaultAttackComponent::CheckSwordCombo()
 
 void UCharacterDefaultAttackComponent::BeginBowDefaultAttack()
 {
-	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
-
 	if (Bow == nullptr) return;
 	FVector SpawnLocation = Bow->GetMesh()->GetSocketLocation(TEXT("Arrow_Socket"));
 	FRotator SpawnRotation = Bow->GetMesh()->GetSocketRotation(TEXT("Arrow_Socket"));
+
+	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 	
+	bCanChangeWeapon = false;
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
-	AnimInstance->Montage_Play(BowDefaultAttackMontage);
+	AnimInstance->Montage_Play(BowDefaultAttackMontage, 2.f);
 	
 	Arrow = GetWorld()->SpawnActor<AArrow>(ArrowClass, SpawnLocation, SpawnRotation);
 	Arrow->AttachToComponent(Bow->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("Arrow_Socket"));
@@ -139,6 +142,7 @@ void UCharacterDefaultAttackComponent::BeginBowDefaultAttack()
 void UCharacterDefaultAttackComponent::EndBowDefaultAttack(UAnimMontage* Target, bool IsProperlyEnded)
 {
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+	bCanChangeWeapon = true;
 }
 
 void UCharacterDefaultAttackComponent::SetBow(ABow* InBow)

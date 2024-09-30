@@ -22,6 +22,8 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
+	FORCEINLINE bool CanChangeWeapon() { return bCanChangeWeapon; }
+
 	void SetWeaponType(const int32& InCurrentWeaponType);
 
 	void BeginAttack();
@@ -89,6 +91,8 @@ private:
 	int32 CurrentCombo = 0;
 	int32 CurrentWeaponType;
 	bool HasNextComboCommand = false;
+
+	bool bCanChangeWeapon = true;
 
 	UPROPERTY(VisibleAnywhere, Category = "Character")
 	TObjectPtr<class ACharacter> Character;

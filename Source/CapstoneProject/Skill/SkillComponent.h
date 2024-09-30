@@ -25,6 +25,8 @@ public:
 
 	FORCEINLINE bool GetCastingFlag() { return bCasting; }
 	FORCEINLINE void SetCastingFlag(bool InCasting) { bCasting = InCasting; }
+	FORCEINLINE bool CanChangeWeapon() { return bCanChangeWeapon; }
+
 public:
 	FParryingSign ParryingSign;
 	void ParryingSuccess(AActor* Attacker);
@@ -120,6 +122,7 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Character")
 	TObjectPtr<class APlayerController> PlayerController;
 
+	bool bCanChangeWeapon = true;
 	int32 CurrentWeaponType = 0;
 	
 };
