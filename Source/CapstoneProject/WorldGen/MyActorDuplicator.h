@@ -28,7 +28,7 @@ struct FRoom {
 };
 
 UCLASS()
-class ARENA_API AMyActorDuplicator : public AActor
+class CAPSTONEPROJECT_API AMyActorDuplicator : public AActor
 {
     GENERATED_BODY()
 
