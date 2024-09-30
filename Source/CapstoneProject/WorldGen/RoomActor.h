@@ -6,7 +6,7 @@
 #include "RoomActor.generated.h"
 
 UCLASS()
-class ARENA_API ARoomActor : public AActor
+class CAPSTONEPROJECT_API ARoomActor : public AActor
 {
     GENERATED_BODY()
 
