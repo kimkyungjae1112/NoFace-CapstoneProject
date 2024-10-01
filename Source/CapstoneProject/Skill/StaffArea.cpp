@@ -4,6 +4,7 @@
 #include "Skill/StaffArea.h"
 #include "Engine/OverlapResult.h"
 #include "Engine/DamageEvents.h"
+#include "Stat/CharacterDataStat.h"
 
 AStaffArea::AStaffArea()
 {
@@ -21,8 +22,9 @@ AStaffArea::AStaffArea()
 		Area->SetStaticMesh(AreaRef.Object);
 	}
 
-	LifeTime = 5.f;
+	LifeTime = Stat->Staff_W_LifeTime;
 	DamageTime = 0.f;
+	Damage = Stat->Staff_W_Damage;
 }
 
 void AStaffArea::BeginPlay()
@@ -70,7 +72,7 @@ void AStaffArea::PullToCenter(float DeltaTime)
 		DamageTime += DeltaTime;
 		if (DamageTime >= 1.f)
 		{
-			Actor->TakeDamage(10.f, DamageEvent, Actor->GetInstigatorController(), GetOwner());
+			Actor->TakeDamage(Damage, DamageEvent, Actor->GetInstigatorController(), GetOwner());
 			DamageTime = 0.f;
 		}
 		DrawDebugSphere(GetWorld(), GetActorLocation(), 200.f, 32, FColor::Green, false);

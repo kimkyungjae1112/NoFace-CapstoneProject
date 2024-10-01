@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "Skill/ProjectileBase.h"
 #include "StaffMeteor.generated.h"
 
 UCLASS()
-class CAPSTONEPROJECT_API AStaffMeteor : public AActor
+class CAPSTONEPROJECT_API AStaffMeteor : public AProjectileBase
 {
 	GENERATED_BODY()
 	

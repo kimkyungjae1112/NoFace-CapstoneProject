@@ -29,8 +29,10 @@ void UCharacterHitCheckComponent::BeginPlay()
 
 void UCharacterHitCheckComponent::SwordDefaultAttackHitCheck()
 {
-	float AttackDamage = Stat->Damage;
-	float AttackRange = Stat->Range;
+	const float AttackDamage = Stat->SwordDamage;
+	const float AttackRange = Stat->SwordRange;
+	const float AttackDegree = Stat->SwordDegree;
+
 	FColor Color = FColor::Red;
 
 	FVector Origin = Character->GetActorLocation();
@@ -47,7 +49,7 @@ void UCharacterHitCheckComponent::SwordDefaultAttackHitCheck()
 			FDamageEvent DamageEvent;
 			//설정된 Degree 값 안에 있는지 한번 더 확인을 거친다.
 			//부채꼴의 공격 판정이 만들어짐
-			if (SwordDefaultAttackRadialRange(GetOwner(), OverlapResult.GetActor(), 60.f))
+			if (SwordDefaultAttackRadialRange(GetOwner(), OverlapResult.GetActor(), AttackDegree))
 			{   
 				OverlapResult.GetActor()->TakeDamage(AttackDamage, DamageEvent, GetWorld()->GetFirstPlayerController(), Character);
 				Color = FColor::Green;
@@ -56,7 +58,7 @@ void UCharacterHitCheckComponent::SwordDefaultAttackHitCheck()
 	}
 
 	//공격 범위 라인으로 나타내기
-	SwordDefaultAttackHitDebug(Origin, ForwardVector, AttackRange, Color);
+	SwordDefaultAttackHitDebug(Origin, ForwardVector, AttackRange, Color, AttackDegree);
 }
 
 void UCharacterHitCheckComponent::Sword_Q_SkillHitCheck()
@@ -64,7 +66,7 @@ void UCharacterHitCheckComponent::Sword_Q_SkillHitCheck()
 	FColor Color = FColor::Red;
 
 	FVector Origin = Character->GetActorLocation() + Character->GetActorForwardVector() * Character->GetCapsuleComponent()->GetScaledCapsuleRadius();
-	FVector End = Origin + (Character->GetActorForwardVector() * Stat->Range);
+	FVector End = Origin + (Character->GetActorForwardVector() * Stat->Sword_Q_Range);
 	FVector CapsuleExtend = FVector(200.f, 50.f, 50.f);
 	FCollisionQueryParams Params(NAME_None, false, Character);
 	TArray<FHitResult> HitResults;
@@ -93,12 +95,14 @@ void UCharacterHitCheckComponent::Sword_Q_SkillHitCheck()
 
 void UCharacterHitCheckComponent::Sword_W_SkillHitCheck()
 {
+	const float Damage = Stat->Sword_W_Damage;
+	const float Radius = Stat->Sword_W_Range;
+
 	FColor Color = FColor::Red;
 
 	FVector Origin = Character->GetActorLocation();
 	FCollisionQueryParams Params(NAME_None, true, Character);
 	TArray<FOverlapResult> OverlapResults;
-	const float Radius = 300.f;
 
 	bool bHit = GetWorld()->OverlapMultiByChannel(OverlapResults, Origin, FQuat::Identity, ECC_GameTraceChannel2, FCollisionShape::MakeSphere(Radius), Params);
 	if (bHit)
@@ -106,7 +110,7 @@ void UCharacterHitCheckComponent::Sword_W_SkillHitCheck()
 		FDamageEvent DamageEvent;
 		for (const auto& OverlapResult : OverlapResults)
 		{
-			OverlapResult.GetActor()->TakeDamage(100.f, DamageEvent, GetWorld()->GetFirstPlayerController(), Character);
+			OverlapResult.GetActor()->TakeDamage(Damage, DamageEvent, GetWorld()->GetFirstPlayerController(), Character);
 			Color = FColor::Green;
 		}
 	}
@@ -145,11 +149,11 @@ bool UCharacterHitCheckComponent::SwordDefaultAttackRadialRange(AActor* Player, 
 	return AngleToTargetDegrees <= (RadialAngle / 2.0f);
 }
 
-void UCharacterHitCheckComponent::SwordDefaultAttackHitDebug(const FVector& Start, const FVector& ForwardVector, const float AttackRange, const FColor& Color)
+void UCharacterHitCheckComponent::SwordDefaultAttackHitDebug(const FVector& Start, const FVector& ForwardVector, const float AttackRange, const FColor& Color, const float Degree)
 {
 	// 부채꼴의 두 끝점 계산
-	FVector LeftVector = ForwardVector.RotateAngleAxis(-60.f / 2.0f, FVector::UpVector);
-	FVector RightVector = ForwardVector.RotateAngleAxis(60.f / 2.0f, FVector::UpVector);
+	FVector LeftVector = ForwardVector.RotateAngleAxis(-Degree/ 2.0f, FVector::UpVector);
+	FVector RightVector = ForwardVector.RotateAngleAxis(Degree / 2.0f, FVector::UpVector);
 
 	FVector LeftEndpoint = Start + LeftVector * AttackRange;
 	FVector RightEndpoint = Start + RightVector * AttackRange;

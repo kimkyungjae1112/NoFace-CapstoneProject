@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "Skill/ProjectileBase.h"
 #include "StaffThunderbolt.generated.h"
 
 UCLASS()
-class CAPSTONEPROJECT_API AStaffThunderbolt : public AActor
+class CAPSTONEPROJECT_API AStaffThunderbolt : public AProjectileBase
 {
 	GENERATED_BODY()
 	
@@ -39,4 +39,6 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "LifeTime")
 	float LifeTime;
+
+	float Damage;
 };

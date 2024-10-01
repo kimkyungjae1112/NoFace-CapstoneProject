@@ -4,6 +4,7 @@
 #include "Skill/StaffThunderbolt.h"
 #include "Engine/OverlapResult.h"
 #include "Engine/DamageEvents.h"
+#include "Stat/CharacterDataStat.h"
 
 AStaffThunderbolt::AStaffThunderbolt()
 {
@@ -31,6 +32,7 @@ AStaffThunderbolt::AStaffThunderbolt()
 	}
 
 	LifeTime = 5.f;
+	Damage = Stat->Staff_R_Damage;
 }
 
 void AStaffThunderbolt::BeginPlay()
@@ -58,7 +60,7 @@ void AStaffThunderbolt::ActiveThunderbolt()
 		FDamageEvent DamageEvent;
 		for (const auto& OverlapResult : OverlapResults)
 		{
-			OverlapResult.GetActor()->TakeDamage(200.f, DamageEvent, OverlapResult.GetActor()->GetInstigatorController(), GetOwner());
+			OverlapResult.GetActor()->TakeDamage(Damage, DamageEvent, OverlapResult.GetActor()->GetInstigatorController(), GetOwner());
 		}
 		DrawDebugSphere(GetWorld(), GetActorLocation(), 350.f, 32, FColor::Green, false, 3.f);
 	}
