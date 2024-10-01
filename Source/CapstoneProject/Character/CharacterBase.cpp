@@ -211,7 +211,7 @@ void ACharacterBase::E_Skill()
 
 void ACharacterBase::R_Skill()
 {
-	RotateToTarget();
+	//RotateToTarget();
 	OnClickStart();
 	SkillComponent->PlaySkill_R();
 }

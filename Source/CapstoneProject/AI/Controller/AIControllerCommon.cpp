@@ -4,6 +4,8 @@
 #include "AI/Controller/AIControllerCommon.h"
 #include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include "Perception/AIPerceptionComponent.h"
+#include "Perception/AISenseConfig_Sight.h"
 
 AAIControllerCommon::AAIControllerCommon()
 {
@@ -17,4 +19,28 @@ AAIControllerCommon::AAIControllerCommon()
 	{
 		BTData = BTDataRef.Object;
 	}
+
+	AIPerception = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception"));
+	SetPerceptionComponent(*AIPerception);
+
+	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("SightConfig"));
+	SightConfig->SightRadius = 800.f;
+	SightConfig->LoseSightRadius = 1200.f;
+	SightConfig->PeripheralVisionAngleDegrees = 60.f;
+	SightConfig->SetMaxAge(5.f);
+	SightConfig->AutoSuccessRangeFromLastSeenLocation = -1.f;
+
+	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
+	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
+	SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
+
+	AIPerception->ConfigureSense(*SightConfig);
+	AIPerception->SetDominantSense(SightConfig->GetSenseImplementation());
+
+	AIPerception->OnPerceptionUpdated.AddDynamic(this, &AAIControllerCommon::PerceptionUpdated);
+}
+
+void AAIControllerCommon::PerceptionUpdated(const TArray<AActor*>& UpdatedActors)
+{
+	
 }

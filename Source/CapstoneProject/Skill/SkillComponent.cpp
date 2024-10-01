@@ -16,6 +16,7 @@
 #include "Skill/StaffThunderbolt.h"
 #include "Skill/BowAutoTargeting.h"
 #include "Weapon/Arrow.h"
+#include "Engine/DamageEvents.h"
 
 USkillComponent::USkillComponent()
 {
@@ -106,7 +107,7 @@ void USkillComponent::PlaySkill_R()
 		BeginSwordAura();
 		break;
 	case 1:
-		BeginBowAutoTargeting();
+		BeginBowOneShot();
 		break;
 	case 2:
 		BeginStaffThunderbolt();
@@ -273,42 +274,73 @@ void USkillComponent::EndBowExplosionArrow(UAnimMontage* Target, bool IsProperly
 
 void USkillComponent::BeginBowBackstep()
 {
-	//bCanChangeWeapon = false;
+	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
+
+	bCanChangeWeapon = false;
+	AnimInstance->Montage_Play(SkillMontageData->BowMontages[2], 4.f);
+
 	FVector BackstepDirection = Character->GetActorForwardVector() * -500.f;
 	Character->LaunchCharacter(BackstepDirection + FVector(0.f, 0.f, 100.f), true, true);
+
+	FOnMontageEnded MontageEnd;
+	MontageEnd.BindUObject(this, &USkillComponent::EndBowBackstep);
+	AnimInstance->Montage_SetEndDelegate(MontageEnd, SkillMontageData->BowMontages[2]);
 }
 
 void USkillComponent::EndBowBackstep(UAnimMontage* Target, bool IsProperlyEnded)
 {
-	//bCanChangeWeapon = true;
+	bCanChangeWeapon = true;
 }
 
-void USkillComponent::BeginBowAutoTargeting()
+/* 애니메이션이 천천히 실행되고, 카메라가 줌이 되는 효과 추가 하자 */
+void USkillComponent::BeginBowOneShot()
 {
-	FVector SpawnLocation = Character->GetActorLocation() + (Character->GetActorForwardVector() * 300.f);
-	FRotator SpawnRotation = Character->GetActorRotation();
+	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 
-	BowAutoTargeting = GetWorld()->SpawnActor<ABowAutoTargeting>(AutoTargetingClass, SpawnLocation, SpawnRotation);
-	BowAutoTargeting->SetOwner(Character);
+	bCanChangeWeapon = false;
+	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+	AnimInstance->Montage_Play(SkillMontageData->BowMontages[3]);
 	
-	GetWorld()->GetTimerManager().SetTimer(AutoTargetingTimer, this, &USkillComponent::DisplayTargeting, 0.1f, true);
+	FOnMontageEnded MontageEnd;
+	MontageEnd.BindUObject(this, &USkillComponent::EndBowOneShot);
+	AnimInstance->Montage_SetEndDelegate(MontageEnd, SkillMontageData->BowMontages[3]);
 }
 
-void USkillComponent::EndBowAutoTargeting(UAnimMontage* Target, bool IsProperlyEnded)
+void USkillComponent::EndBowOneShot(UAnimMontage* Target, bool IsProperlyEnded)
 {
-	//애니메이션 끝날 때 실행
-	GetWorld()->GetTimerManager().ClearTimer(AutoTargetingTimer);
+	FireOneShot();
+
+	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+	bCanChangeWeapon = true;
 }
 
-void USkillComponent::DisplayTargeting()
+void USkillComponent::FireOneShot()
 {
-	if (!BowAutoTargeting->GetEnemys().IsEmpty())
+	TArray<FHitResult> HitResults;
+
+	const float Damage = 100.f;
+	const float Range = 500.f;
+	FVector Origin = Character->GetActorLocation();
+	FVector End = Origin + (Character->GetActorForwardVector() * Range);
+
+	FVector ForwardVector = Character->GetActorForwardVector() * Range;
+	FQuat RootRot = FRotationMatrix::MakeFromZ(ForwardVector).ToQuat();
+	FVector BoxExtent = FVector(100.f, 100.f, 100.f);
+	FCollisionQueryParams Params(NAME_None, true, Character);
+
+	bool bHit = GetWorld()->SweepMultiByChannel(HitResults, Origin, End, RootRot, ECC_GameTraceChannel2, FCollisionShape::MakeBox(BoxExtent), Params);
+	if (bHit)
 	{
-		for (const auto& Enemy : BowAutoTargeting->GetEnemys())
+		FDamageEvent DamageEvent;
+		for (const auto& HitResult : HitResults)
 		{
-			DrawDebugSphere(GetWorld(), Enemy->GetActorLocation(), 15.f, 12, FColor::Green, false);
+			UE_LOG(LogTemp, Display, TEXT("HitResult Actor Name : %s"), *HitResult.GetActor()->GetActorNameOrLabel());
+			HitResult.GetActor()->TakeDamage(Damage, DamageEvent, PlayerController, Character);
 		}
 	}
+
+	DrawDebugBox(GetWorld(), Origin, BoxExtent, RootRot, FColor::Green, false, 5.f);
+	DrawDebugBox(GetWorld(), End, BoxExtent, RootRot, FColor::Green, false, 5.f);
 }
 
 void USkillComponent::Bow_Q_Skill()

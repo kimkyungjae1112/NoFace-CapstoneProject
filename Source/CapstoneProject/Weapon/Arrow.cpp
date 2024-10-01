@@ -29,7 +29,7 @@ AArrow::AArrow()
 
 	Direction = FVector::ZeroVector;
 	Damage = 50.f;
-	MoveSpeed = 1500.f;
+	MoveSpeed = 500.f;
 	LifeTime = 5.f;
 }
 
@@ -46,7 +46,6 @@ void AArrow::Tick(float DeltaTime)
 	FVector NewLocation = GetActorLocation() + (Direction * MoveSpeed * DeltaTime);
 	SetActorLocation(NewLocation);
 
-	DrawDebugBox(GetWorld(), GetActorLocation(), Box->GetScaledBoxExtent(), FColor::Red, false);
 	LifeTime -= DeltaTime;
 	if (LifeTime <= 0.f)
 	{

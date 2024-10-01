@@ -20,6 +20,8 @@ protected:
 public:
 	FORCEINLINE USkeletalMeshComponent* GetMesh() { return Mesh; }
 
+/* 해당 클래스는 웨폰 베이스 클래스로 상속받은 무기들은 */
+/* Mesh를 디테일 패널에서 바꾸고 있음 */
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Root")
 	TObjectPtr<class USceneComponent> Root;
