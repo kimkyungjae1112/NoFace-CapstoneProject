@@ -3,6 +3,7 @@
 
 #include "Skill/StaffMeteor.h"
 #include "Components/BoxComponent.h"
+#include "Stat/CharacterDataStat.h"
 
 AStaffMeteor::AStaffMeteor()
 {
@@ -34,7 +35,7 @@ AStaffMeteor::AStaffMeteor()
 	}
 
 	MoveSpeed = 1500.f;
-	Damage = 50.f;
+	Damage = Stat->Staff_Q_Damage;
 	Destination = FVector::ZeroVector;
 	bStart = false;
 }

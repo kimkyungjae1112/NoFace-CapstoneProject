@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "Skill/ProjectileBase.h"
 #include "SwordAura.generated.h"
 
 UCLASS()
-class CAPSTONEPROJECT_API ASwordAura : public AActor
+class CAPSTONEPROJECT_API ASwordAura : public AProjectileBase
 {
 	GENERATED_BODY()
 	

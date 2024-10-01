@@ -77,8 +77,8 @@ private:
 	void EndStaffMeteor(class UAnimMontage* Target, bool IsProperlyEnded); //스태프 Q - 메테오 끝
 	void BeginStaffArea(); //스태프 W - 범위 바인딩 시작
 	void EndStaffArea(class UAnimMontage* Target, bool IsProperlyEnded); //스태프 W - 범위 바인딩 끝
-	void BeginStaffUpGround(); //스태프 E - 범위 지각 변동 시작
-	void EndStaffUpGround(class UAnimMontage* Target, bool IsProperlyEnded); //스태프 E - 범위 지각 변동 끝
+	void BeginStaffUpGround(); //스태프 E - 범위 쉴?드 시작
+	void EndStaffUpGround(class UAnimMontage* Target, bool IsProperlyEnded); //스태프 E - 쉴?드 끝
 	void BeginStaffThunderbolt(); //스태프 R - 주위 번개 공격 시작
 	void EndStaffThunderbolt(class UAnimMontage* Target, bool IsProperlyEnded); //스태프 R - 주위 번개 공격 끝
 
@@ -117,6 +117,33 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Staff")
 	TSubclassOf<class AStaffThunderbolt> ThunderboltClass;
+
+/* 쿨타임 섹션 */
+private:
+	void StartCooldown(float CooldownDuration, FTimerHandle& CooldownTimerHandle, bool& bCanUseSkill);
+
+	FTimerHandle CooldownTimerHandle_Q;
+	FTimerHandle CooldownTimerHandle_W;
+	FTimerHandle CooldownTimerHandle_E;
+	FTimerHandle CooldownTimerHandle_R;
+
+	bool bCanUseSkill_Q = true;
+	bool bCanUseSkill_W = true;
+	bool bCanUseSkill_E = true;
+	bool bCanUseSkill_R = true;
+
+	UPROPERTY(EditAnywhere, Category = "Cooldown")
+	float CooldownDuration_Q = 5.f;
+
+	UPROPERTY(EditAnywhere, Category = "Cooldown")
+	float CooldownDuration_W = 5.f;
+
+	UPROPERTY(EditAnywhere, Category = "Cooldown")
+	float CooldownDuration_E = 5.f;
+	
+	UPROPERTY(EditAnywhere, Category = "Cooldown")
+	float CooldownDuration_R = 5.f;
+
 
 /* 유틸리티 */
 private:

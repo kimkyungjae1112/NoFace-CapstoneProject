@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "Skill/ProjectileBase.h"
 #include "Arrow.generated.h"
 
 UCLASS()
-class CAPSTONEPROJECT_API AArrow : public AActor
+class CAPSTONEPROJECT_API AArrow : public AProjectileBase
 {
 	GENERATED_BODY()
 	

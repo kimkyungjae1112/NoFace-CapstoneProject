@@ -4,6 +4,7 @@
 #include "Weapon/Arrow.h"
 #include "Components/BoxComponent.h"
 #include "Engine/DamageEvents.h"
+#include "Stat/CharacterDataStat.h"
 
 AArrow::AArrow()
 {
@@ -28,9 +29,9 @@ AArrow::AArrow()
 	}
 
 	Direction = FVector::ZeroVector;
-	Damage = 50.f;
-	MoveSpeed = 500.f;
-	LifeTime = 5.f;
+	Damage = Stat->BowDamage;
+	MoveSpeed = Stat->BowSpeed;
+	LifeTime = Stat->BowLifeTime;
 }
 
 void AArrow::BeginPlay()

@@ -21,8 +21,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	FORCEINLINE float GetCurrentHp() const { return CurrentHp; }
-	FORCEINLINE float GetCurrentMp() const { return CurrentMp; }
-	FORCEINLINE float GetCurrentDamage() const { return CurrentDamage; }
+	FORCEINLINE float GetCurrentExp() const { return CurrentExp; }
 
 	float ApplyDamage(float InDamage);
 	void SetHp(float ChangeHp);
@@ -35,12 +34,5 @@ private:
 	float CurrentHp;
 
 	UPROPERTY(EditAnywhere, Category = "Stat")
-	float CurrentMp;
-
-	UPROPERTY(EditAnywhere, Category = "Stat")
-	float CurrentDamage;
-
-	UPROPERTY(EditAnywhere, Category = "Stat")
-	float CurrentRange;
-
+	float CurrentExp;
 };

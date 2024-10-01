@@ -46,73 +46,90 @@ void USkillComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 void USkillComponent::PlaySkill_Q()
 {
-	switch (CurrentWeaponType)
+	if (bCanUseSkill_Q)
 	{
-	case 0:
-		BeginSwordSting();
-		break;
-	case 1:
-		BeginBowSeveralArrows();
-		break;
-	case 2:
-		BeginStaffMeteor();
-		break;
-	default:
-		break;
+		StartCooldown(CooldownDuration_Q, CooldownTimerHandle_Q, bCanUseSkill_Q);
+		switch (CurrentWeaponType)
+		{
+		case 0:
+			BeginSwordSting();
+			break;
+		case 1:
+			BeginBowSeveralArrows();
+			break;
+		case 2:
+			BeginStaffMeteor();
+			break;
+		default:
+			break;
+		}
 	}
+
 }
 
 void USkillComponent::PlaySkill_W()
 {
-	switch (CurrentWeaponType)
+	if (bCanUseSkill_W)
 	{
-	case 0:
-		BeginSwordWhirlwind();
-		break;
-	case 1:
-		BeginBowExplosionArrow();
-		break;
-	case 2:
-		BeginStaffArea();
-		break;
-	default:
-		break;
+		StartCooldown(CooldownDuration_W, CooldownTimerHandle_W, bCanUseSkill_W);
+		switch (CurrentWeaponType)
+		{
+		case 0:
+			BeginSwordWhirlwind();
+			break;
+		case 1:
+			BeginBowExplosionArrow();
+			break;
+		case 2:
+			BeginStaffArea();
+			break;
+		default:
+			break;
+		}
 	}
 }
 
 void USkillComponent::PlaySkill_E()
 {
-	switch (CurrentWeaponType)
+	if (bCanUseSkill_E)
 	{
-	case 0:
-		BeginSwordParrying();
-		break;
-	case 1:
-		BeginBowBackstep();
-		break;
-	case 2:
-		BeginStaffUpGround();
-		break;
-	default:
-		break;
+		StartCooldown(CooldownDuration_E, CooldownTimerHandle_E, bCanUseSkill_E);
+		switch (CurrentWeaponType)
+		{
+		case 0:
+			BeginSwordParrying();
+			break;
+		case 1:
+			BeginBowBackstep();
+			break;
+		case 2:
+			BeginStaffUpGround();
+			break;
+		default:
+			break;
+		}
 	}
 }
 
 void USkillComponent::PlaySkill_R()
 {
-	switch (CurrentWeaponType)
+	if (bCanUseSkill_R)
 	{
-	case 0:
-		BeginSwordAura();
-		break;
-	case 1:
-		BeginBowOneShot();
-		break;
-	case 2:
-		BeginStaffThunderbolt();
-		break;
-	default:
-		break;
+		StartCooldown(CooldownDuration_R, CooldownTimerHandle_R, bCanUseSkill_R);
+		switch (CurrentWeaponType)
+		{
+		case 0:
+			BeginSwordAura();
+			break;
+		case 1:
+			BeginBowOneShot();
+			break;
+		case 2:
+			BeginStaffThunderbolt();
+			break;
+		default:
+			break;
+		}
 	}
 }
 
@@ -460,6 +477,16 @@ void USkillComponent::BeginStaffThunderbolt()
 
 void USkillComponent::EndStaffThunderbolt(UAnimMontage* Target, bool IsProperlyEnded)
 {
+}
+
+void USkillComponent::StartCooldown(float CooldownDuration, FTimerHandle& CooldownTimerHandle, bool& bCanUseSkill)
+{
+	bCanUseSkill = false;
+	GetWorld()->GetTimerManager().SetTimer(CooldownTimerHandle, 
+		[&]()
+		{
+			bCanUseSkill = true;
+		}, CooldownDuration, false);
 }
 
 
