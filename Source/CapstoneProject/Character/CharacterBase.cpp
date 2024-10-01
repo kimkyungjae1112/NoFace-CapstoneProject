@@ -17,7 +17,6 @@
 #include "Weapon/Sword.h"
 #include "Weapon/Bow.h"
 #include "Weapon/Staff.h"
-#include "UI/WeaponChoiceUI.h"
 #include "Skill/SkillComponent.h"
 #include "Character/CharacterHitCheckComponent.h"
 #include "Character/CharacterDefaultAttackComponent.h"
@@ -211,7 +210,7 @@ void ACharacterBase::E_Skill()
 
 void ACharacterBase::R_Skill()
 {
-	//RotateToTarget();
+	RotateToTarget();
 	OnClickStart();
 	SkillComponent->PlaySkill_R();
 }

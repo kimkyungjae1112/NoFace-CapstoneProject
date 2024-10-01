@@ -102,12 +102,6 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Bow")
 	TSubclassOf<class AArrow> ArrowClass;
 
-	UPROPERTY(EditAnywhere, Category = "Bow")
-	TSubclassOf<class ABowAutoTargeting> AutoTargetingClass;
-	
-	UPROPERTY(VisibleAnywhere, Category = "Bow")
-	TObjectPtr<class ABowAutoTargeting> BowAutoTargeting;
-
 	FTimerHandle AutoTargetingTimer;
 
 /* Staff 데이터 */
