@@ -28,4 +28,7 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, Category = "BT")
 	TObjectPtr<class UBehaviorTree> BTData;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UAIPerceptionComponent> AIPerception;
 };

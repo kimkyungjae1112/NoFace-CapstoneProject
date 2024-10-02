@@ -46,10 +46,10 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 		for (auto const& OverlapResult : OverlapResults)
 		{
 			APawn* Target = Cast<APawn>(OverlapResult.GetActor());
-			OwnerComp.GetBlackboardComponent()->SetValueAsObject(TEXT("Target"), Target);
+			//OwnerComp.GetBlackboardComponent()->SetValueAsObject(TEXT("Target"), Target);
 
 			return;
 		}
 	}
-	OwnerComp.GetBlackboardComponent()->SetValueAsObject(TEXT("Target"), nullptr);
+	//OwnerComp.GetBlackboardComponent()->SetValueAsObject(TEXT("Target"), nullptr);
 }

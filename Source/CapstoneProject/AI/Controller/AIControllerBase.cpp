@@ -5,6 +5,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include "Perception/AIPerceptionComponent.h"
 
 AAIControllerBase::AAIControllerBase()
 {
@@ -18,6 +19,9 @@ AAIControllerBase::AAIControllerBase()
 	{
 		BTData = BTDataRef.Object;
 	}
+
+	AIPerception = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception"));
+	SetPerceptionComponent(*AIPerception);
 }
 
 void AAIControllerBase::OnPossess(APawn* InPawn)

@@ -51,7 +51,6 @@ float UCharacterStatComponent::ApplyDamage(float InDamage)
 void UCharacterStatComponent::SetHp(float ChangeHp)
 {
 	CurrentHp = ChangeHp;
-	UE_LOG(LogTemp, Display, TEXT("Current Hp : %f"), CurrentHp);
 	OnHpChanged.Broadcast(CurrentHp);
 }
 

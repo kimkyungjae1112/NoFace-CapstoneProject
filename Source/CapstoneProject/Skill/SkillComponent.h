@@ -109,6 +109,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Staff")
 	TSubclassOf<class AStaffMeteor> MeteorClass;
 
+	UPROPERTY(EditAnywhere, Category = "Effect")
+	TObjectPtr<class UParticleSystem> MeteorEffect;
+
 	UPROPERTY(EditAnywhere, Category = "Staff")
 	TSubclassOf<class AStaffArea> AreaClass;
 
@@ -133,7 +136,7 @@ private:
 	bool bCanUseSkill_R = true;
 
 	UPROPERTY(EditAnywhere, Category = "Cooldown")
-	float CooldownDuration_Q = 5.f;
+	float CooldownDuration_Q = 1.f;
 
 	UPROPERTY(EditAnywhere, Category = "Cooldown")
 	float CooldownDuration_W = 5.f;
