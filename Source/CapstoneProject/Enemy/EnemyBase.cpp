@@ -10,6 +10,8 @@
 #include "UI/EnemyHpBarWidget.h"
 #include "UI/EnemyHpBarWidgetComponent.h"
 
+FOnDead AEnemyBase::OnDead;
+
 AEnemyBase::AEnemyBase()
 {
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
@@ -83,9 +85,20 @@ void AEnemyBase::SetupHpBarWidget(UEnemyHpBarWidget* InHpBarWidget)
 	}
 }
 
+float AEnemyBase::TakeExp()
+{
+	//기본 10 경험치
+	return 10.f;
+}
+
 void AEnemyBase::Stun()
 {
 	UE_LOG(LogTemp, Display, TEXT("스턴상태!!!!!!!!!!!"));
+}
+
+void AEnemyBase::SetDead()
+{
+	OnDead.ExecuteIfBound(TakeExp());
 }
 
 

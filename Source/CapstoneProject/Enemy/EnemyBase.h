@@ -8,6 +8,8 @@
 #include "Interface/EnemyHpBarWidgetInterface.h"
 #include "EnemyBase.generated.h"
 
+DECLARE_DELEGATE_OneParam(FOnDead, float /* TakeExp */);
+
 UCLASS()
 class CAPSTONEPROJECT_API AEnemyBase : public ACharacter, public IAIInterface, public IEnemyHpBarWidgetInterface
 {
@@ -32,13 +34,21 @@ public:
 	virtual void AttackByAI() override;
 	virtual void DefaultAttackHitCheck() override;
 
+public:
+	static FOnDead OnDead;
+
 /* Widget */
 	virtual void SetupHpBarWidget(class UEnemyHpBarWidget* InHpBarWidget) override;
 
-/* Stun 은 보스 몬스터 말고 있을 것 같으니 상속받아 구현하자. */
-public:
+/* 스텟 몬스터마다 리턴하는 경험치값을 다르게 설정하기 위한 가상함수 */
+	virtual float TakeExp();
+
+/* Stun 은 보스 몬스터 말고 있을 것 같으니 상속받아 구현하자 */
 	virtual void Stun();
-	
+
+/* 경험치 나눠줄 때 SetDead에서 FOnDead 델리게이트 호출하여 송신함 */
+	virtual void SetDead();
+
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Stat")
 	TObjectPtr<class UEnemyStatComponent> Stat;
@@ -48,4 +58,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<class UEnemyPtrWidget> HpBarClass;
+
+private:
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<class UForExpComponent> Exp;
 };

@@ -6,7 +6,6 @@
 #include "Stat/StatBase.h"
 #include "EnemyStatComponent.generated.h"
 
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class CAPSTONEPROJECT_API UEnemyStatComponent : public UStatBase
 {
@@ -21,6 +20,7 @@ protected:
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+public:
 	FORCEINLINE float GetCurrentHp() const { return CurrentHp; }
 	FORCEINLINE float GetCurrentMp() const { return CurrentMp; }
 	FORCEINLINE float GetCurrentDamage() const { return CurrentDamage; }

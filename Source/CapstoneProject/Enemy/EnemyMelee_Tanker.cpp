@@ -91,6 +91,12 @@ float AEnemyMelee_Tanker::TakeDamage(float Damage, FDamageEvent const& DamageEve
 	return 0.0f;
 }
 
+float AEnemyMelee_Tanker::TakeExp()
+{
+	//탱커 몬스터 50 경험치
+	return 50.0f;
+}
+
 void AEnemyMelee_Tanker::Stun()
 {
 	Super::Stun();
@@ -132,6 +138,8 @@ void AEnemyMelee_Tanker::BeginHitAction()
 
 void AEnemyMelee_Tanker::SetDead()
 {
+	Super::SetDead();
+
 	GetMyController()->StopAI();
 
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();

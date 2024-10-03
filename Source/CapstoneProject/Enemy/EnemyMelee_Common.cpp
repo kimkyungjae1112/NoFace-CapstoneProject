@@ -90,6 +90,12 @@ float AEnemyMelee_Common::TakeDamage(float Damage, FDamageEvent const& DamageEve
 	return Damage;
 }
 
+float AEnemyMelee_Common::TakeExp()
+{
+	//일반 몬스터 30 경험치
+	return 30.0f;
+}
+
 void AEnemyMelee_Common::Stun()
 {
 	Super::Stun();
@@ -148,6 +154,8 @@ void AEnemyMelee_Common::BeginHitAction()
 
 void AEnemyMelee_Common::SetDead()
 {
+	Super::SetDead();
+
 	GetMyController()->StopAI();
 
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
