@@ -31,6 +31,7 @@
 /Content/ParagonSparrow
 /Content/ParagonSerath
 /Content/ParagonGideon
+/Content/Assets
 
 # Allow any files from /RawContent dir.
 # Any file in /RawContent dir will be managed by git lfs.
