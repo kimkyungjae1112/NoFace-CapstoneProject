@@ -58,8 +58,4 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<class UEnemyPtrWidget> HpBarClass;
-
-private:
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<class UForExpComponent> Exp;
 };
