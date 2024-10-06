@@ -24,15 +24,19 @@ protected:
 /* AI 인터페이스 구현 섹션 */
 public:
 	FEnemyAttackFinished EnemyAttackFinished;
+	FEnemySkill1Finished EnemySkill1Finished;
 	
 	virtual float GetPatrolRadius() override;
 	virtual float GetDetectRadius() override;
 	virtual float GetAttackInRange() override;
 	virtual float GetTurnSpeed() override;
 
-	virtual void SetMonsterAttackDelegate(FEnemyAttackFinished InEnemyAttackFinished) override;
+	virtual void SetEnemyAttackDelegate(const FEnemyAttackFinished& InEnemyAttackFinished) override;
+	virtual void SetEnemySkill1Delegate(const FEnemySkill1Finished& InEnemySkill1Finished) override;
 	virtual void AttackByAI() override;
 	virtual void DefaultAttackHitCheck() override;
+
+	virtual void Skill1ByAI() override;
 
 public:
 	static FOnDead OnDead;

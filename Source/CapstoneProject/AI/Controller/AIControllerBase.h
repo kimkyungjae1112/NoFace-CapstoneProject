@@ -6,6 +6,13 @@
 #include "AIController.h"
 #include "AIControllerBase.generated.h"
 
+UENUM()
+enum class EAIPerceptionSense : uint8
+{
+	EPS_None = 0,
+	EPS_Sight,
+	EPS_Damage
+};
 /**
  * 
  */
@@ -23,7 +30,7 @@ public:
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
 
-	UPROPERTY(VisibleAnywhere, Category = "BT")
+	UPROPERTY(VisibleAnywhere, Category = "BB")
 	TObjectPtr<class UBlackboardData> BBData;
 	
 	UPROPERTY(VisibleAnywhere, Category = "BT")

@@ -7,6 +7,7 @@
 #include "AIInterface.generated.h"
 
 DECLARE_DELEGATE(FEnemyAttackFinished)
+DECLARE_DELEGATE(FEnemySkill1Finished)
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
@@ -28,7 +29,10 @@ public:
 	virtual float GetAttackInRange() = 0;
 	virtual float GetTurnSpeed() = 0;
 
-	virtual void SetMonsterAttackDelegate(FEnemyAttackFinished InEnemyAttackFinished) = 0;
+	virtual void SetEnemyAttackDelegate(const FEnemyAttackFinished& InEnemyAttackFinished) = 0;
+	virtual void SetEnemySkill1Delegate(const FEnemySkill1Finished& InEnemySkill1Finished) = 0;
 	virtual void AttackByAI() = 0;
 	virtual void DefaultAttackHitCheck() = 0;
+
+	virtual void Skill1ByAI() = 0;
 };

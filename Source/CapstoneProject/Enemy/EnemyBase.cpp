@@ -46,7 +46,7 @@ float AEnemyBase::GetPatrolRadius()
 
 float AEnemyBase::GetDetectRadius()
 {
-	return 600.0f;
+	return 400.0f;
 }
 
 float AEnemyBase::GetAttackInRange()
@@ -59,9 +59,14 @@ float AEnemyBase::GetTurnSpeed()
 	return 10.0f;
 }
 
-void AEnemyBase::SetMonsterAttackDelegate(FEnemyAttackFinished InMonsterAttackFinished)
+void AEnemyBase::SetEnemyAttackDelegate(const FEnemyAttackFinished& InEnemyAttackFinished)
 {
-	EnemyAttackFinished = InMonsterAttackFinished;
+	EnemyAttackFinished = InEnemyAttackFinished;
+}
+
+void AEnemyBase::SetEnemySkill1Delegate(const FEnemySkill1Finished& InEnemySkill1Finished)
+{
+	EnemySkill1Finished = InEnemySkill1Finished;
 }
 
 void AEnemyBase::AttackByAI()
@@ -71,6 +76,10 @@ void AEnemyBase::AttackByAI()
 }
 
 void AEnemyBase::DefaultAttackHitCheck()
+{
+}
+
+void AEnemyBase::Skill1ByAI()
 {
 }
 

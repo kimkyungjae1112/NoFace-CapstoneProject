@@ -19,9 +19,6 @@ public:
 
 public:
 	UFUNCTION()
-	void PerceptionUpdated(const TArray<AActor*>& UpdatedActors);
-
-	UFUNCTION()
 	void OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
 
 
