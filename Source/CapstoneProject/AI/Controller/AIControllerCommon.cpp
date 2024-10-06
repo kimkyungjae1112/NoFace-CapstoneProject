@@ -3,6 +3,7 @@
 
 #include "AI/Controller/AIControllerCommon.h"
 #include "BehaviorTree/BlackboardData.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
@@ -20,9 +21,6 @@ AAIControllerCommon::AAIControllerCommon()
 		BTData = BTDataRef.Object;
 	}
 
-	AIPerception = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception"));
-	SetPerceptionComponent(*AIPerception);
-
 	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("SightConfig"));
 	SightConfig->SightRadius = 800.f;
 	SightConfig->LoseSightRadius = 1200.f;
@@ -37,10 +35,23 @@ AAIControllerCommon::AAIControllerCommon()
 	AIPerception->ConfigureSense(*SightConfig);
 	AIPerception->SetDominantSense(SightConfig->GetSenseImplementation());
 
-	AIPerception->OnPerceptionUpdated.AddDynamic(this, &AAIControllerCommon::PerceptionUpdated);
+	AIPerception->OnTargetPerceptionUpdated.AddDynamic(this, &AAIControllerCommon::OnPerceptionUpdated);
 }
 
-void AAIControllerCommon::PerceptionUpdated(const TArray<AActor*>& UpdatedActors)
+void AAIControllerCommon::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 {
+	FActorPerceptionBlueprintInfo ActorPerceptionBlueprintIntfo;
+	AIPerception->GetActorsPerception(Actor, ActorPerceptionBlueprintIntfo);
+	
+	if (Stimulus.WasSuccessfullySensed())
+	{
+		// Actor 감지됨
+		GetBlackboardComponent()->SetValueAsObject(TEXT("Target"), Actor);
+	}
+	else
+	{
+		// Actor 감지 안됨
+		GetBlackboardComponent()->SetValueAsObject(TEXT("Target"), nullptr);
+	}
 	
 }

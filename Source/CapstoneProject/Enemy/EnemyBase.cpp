@@ -10,6 +10,8 @@
 #include "UI/EnemyHpBarWidget.h"
 #include "UI/EnemyHpBarWidgetComponent.h"
 
+FOnDead AEnemyBase::OnDead;
+
 AEnemyBase::AEnemyBase()
 {
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
@@ -44,7 +46,7 @@ float AEnemyBase::GetPatrolRadius()
 
 float AEnemyBase::GetDetectRadius()
 {
-	return 600.0f;
+	return 400.0f;
 }
 
 float AEnemyBase::GetAttackInRange()
@@ -57,9 +59,14 @@ float AEnemyBase::GetTurnSpeed()
 	return 10.0f;
 }
 
-void AEnemyBase::SetMonsterAttackDelegate(FEnemyAttackFinished InMonsterAttackFinished)
+void AEnemyBase::SetEnemyAttackDelegate(const FEnemyAttackFinished& InEnemyAttackFinished)
 {
-	EnemyAttackFinished = InMonsterAttackFinished;
+	EnemyAttackFinished = InEnemyAttackFinished;
+}
+
+void AEnemyBase::SetEnemySkill1Delegate(const FEnemySkill1Finished& InEnemySkill1Finished)
+{
+	EnemySkill1Finished = InEnemySkill1Finished;
 }
 
 void AEnemyBase::AttackByAI()
@@ -69,6 +76,10 @@ void AEnemyBase::AttackByAI()
 }
 
 void AEnemyBase::DefaultAttackHitCheck()
+{
+}
+
+void AEnemyBase::Skill1ByAI()
 {
 }
 
@@ -83,9 +94,20 @@ void AEnemyBase::SetupHpBarWidget(UEnemyHpBarWidget* InHpBarWidget)
 	}
 }
 
+float AEnemyBase::TakeExp()
+{
+	//기본 10 경험치
+	return 10.f;
+}
+
 void AEnemyBase::Stun()
 {
 	UE_LOG(LogTemp, Display, TEXT("스턴상태!!!!!!!!!!!"));
+}
+
+void AEnemyBase::SetDead()
+{
+	OnDead.ExecuteIfBound(TakeExp());
 }
 
 

@@ -4,6 +4,7 @@
 #include "Animation/EnemyAnimInstance.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 UEnemyAnimInstance::UEnemyAnimInstance()
 {
@@ -30,5 +31,6 @@ void UEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		Velocity = Movement->Velocity;
 		GroundSpeed = Velocity.Size();
 		bIsIdle = GroundSpeed < MovingThreshould;
+		Angle = UKismetMathLibrary::InverseTransformDirection(Character->GetActorTransform(), Velocity);
 	}
 }

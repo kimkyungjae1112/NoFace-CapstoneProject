@@ -8,33 +8,21 @@
 #include "Stat/EnemyStatComponent.h"
 #include "Engine/OverlapResult.h"
 #include "Engine/DamageEvents.h"
+#include "Perception/AISense_Damage.h"
+#include "Navigation/PathFollowingComponent.h"
 
 AEnemyMelee_Tanker::AEnemyMelee_Tanker()
 {
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshRef(TEXT("/Script/Engine.SkeletalMesh'/Game/No-Face/Enemy/Skeleton_Knight_02/mesh/SK_SKnigh_02_full.SK_SKnigh_02_full'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshRef(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonMinions/Characters/Buff/Buff_Red/Meshes/Buff_Red.Buff_Red'"));
 	if (MeshRef.Object)
 	{
 		GetMesh()->SetSkeletalMesh(MeshRef.Object);
 	}
-	GetMesh()->SetRelativeRotation(FRotator(0.f, -180.f, 0.f));
+	GetMesh()->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
 	GetMesh()->SetCollisionProfileName(TEXT("NoCollision"));
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
 
-	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
-	WeaponMesh->SetupAttachment(GetMesh(), TEXT("hand_rSocket"));
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> WeaponMeshRef(TEXT("/Script/Engine.SkeletalMesh'/Game/No-Face/Enemy/Skeleton_Knight_02/mesh/weapon/SK_weapon_02.SK_weapon_02'"));
-	if (WeaponMeshRef.Object)
-	{
-		WeaponMesh->SetSkeletalMesh(WeaponMeshRef.Object);
-	}
-
-	ShieldMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Shield"));
-	ShieldMesh->SetupAttachment(GetMesh(), TEXT("hand_lSocket"));
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> ShieldMeshRef(TEXT("/Script/Engine.SkeletalMesh'/Game/No-Face/Enemy/Skeleton_Knight_02/mesh/weapon/SK_shield_02.SK_shield_02'"));
-	if (ShieldMeshRef.Object)
-	{
-		ShieldMesh->SetSkeletalMesh(ShieldMeshRef.Object);
-	}
+	//SetWalkSpeed();
 }
 
 void AEnemyMelee_Tanker::BeginPlay()
@@ -81,6 +69,13 @@ void AEnemyMelee_Tanker::DefaultAttackHitCheck()
 	DefaultAttackHitDebug(Origin, GetActorForwardVector(), Range, Degree, Color);
 }
 
+void AEnemyMelee_Tanker::Skill1ByAI()
+{
+	Super::Skill1ByAI();
+
+	BeginSkill1();
+}
+
 float AEnemyMelee_Tanker::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
@@ -88,14 +83,37 @@ float AEnemyMelee_Tanker::TakeDamage(float Damage, FDamageEvent const& DamageEve
 	BeginHitAction();
 
 	Stat->ApplyDamage(Damage);
-	return 0.0f;
+
+	UAISense_Damage::ReportDamageEvent(
+		GetWorld(),
+		this,
+		DamageCauser,
+		Damage,
+		GetActorLocation(),
+		(GetActorLocation() - DamageCauser->GetActorLocation()).GetSafeNormal()
+	);
+
+	return Damage;
+}
+
+float AEnemyMelee_Tanker::TakeExp()
+{
+	//탱커 몬스터 50 경험치
+	return 50.0f;
 }
 
 void AEnemyMelee_Tanker::Stun()
 {
 	Super::Stun();
 
+	UAnimInstance* AnimInstance = Cast<UAnimInstance>(GetMesh()->GetAnimInstance());
 
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+	AnimInstance->Montage_Play(StunMontage);
+
+	FOnMontageEnded MontageEnd;
+	MontageEnd.BindUObject(this, &AEnemyMelee_Tanker::EndStun);
+	AnimInstance->Montage_SetEndDelegate(MontageEnd, StunMontage);
 }
 
 void AEnemyMelee_Tanker::BeginAttack()
@@ -122,7 +140,7 @@ void AEnemyMelee_Tanker::BeginHitAction()
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 
 	/* 스턴 상태라면 그대로 진행 */
-	if (AnimInstance->Montage_IsPlaying(StunMontage))
+	if (AnimInstance->Montage_IsPlaying(StunMontage) || AnimInstance->Montage_IsPlaying(Skill1Montage))
 	{
 		return;
 	}
@@ -130,8 +148,26 @@ void AEnemyMelee_Tanker::BeginHitAction()
 	AnimInstance->Montage_Play(HitMontage);
 }
 
+void AEnemyMelee_Tanker::BeginSkill1()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+
+	AnimInstance->Montage_Play(Skill1Montage);
+
+	FOnMontageEnded MontageEnd;
+	MontageEnd.BindUObject(this, &AEnemyMelee_Tanker::EndSkill1);
+	AnimInstance->Montage_SetEndDelegate(MontageEnd, Skill1Montage);
+}
+
+void AEnemyMelee_Tanker::EndSkill1(UAnimMontage* Target, bool IsProperlyEnded)
+{
+	EnemySkill1Finished.ExecuteIfBound();
+}
+
 void AEnemyMelee_Tanker::SetDead()
 {
+	Super::SetDead();
+
 	GetMyController()->StopAI();
 
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
@@ -150,6 +186,7 @@ void AEnemyMelee_Tanker::SetDead()
 
 void AEnemyMelee_Tanker::EndStun(UAnimMontage* Target, bool IsProperlyEnded)
 {
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 }
 
 bool AEnemyMelee_Tanker::IsInDegree(AActor* Actor, AActor* Target, float RadialAngle)
@@ -187,6 +224,16 @@ void AEnemyMelee_Tanker::DefaultAttackHitDebug(const FVector& Start, const FVect
 	DrawDebugLine(GetWorld(), Start, LeftEndpoint, Color, false, 3.0f);
 	DrawDebugLine(GetWorld(), Start, RightEndpoint, Color, false, 3.0f);
 }
+
+//void AEnemyMelee_Tanker::SetWalkSpeed()
+//{
+//	GetCharacterMovement()->MaxWalkSpeed = 250.f;
+//}
+//
+//void AEnemyMelee_Tanker::SetRunSpeed()
+//{
+//	GetCharacterMovement()->MaxWalkSpeed = 400.f;
+//}
 
 AAIControllerTanker* AEnemyMelee_Tanker::GetMyController()
 {

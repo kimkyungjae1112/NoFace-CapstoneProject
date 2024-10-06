@@ -25,9 +25,18 @@ public:
 	virtual void AttackByAI() override;
 	virtual void DefaultAttackHitCheck() override;
 
+	virtual void Skill1ByAI() override;
+
 	/* 오버라이딩 섹션 */
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	virtual float TakeExp() override;
 	virtual void Stun() override;
+	virtual void SetDead() override;
+
+
+	///* 속도 조절, PlayerController 에서 호출 */
+	//void SetWalkSpeed();
+	//void SetRunSpeed();
 
 private:
 	void BeginAttack();
@@ -35,7 +44,9 @@ private:
 
 	void BeginHitAction();
 
-	void SetDead();
+	/* 스킬 함수들 */
+	void BeginSkill1();
+	void EndSkill1(class UAnimMontage* Target, bool IsProperlyEnded);
 
 	/* 스턴 애니메이션 끝날 때 실행되는 함수 */
 	void EndStun(class UAnimMontage* Target, bool IsProperlyEnded);
@@ -44,18 +55,14 @@ private:
 	bool IsInDegree(AActor* Actor, AActor* Target, float RadialAngle);
 	void DefaultAttackHitDebug(const FVector& Start, const FVector& ForwardVector, const float AttackRange, const float AttackDegree, const FColor& Color);
 
-	/* 유틸리티 섹션 */
+	
+
+/* 유틸리티 섹션 */
 private:
 	class AAIControllerTanker* GetMyController();
 
 
-private:
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<class USkeletalMeshComponent> WeaponMesh;
-
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<class USkeletalMeshComponent> ShieldMesh;
-
+/* 몽타주 섹션 */
 private:
 	UPROPERTY(EditAnywhere, Category = "Montage")
 	TObjectPtr<class UAnimMontage> DefaultAttackMontage;
@@ -68,4 +75,8 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Montage")
 	TObjectPtr<class UAnimMontage> StunMontage;
+
+	UPROPERTY(EditAnywhere, Category = "Montage")
+	TObjectPtr<class UAnimMontage> Skill1Montage;
+
 };

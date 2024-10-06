@@ -11,6 +11,7 @@ UBTService_Detect::UBTService_Detect()
 {
 	NodeName = TEXT("Detect");
 	Interval = 1.f;
+	DetectTime = 0.f;
 }
 
 void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
@@ -46,10 +47,13 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 		for (auto const& OverlapResult : OverlapResults)
 		{
 			APawn* Target = Cast<APawn>(OverlapResult.GetActor());
-			OwnerComp.GetBlackboardComponent()->SetValueAsObject(TEXT("Target"), Target);
 
+			/* 몬스터의 일정범위 안으로 들어가면 DetectTime이 쌓이고 설정된 DetectTime을 넘어가면 몬스터가 플레이어를 인지 */
+			DetectTime += DeltaSeconds;
+			OwnerComp.GetBlackboardComponent()->SetValueAsFloat(TEXT("DetectTime"), DetectTime);
 			return;
 		}
 	}
-	OwnerComp.GetBlackboardComponent()->SetValueAsObject(TEXT("Target"), nullptr);
+	DetectTime = 0.f;
+	OwnerComp.GetBlackboardComponent()->SetValueAsFloat(TEXT("DetectTime"), DetectTime);
 }

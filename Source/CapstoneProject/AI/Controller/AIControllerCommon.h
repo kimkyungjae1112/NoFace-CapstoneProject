@@ -19,12 +19,9 @@ public:
 
 public:
 	UFUNCTION()
-	void PerceptionUpdated(const TArray<AActor*>& UpdatedActors);
+	void OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
 
-	
+
 private:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UAIPerceptionComponent> AIPerception;
-
 	TObjectPtr<class UAISenseConfig_Sight> SightConfig;
 };

@@ -22,6 +22,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Common")
 	float Exp;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Common")
+	int32 Level;
+
 /* 검 스텟 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sword")
 	float SwordDamage;

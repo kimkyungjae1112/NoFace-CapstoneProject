@@ -27,7 +27,9 @@ public:
 
 	/* 오버라이딩 섹션 */
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	virtual float TakeExp() override;
 	virtual void Stun() override;
+	virtual void SetDead() override;
 
 private:
 	void BeginAttack();
@@ -36,7 +38,6 @@ private:
 
 	void BeginHitAction();
 
-	void SetDead();
 
 	/* 스턴 애니메이션 끝날 때 실행되는 함수 */
 	void EndStun(class UAnimMontage* Target, bool IsProperlyEnded);

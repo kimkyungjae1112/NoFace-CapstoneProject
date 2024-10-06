@@ -38,4 +38,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Var")
 	FVector Velocity;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Var")
+	FVector Angle;
+
 };

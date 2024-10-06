@@ -389,10 +389,14 @@ void USkillComponent::BeginStaffMeteor()
 {
 	if (bCasting)
 	{
-		FVector SpawnLocation = Character->GetActorLocation() + FVector(0.f, 0.f, 150.f);
+		//수정중 
+		/*FVector SpawnLocation = Character->GetActorLocation() + FVector(0.f, 0.f, 150.f);
 		FRotator SpawnRotation = Character->GetActorRotation();
 		AStaffMeteor* Meteor = GetWorld()->SpawnActor<AStaffMeteor>(MeteorClass, SpawnLocation, SpawnRotation);
-		Meteor->Init(Cursor.Location);
+		Meteor->Init(Cursor.Location);*/
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MeteorEffect, Cursor.Location + FVector(0.f, 0.f, 500.f), FRotator::ZeroRotator);
+		UGameplayStatics::ApplyRadialDamage(GetOwner(), 50.f, Cursor.Location, 200.f, UDamageType::StaticClass(), TArray<AActor*>(), GetOwner());
+
 
 		bCasting = false;
 	}

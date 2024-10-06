@@ -27,14 +27,14 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 		return EBTNodeResult::Failed;
 	}
 
-	FEnemyAttackFinished MonsterAttackFinished;
-	MonsterAttackFinished.BindLambda(
+	FEnemyAttackFinished EnemyAttackFinished;
+	EnemyAttackFinished.BindLambda(
 		[&]()
 		{
 			FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		});
 
-	Interface->SetMonsterAttackDelegate(MonsterAttackFinished);
+	Interface->SetEnemyAttackDelegate(EnemyAttackFinished);
 	Interface->AttackByAI();
 
 	return EBTNodeResult::InProgress;

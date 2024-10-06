@@ -32,8 +32,14 @@
 /Content/ParagonSparrow
 /Content/ParagonSerath
 /Content/ParagonGideon
+/Content/Assets
+/Content/ParagonMinions/Characters/Buff/Buff_Black
+/Content/ParagonMinions/Characters/Buff/Buff_Blue
+/Content/ParagonMinions/Characters/Buff/Buff_Green
+/Content/ParagonMinions/Characters/Buff/Buff_White
+/Content/ParagonMinions/Characters/Global
+/Content/ParagonMinions/FX
 
-# Allow any files from /RawContent dir.
 # Any file in /RawContent dir will be managed by git lfs.
 !/RawContent/**/*
 
