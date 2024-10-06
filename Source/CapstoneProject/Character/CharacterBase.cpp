@@ -134,6 +134,9 @@ ACharacterBase::ACharacterBase()
 	HitCheckComponent = CreateDefaultSubobject<UCharacterHitCheckComponent>(TEXT("Hit Checker"));
 
 	AttackComponent = CreateDefaultSubobject<UCharacterDefaultAttackComponent>(TEXT("Attack"));
+
+	/* 태그 */
+	Tags.Add(TEXT("Player"));
 }
 
 void ACharacterBase::BeginPlay()
@@ -248,6 +251,7 @@ void ACharacterBase::OnAttackStart()
 		return;
 	}
 
+	/* 스킬 캐스팅 중이면 해당 스킬 싱행 */
 	if (SkillComponent->GetCastingFlag())
 	{
 		TFunction<void()> SkillAction;
@@ -304,6 +308,7 @@ void ACharacterBase::ZoomInOut(const FInputActionValue& Value)
 
 void ACharacterBase::CancelCasting()
 {
+	/* 스킬 캐스팅 중 취소 */
 	if (SkillComponent->GetCastingFlag())
 	{
 		SkillComponent->SetCastingFlag(false);

@@ -125,28 +125,71 @@ private:
 private:
 	void StartCooldown(float CooldownDuration, FTimerHandle& CooldownTimerHandle, bool& bCanUseSkill);
 
-	FTimerHandle CooldownTimerHandle_Q;
-	FTimerHandle CooldownTimerHandle_W;
-	FTimerHandle CooldownTimerHandle_E;
-	FTimerHandle CooldownTimerHandle_R;
+	FTimerHandle CooldownTimerHandle_Sword_Q;
+	FTimerHandle CooldownTimerHandle_Sword_W;
+	FTimerHandle CooldownTimerHandle_Sword_E;
+	FTimerHandle CooldownTimerHandle_Sword_R;
 
-	bool bCanUseSkill_Q = true;
-	bool bCanUseSkill_W = true;
-	bool bCanUseSkill_E = true;
-	bool bCanUseSkill_R = true;
+	FTimerHandle CooldownTimerHandle_Bow_Q;
+	FTimerHandle CooldownTimerHandle_Bow_W;
+	FTimerHandle CooldownTimerHandle_Bow_E;
+	FTimerHandle CooldownTimerHandle_Bow_R;
+
+	FTimerHandle CooldownTimerHandle_Staff_Q;
+	FTimerHandle CooldownTimerHandle_Staff_W;
+	FTimerHandle CooldownTimerHandle_Staff_E;
+	FTimerHandle CooldownTimerHandle_Staff_R;
+
+	bool bCanUseSkill_Sword_Q = true;
+	bool bCanUseSkill_Sword_W = true;
+	bool bCanUseSkill_Sword_E = true;
+	bool bCanUseSkill_Sword_R = true;
+
+	bool bCanUseSkill_Bow_Q = true;
+	bool bCanUseSkill_Bow_W = true;
+	bool bCanUseSkill_Bow_E = true;
+	bool bCanUseSkill_Bow_R = true;
+
+	bool bCanUseSkill_Staff_Q = true;
+	bool bCanUseSkill_Staff_W = true;
+	bool bCanUseSkill_Staff_E = true;
+	bool bCanUseSkill_Staff_R = true;
 
 	UPROPERTY(EditAnywhere, Category = "Cooldown")
-	float CooldownDuration_Q = 1.f;
+	float CooldownDuration_Sword_Q = 1.f;
 
 	UPROPERTY(EditAnywhere, Category = "Cooldown")
-	float CooldownDuration_W = 5.f;
+	float CooldownDuration_Sword_W = 1.f;
 
 	UPROPERTY(EditAnywhere, Category = "Cooldown")
-	float CooldownDuration_E = 5.f;
+	float CooldownDuration_Sword_E = 1.f;
 	
 	UPROPERTY(EditAnywhere, Category = "Cooldown")
-	float CooldownDuration_R = 5.f;
+	float CooldownDuration_Sword_R = 1.f;
 
+	UPROPERTY(EditAnywhere, Category = "Cooldown")
+	float CooldownDuration_Bow_Q = 1.f;
+
+	UPROPERTY(EditAnywhere, Category = "Cooldown")
+	float CooldownDuration_Bow_W = 1.f;
+
+	UPROPERTY(EditAnywhere, Category = "Cooldown")
+	float CooldownDuration_Bow_E = 1.f;
+
+	UPROPERTY(EditAnywhere, Category = "Cooldown")
+	float CooldownDuration_Bow_R = 1.f;
+
+	UPROPERTY(EditAnywhere, Category = "Cooldown")
+	float CooldownDuration_Staff_Q = 1.f;
+
+	UPROPERTY(EditAnywhere, Category = "Cooldown")
+	float CooldownDuration_Staff_W = 1.f;
+
+	UPROPERTY(EditAnywhere, Category = "Cooldown")
+	float CooldownDuration_Staff_E = 1.f;
+
+	UPROPERTY(EditAnywhere, Category = "Cooldown")
+	float CooldownDuration_Staff_R = 1.f;
 
 /* 유틸리티 */
 private:

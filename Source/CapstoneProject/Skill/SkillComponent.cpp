@@ -46,90 +46,73 @@ void USkillComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 void USkillComponent::PlaySkill_Q()
 {
-	if (bCanUseSkill_Q)
+	switch (CurrentWeaponType)
 	{
-		StartCooldown(CooldownDuration_Q, CooldownTimerHandle_Q, bCanUseSkill_Q);
-		switch (CurrentWeaponType)
-		{
-		case 0:
-			BeginSwordSting();
-			break;
-		case 1:
-			BeginBowSeveralArrows();
-			break;
-		case 2:
-			BeginStaffMeteor();
-			break;
-		default:
-			break;
-		}
+	case 0:
+		BeginSwordSting();
+		break;
+	case 1:
+		BeginBowSeveralArrows();
+		break;
+	case 2:
+		BeginStaffMeteor();
+		break;
+	default:
+		break;
 	}
-
 }
 
 void USkillComponent::PlaySkill_W()
 {
-	if (bCanUseSkill_W)
+	switch (CurrentWeaponType)
 	{
-		StartCooldown(CooldownDuration_W, CooldownTimerHandle_W, bCanUseSkill_W);
-		switch (CurrentWeaponType)
-		{
-		case 0:
-			BeginSwordWhirlwind();
-			break;
-		case 1:
-			BeginBowExplosionArrow();
-			break;
-		case 2:
-			BeginStaffArea();
-			break;
-		default:
-			break;
-		}
+	case 0:
+		BeginSwordWhirlwind();
+		break;
+	case 1:
+		BeginBowExplosionArrow();
+		break;
+	case 2:
+		BeginStaffArea();
+		break;
+	default:
+		break;
 	}
 }
 
 void USkillComponent::PlaySkill_E()
 {
-	if (bCanUseSkill_E)
+	switch (CurrentWeaponType)
 	{
-		StartCooldown(CooldownDuration_E, CooldownTimerHandle_E, bCanUseSkill_E);
-		switch (CurrentWeaponType)
-		{
-		case 0:
-			BeginSwordParrying();
-			break;
-		case 1:
-			BeginBowBackstep();
-			break;
-		case 2:
-			BeginStaffUpGround();
-			break;
-		default:
-			break;
-		}
+	case 0:
+		BeginSwordParrying();
+		break;
+	case 1:
+		BeginBowBackstep();
+		break;
+	case 2:
+		BeginStaffUpGround();
+		break;
+	default:
+		break;
 	}
 }
 
 void USkillComponent::PlaySkill_R()
 {
-	if (bCanUseSkill_R)
+	switch (CurrentWeaponType)
 	{
-		StartCooldown(CooldownDuration_R, CooldownTimerHandle_R, bCanUseSkill_R);
-		switch (CurrentWeaponType)
-		{
-		case 0:
-			BeginSwordAura();
-			break;
-		case 1:
-			BeginBowOneShot();
-			break;
-		case 2:
-			BeginStaffThunderbolt();
-			break;
-		default:
-			break;
-		}
+	case 0:
+		BeginSwordAura();
+		break;
+	case 1:
+		BeginBowOneShot();
+		break;
+	case 2:
+		BeginStaffThunderbolt();
+		break;
+	default:
+		break;
 	}
 }
 
@@ -140,6 +123,9 @@ void USkillComponent::SetWeaponType(const int32& InCurrentWeaponType)
 
 void USkillComponent::BeginSwordSting()
 {
+	if (!bCanUseSkill_Sword_Q) return;
+	else StartCooldown(CooldownDuration_Sword_Q, CooldownTimerHandle_Sword_Q, bCanUseSkill_Sword_Q);
+
 	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 
 	bCanChangeWeapon = false;
@@ -159,6 +145,9 @@ void USkillComponent::EndSwordSting(UAnimMontage* Target, bool IsProperlyEnded)
 
 void USkillComponent::BeginSwordWhirlwind()
 {
+	if (!bCanUseSkill_Sword_W) return;	
+	else StartCooldown(CooldownDuration_Sword_W, CooldownTimerHandle_Sword_W, bCanUseSkill_Sword_W);
+	
 	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 
 	bCanChangeWeapon = false;
@@ -178,6 +167,9 @@ void USkillComponent::EndSwordWhirlwind(UAnimMontage* Target, bool IsProperlyEnd
 
 void USkillComponent::BeginSwordParrying()
 {
+	if (!bCanUseSkill_Sword_E) return;
+	else StartCooldown(CooldownDuration_Sword_E, CooldownTimerHandle_Sword_E, bCanUseSkill_Sword_E);
+
 	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 
 	bCanChangeWeapon = false;
@@ -210,6 +202,9 @@ void USkillComponent::ParryingSuccess(AActor* Attacker)
 
 void USkillComponent::BeginSwordAura()
 {
+	if (!bCanUseSkill_Sword_R) return;
+	else StartCooldown(CooldownDuration_Sword_R, CooldownTimerHandle_Sword_R, bCanUseSkill_Sword_R);
+
 	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 
 	bCanChangeWeapon = false;
@@ -229,6 +224,9 @@ void USkillComponent::EndSwordAura(UAnimMontage* Target, bool IsProperlyEnded)
 
 void USkillComponent::BeginBowSeveralArrows()
 {
+	if (!bCanUseSkill_Bow_Q) return;
+	else StartCooldown(CooldownDuration_Bow_Q, CooldownTimerHandle_Bow_Q, bCanUseSkill_Bow_Q);
+
 	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 
 	bCanChangeWeapon = false;
@@ -270,6 +268,9 @@ void USkillComponent::BeginBowExplosionArrow()
 	}
 	else
 	{
+		if (!bCanUseSkill_Bow_W) return;
+		else StartCooldown(CooldownDuration_Bow_W, CooldownTimerHandle_Bow_W, bCanUseSkill_Bow_W);
+
 		bCasting = true;
 
 		SkillQueue.Enqueue([this]()
@@ -290,6 +291,9 @@ void USkillComponent::EndBowExplosionArrow(UAnimMontage* Target, bool IsProperly
 
 void USkillComponent::BeginBowBackstep()
 {
+	if (!bCanUseSkill_Bow_E) return;
+	else StartCooldown(CooldownDuration_Bow_E, CooldownTimerHandle_Bow_E, bCanUseSkill_Bow_E);
+
 	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 
 	bCanChangeWeapon = false;
@@ -311,6 +315,9 @@ void USkillComponent::EndBowBackstep(UAnimMontage* Target, bool IsProperlyEnded)
 /* 애니메이션이 천천히 실행되고, 카메라가 줌이 되는 효과 추가 하자 */
 void USkillComponent::BeginBowOneShot()
 {
+	if (!bCanUseSkill_Bow_R) return;
+	else StartCooldown(CooldownDuration_Bow_R, CooldownTimerHandle_Bow_R, bCanUseSkill_Bow_R);
+
 	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 
 	bCanChangeWeapon = false;
@@ -402,6 +409,9 @@ void USkillComponent::BeginStaffMeteor()
 	}
 	else
 	{
+		if (!bCanUseSkill_Staff_Q) return;
+		else StartCooldown(CooldownDuration_Staff_Q, CooldownTimerHandle_Staff_Q, bCanUseSkill_Staff_Q);
+
 		bCasting = true;
 		
 		//컨테이너에 람다형식으로 함수 등록
@@ -428,6 +438,9 @@ void USkillComponent::BeginStaffArea()
 	}
 	else
 	{
+		if (!bCanUseSkill_Staff_W) return;
+		else StartCooldown(CooldownDuration_Staff_W, CooldownTimerHandle_Staff_W, bCanUseSkill_Staff_W);
+
 		bCasting = true;
 
 		//컨테이너에 람다형식으로 함수 등록
@@ -456,6 +469,9 @@ void USkillComponent::BeginStaffUpGround()
 	}
 	else
 	{
+		if (!bCanUseSkill_Staff_E) return;
+		else StartCooldown(CooldownDuration_Staff_E, CooldownTimerHandle_Staff_E, bCanUseSkill_Staff_E);
+
 		bCasting = true;
 
 		//컨테이너에 람다형식으로 함수 등록
@@ -472,6 +488,9 @@ void USkillComponent::EndStaffUpGround(UAnimMontage* Target, bool IsProperlyEnde
 
 void USkillComponent::BeginStaffThunderbolt()
 {
+	if (!bCanUseSkill_Staff_R) return;
+	else StartCooldown(CooldownDuration_Staff_R, CooldownTimerHandle_Staff_R, bCanUseSkill_Staff_R);
+
 	FVector SpawnLocation = Character->GetMesh()->GetSocketLocation(TEXT("root")) + FVector(0.f, 0.f, 5.f);
 	FRotator SpawnRotation = Character->GetActorRotation();
 	AStaffThunderbolt* Thunderbolt = GetWorld()->SpawnActor<AStaffThunderbolt>(ThunderboltClass, SpawnLocation, SpawnRotation);

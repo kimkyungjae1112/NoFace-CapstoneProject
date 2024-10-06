@@ -32,6 +32,4 @@ private:
 	TObjectPtr<class UAISenseConfig_Sight> SightConfig;
 	TObjectPtr<class UAISenseConfig_Damage> DamageConfig;
 
-	TObjectPtr<class AActor> Target;
-
 };

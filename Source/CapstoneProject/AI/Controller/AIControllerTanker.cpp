@@ -41,17 +41,18 @@ AAIControllerTanker::AAIControllerTanker()
 	AIPerception->SetDominantSense(SightConfig->GetSenseImplementation());
 
 	AIPerception->OnTargetPerceptionUpdated.AddDynamic(this, &AAIControllerTanker::OnPerceptionUpdated);
-
 }
 
 void AAIControllerTanker::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 {
-	Stimulus = CanSenseActor(Actor, EAIPerceptionSense::EPS_Sight);
-	HandleSenseSight(Actor, Stimulus);
+	if (Actor->ActorHasTag(TEXT("Player")))
+	{
+		Stimulus = CanSenseActor(Actor, EAIPerceptionSense::EPS_Sight);
+		HandleSenseSight(Actor, Stimulus);
 
-	Stimulus = CanSenseActor(Actor, EAIPerceptionSense::EPS_Damage);
-	HandleSenseDamage(Actor, Stimulus);
-	
+		Stimulus = CanSenseActor(Actor, EAIPerceptionSense::EPS_Damage);
+		HandleSenseDamage(Actor, Stimulus);
+	}
 }
 
 FAIStimulus AAIControllerTanker::CanSenseActor(AActor* Actor, EAIPerceptionSense AIPerceptionSense)
@@ -99,12 +100,10 @@ void AAIControllerTanker::HandleSenseSight(AActor* Actor, const FAIStimulus& AIS
 	if (AIStimulus.WasSuccessfullySensed())
 	{
 		GetBlackboardComponent()->SetValueAsObject(TEXT("Target"), Actor);
-		UE_LOG(LogTemp, Display, TEXT("Detect Success"));
 	}
 	else
 	{
 		GetBlackboardComponent()->SetValueAsObject(TEXT("Target"), nullptr);
-		UE_LOG(LogTemp, Display, TEXT("Detect Failed"));
 	}
 }
 
@@ -114,6 +113,7 @@ void AAIControllerTanker::HandleSenseDamage(AActor* Actor, const FAIStimulus& AI
 	{
 		float SkillEnergy = GetBlackboardComponent()->GetValueAsFloat(TEXT("SkillEnergy"));
 		GetBlackboardComponent()->SetValueAsFloat(TEXT("SkillEnergy"), SkillEnergy + 10.f);
+		GetBlackboardComponent()->SetValueAsObject(TEXT("Target"), Actor);
 	}
 }
 
