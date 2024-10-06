@@ -16,11 +16,13 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void InitializeComponent() override;
 
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
+	FORCEINLINE float GetMaxHp() const { return MaxHp; }
 	FORCEINLINE float GetCurrentHp() const { return CurrentHp; }
 	FORCEINLINE float GetCurrentExp() const { return CurrentExp; }
 	FORCEINLINE void SetCurrentExp(float InExp) { CurrentExp = InExp; }
@@ -36,6 +38,9 @@ private:
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Stat")
 	TObjectPtr<class UCharacterDataStat> DataStat;
+
+	UPROPERTY(EditAnywhere, Category = "Stat")
+	float MaxHp;
 
 	UPROPERTY(EditAnywhere, Category = "Stat")
 	float CurrentHp;

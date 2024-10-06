@@ -8,6 +8,7 @@
 
 DECLARE_MULTICAST_DELEGATE(FOnHpZero);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnHpChanged, float /* CurrentHp */);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnExpChanged, float /* CurrentExp */);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class CAPSTONEPROJECT_API UStatBase : public UActorComponent
@@ -20,5 +21,6 @@ public:
 public:
 	FOnHpZero OnHpZero;
 	FOnHpChanged OnHpChanged;
+	FOnExpChanged OnExpChanged;
 		
 };

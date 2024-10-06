@@ -17,6 +17,9 @@ class CAPSTONEPROJECT_API UCharacterDataStat : public UPrimaryDataAsset
 /* 일반 스텟 */
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Common")
+	float MaxHp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Common")
 	float Hp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Common")

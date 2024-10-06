@@ -16,5 +16,15 @@ class CAPSTONEPROJECT_API ACPlayerController : public APlayerController
 
 public:
 	ACPlayerController();
+
+protected:
+	virtual void BeginPlay() override;
 	
+/*HUD ¼½¼Ç*/
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HUD")
+	TSubclassOf<class UHUDWidget> HUDWidgetClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "HUD")
+	TObjectPtr<class UHUDWidget> HUDWidget;
 };

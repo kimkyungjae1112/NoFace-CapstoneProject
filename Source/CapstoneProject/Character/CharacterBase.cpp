@@ -22,6 +22,12 @@
 #include "Character/CharacterDefaultAttackComponent.h"
 #include "Interface/BowInterface.h"
 #include "Components/CapsuleComponent.h"
+#include "UI/PlayerHpBarWidgetComponent.h"
+#include "UI/PlayerExpBarWidgetComponent.h"
+#include "UI/PlayerHpBarWidget.h"
+#include "UI/PlayerExpBarWidget.h"
+#include "Interface/PlayerHUDInterface.h"
+#include "UI/HUDWidget.h"
 
 ACharacterBase::ACharacterBase()
 {
@@ -121,6 +127,7 @@ ACharacterBase::ACharacterBase()
 
 	/* 스텟 */
 	Stat = CreateDefaultSubobject<UCharacterStatComponent>(TEXT("Stat"));
+
 
 	/* 무기 */
 	TakeItemDelegateArray.Add(FTakeItemDelegateWrapper(FTakeItemDelegate::CreateUObject(this, &ACharacterBase::EquipSword)));
@@ -426,8 +433,42 @@ void ACharacterBase::ToggleParrying()
 	else bIsParrying = false;
 }
 
+
+void ACharacterBase::SetupPlayerHpBarWidget(UPlayerHpBarWidget* InPlayerHpBarWidget)
+{
+	UPlayerHpBarWidget* HpBarWidget = InPlayerHpBarWidget;
+	if (HpBarWidget)
+	{
+		HpBarWidget->SetMaxHp(Stat->GetMaxHp());
+		HpBarWidget->UpdateHpBar(Stat->GetCurrentHp());
+		Stat->OnHpChanged.AddUObject(HpBarWidget, &UPlayerHpBarWidget::UpdateHpBar);
+	}
+}
+
+void ACharacterBase::SetupPlayerExpBarWidget(UPlayerExpBarWidget* InPlayerExpBarWidget)
+{
+	UPlayerExpBarWidget* ExpBarWidget = InPlayerExpBarWidget;
+	if (ExpBarWidget)
+	{
+		ExpBarWidget->UpdateExpBar(Stat->GetCurrentExp());
+		Stat->OnExpChanged.AddUObject(ExpBarWidget, &UPlayerExpBarWidget::UpdateExpBar);
+	}
+}
+
+void ACharacterBase::SetupHUDWidget(UHUDWidget* InHUDWidget)
+{
+	if (InHUDWidget) {
+		InHUDWidget->SetMaxHp(Stat->GetMaxHp());
+		InHUDWidget->UpdateHpBar(Stat->GetCurrentHp());
+		InHUDWidget->UpdateExpBar(Stat->GetCurrentExp());
+		Stat->OnHpChanged.AddUObject(InHUDWidget, &UHUDWidget::UpdateHpBar);
+		Stat->OnExpChanged.AddUObject(InHUDWidget, &UHUDWidget::UpdateExpBar);
+	}
+
+}
+
+
 ACPlayerController* ACharacterBase::GetPlayerController() const
 {
 	return Cast<ACPlayerController>(GetController());
 }
-
