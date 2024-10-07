@@ -36,8 +36,8 @@
 /Content/ParagonMinions/Characters/Buff/Buff_Blue
 /Content/ParagonMinions/Characters/Buff/Buff_Green
 /Content/ParagonMinions/Characters/Buff/Buff_White
-/Content/ParagonMinions/Characters/Global
 /Content/ParagonMinions/FX
+/Content/ParagonMinions/Characters/Global
 
 # Any file in /RawContent dir will be managed by git lfs.
 !/RawContent/**/*
