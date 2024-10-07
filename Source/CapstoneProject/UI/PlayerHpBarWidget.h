@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PlayerHpBarUserWidget.h"
+#include "Blueprint/UserWidget.h"
 #include "PlayerHpBarWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CAPSTONEPROJECT_API UPlayerHpBarWidget : public UPlayerHpBarUserWidget
+class CAPSTONEPROJECT_API UPlayerHpBarWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
@@ -22,6 +22,7 @@ public:
 
 	void SetMaxHp(float NewMaxHp);
 	void UpdateHpBar(float NewCurrentHp);
+
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "HpBar")
 	TObjectPtr<class UProgressBar> HpProgressBar;

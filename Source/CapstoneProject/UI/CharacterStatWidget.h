@@ -16,4 +16,4 @@ class CAPSTONEPROJECT_API UCharacterStatWidget : public UUserWidget
 	
 };
 
-//ÅØ½ºÆ®·Î µÈ HUD Á¦ÀÛÀ» À§ÇÑ Å¬·¡½º
+//ï¿½Ø½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ HUD ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½

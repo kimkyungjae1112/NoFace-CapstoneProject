@@ -2,8 +2,6 @@
 
 
 #include "UI/PlayerExpBarWidget.h"
-#include "Interface/PlayerHpBarWidgetInterface.h"
-#include "Interface/PlayerExpBarWidgetInterface.h"
 #include "Components/ProgressBar.h"
 
 UPlayerExpBarWidget::UPlayerExpBarWidget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -17,12 +15,6 @@ void UPlayerExpBarWidget::NativeConstruct()
 
 	ExpProgressBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("PlayerExpBar")));
 	ensure(ExpProgressBar);
-
-	IPlayerExpBarWidgetInterface* Interface = Cast<IPlayerExpBarWidgetInterface>(GetOwner());
-	if (Interface)
-	{
-		Interface->SetupPlayerExpBarWidget(this);
-	}
 }
 
 void UPlayerExpBarWidget::UpdateExpBar(float NewCurrentHp)

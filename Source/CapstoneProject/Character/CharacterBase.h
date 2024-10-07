@@ -5,12 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
-#include "Interface/PlayerHpBarWidgetInterface.h"
-#include "Interface/PlayerExpBarWidgetInterface.h"
 #include "Interface/PlayerHUDInterface.h"
-#include "UI/PlayerHpBarWidget.h"
-#include "UI/PlayerExpBarWidget.h"
-#include "UI/HUDWidget.h"
 #include "CharacterBase.generated.h"
 
 //Animation Blueprint 에서 무기 애니메이션 값을 바꿀 때 쓰는 ENUM 값
@@ -36,7 +31,7 @@ struct FTakeItemDelegateWrapper
 };
 
 UCLASS()
-class CAPSTONEPROJECT_API ACharacterBase : public ACharacter, public IPlayerHpBarWidgetInterface, public IPlayerExpBarWidgetInterface, public IPlayerHUDInterface
+class CAPSTONEPROJECT_API ACharacterBase : public ACharacter, public IPlayerHUDInterface
 {
 	GENERATED_BODY()
 
@@ -51,11 +46,7 @@ public:
 
 /* 오버라이딩 섹션 */
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
-	virtual void SetupPlayerHpBarWidget(class UPlayerHpBarWidget* InPlayerHpBarWidget) override;
-	virtual void SetupPlayerExpBarWidget(class UPlayerExpBarWidget* InPlayerExpBarWidget) override;
 	virtual void SetupHUDWidget(class UHUDWidget* InHUDWidget) override;
-
-/* Getter */
 
 /* 스킬 섹션 */
 protected:
@@ -185,22 +176,6 @@ private:
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Component")
 	TObjectPtr<class UCharacterStatComponent> Stat;
-
-/* UI 섹션 */
-public:
-
-	UPROPERTY(VisibleAnywhere, Category = "UI")
-	TObjectPtr<class UPlayerHpBarWidgetComponent> HpBar;
-
-	UPROPERTY(EditAnywhere, Category = "UI")
-	TSubclassOf<class UPlayerHpBarUserWidget> HpBarClass;
-
-	UPROPERTY(VisibleAnywhere, Category = "UI")
-	TObjectPtr<class UPlayerExpBarWidgetComponent> ExpBar;
-
-	UPROPERTY(EditAnywhere, Category = "UI")
-	TSubclassOf<class UPlayerHpBarUserWidget> ExpBarClass;
-
 
 /* 유틸리티 섹션 */
 private:

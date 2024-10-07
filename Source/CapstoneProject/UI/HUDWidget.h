@@ -33,5 +33,4 @@ protected:
 	UPROPERTY()
 	TObjectPtr<class UPlayerExpBarWidget> ExpBar;
 
-
 };

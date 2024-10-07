@@ -2,7 +2,6 @@
 
 
 #include "UI/PlayerHpBarWidget.h"
-#include "Interface/PlayerHpBarWidgetInterface.h"
 #include "Components/ProgressBar.h"
 
 UPlayerHpBarWidget::UPlayerHpBarWidget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -16,12 +15,6 @@ void UPlayerHpBarWidget::NativeConstruct()
 
 	HpProgressBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("PlayerHpBar")));
 	ensure(HpProgressBar);
-
-	IPlayerHpBarWidgetInterface* Interface = Cast<IPlayerHpBarWidgetInterface>(GetOwner());
-	if (Interface)
-	{
-		Interface->SetupPlayerHpBarWidget(this);
-	}
 }
 
 void UPlayerHpBarWidget::UpdateHpBar(float NewCurrentHp)

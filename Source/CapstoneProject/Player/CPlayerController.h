@@ -20,7 +20,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	
-/*HUD ¼½¼Ç*/
+/*HUD ï¿½ï¿½ï¿½ï¿½*/
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HUD")
 	TSubclassOf<class UHUDWidget> HUDWidgetClass;

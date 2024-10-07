@@ -22,10 +22,6 @@
 #include "Character/CharacterDefaultAttackComponent.h"
 #include "Interface/BowInterface.h"
 #include "Components/CapsuleComponent.h"
-#include "UI/PlayerHpBarWidgetComponent.h"
-#include "UI/PlayerExpBarWidgetComponent.h"
-#include "UI/PlayerHpBarWidget.h"
-#include "UI/PlayerExpBarWidget.h"
 #include "Interface/PlayerHUDInterface.h"
 #include "UI/HUDWidget.h"
 
@@ -438,31 +434,10 @@ void ACharacterBase::ToggleParrying()
 	else bIsParrying = false;
 }
 
-
-void ACharacterBase::SetupPlayerHpBarWidget(UPlayerHpBarWidget* InPlayerHpBarWidget)
-{
-	UPlayerHpBarWidget* HpBarWidget = InPlayerHpBarWidget;
-	if (HpBarWidget)
-	{
-		HpBarWidget->SetMaxHp(Stat->GetMaxHp());
-		HpBarWidget->UpdateHpBar(Stat->GetCurrentHp());
-		Stat->OnHpChanged.AddUObject(HpBarWidget, &UPlayerHpBarWidget::UpdateHpBar);
-	}
-}
-
-void ACharacterBase::SetupPlayerExpBarWidget(UPlayerExpBarWidget* InPlayerExpBarWidget)
-{
-	UPlayerExpBarWidget* ExpBarWidget = InPlayerExpBarWidget;
-	if (ExpBarWidget)
-	{
-		ExpBarWidget->UpdateExpBar(Stat->GetCurrentExp());
-		Stat->OnExpChanged.AddUObject(ExpBarWidget, &UPlayerExpBarWidget::UpdateExpBar);
-	}
-}
-
 void ACharacterBase::SetupHUDWidget(UHUDWidget* InHUDWidget)
 {
-	if (InHUDWidget) {
+	if (InHUDWidget) 
+	{
 		InHUDWidget->SetMaxHp(Stat->GetMaxHp());
 		InHUDWidget->UpdateHpBar(Stat->GetCurrentHp());
 		InHUDWidget->UpdateExpBar(Stat->GetCurrentExp());
@@ -471,7 +446,6 @@ void ACharacterBase::SetupHUDWidget(UHUDWidget* InHUDWidget)
 	}
 
 }
-
 
 ACPlayerController* ACharacterBase::GetPlayerController() const
 {
