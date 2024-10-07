@@ -4,17 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "AI/Controller/AIControllerBase.h"
-#include "AIControllerCommon.generated.h"
+#include "AIControllerRifle.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CAPSTONEPROJECT_API AAIControllerCommon : public AAIControllerBase
+class CAPSTONEPROJECT_API AAIControllerRifle : public AAIControllerBase
 {
 	GENERATED_BODY()
+	
 public:
-	AAIControllerCommon();
+	AAIControllerRifle();
 
 public:
 	UFUNCTION()
@@ -25,10 +26,8 @@ private:
 	FAIStimulus CanSenseActor(AActor* Actor, EAIPerceptionSense AIPerceptionSense);
 
 	void HandleSenseSight(AActor* Actor, const FAIStimulus& AIStimulus);
-	void HandleSenseDamage(AActor* Actor, const FAIStimulus& AIStimulus);
 
 private:
 	TObjectPtr<class UAISenseConfig_Sight> SightConfig;
-	TObjectPtr<class UAISenseConfig_Damage> DamageConfig;
 
 };

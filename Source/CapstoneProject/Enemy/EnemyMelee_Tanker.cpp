@@ -99,6 +99,8 @@ float AEnemyMelee_Tanker::TakeDamage(float Damage, FDamageEvent const& DamageEve
 float AEnemyMelee_Tanker::TakeExp()
 {
 	//탱커 몬스터 50 경험치
+	Super::TakeExp();
+
 	return 50.0f;
 }
 

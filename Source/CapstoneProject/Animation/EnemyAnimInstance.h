@@ -30,6 +30,9 @@ public:
 	uint8 bIsIdle : 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Var")
+	uint8 bIsBattle : 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Var")
 	float GroundSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Var")

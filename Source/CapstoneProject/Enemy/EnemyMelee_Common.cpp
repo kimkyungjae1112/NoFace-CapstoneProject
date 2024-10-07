@@ -25,13 +25,13 @@ AEnemyMelee_Common::AEnemyMelee_Common()
 	GetMesh()->SetCollisionProfileName(TEXT("NoCollision"));
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
 
+	Stat->OnHpZero.AddUObject(this, &AEnemyMelee_Common::SetDead);
 }
 
 void AEnemyMelee_Common::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Stat->OnHpZero.AddUObject(this, &AEnemyMelee_Common::SetDead);
 }
 
 void AEnemyMelee_Common::AttackByAI()

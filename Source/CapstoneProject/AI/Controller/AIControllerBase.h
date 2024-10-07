@@ -30,10 +30,10 @@ public:
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
 
-	UPROPERTY(VisibleAnywhere, Category = "BB")
+	UPROPERTY(EditAnywhere, Category = "BB")
 	TObjectPtr<class UBlackboardData> BBData;
 	
-	UPROPERTY(VisibleAnywhere, Category = "BT")
+	UPROPERTY(EditAnywhere, Category = "BT")
 	TObjectPtr<class UBehaviorTree> BTData;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
