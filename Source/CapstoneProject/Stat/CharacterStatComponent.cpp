@@ -17,9 +17,12 @@ UCharacterStatComponent::UCharacterStatComponent()
 	}
 
 	/* 이렇게 해야 하나의 에셋으로 캐릭터의 스텟을 관리하기 편한거 같음 */
+	MaxHp = DataStat->MaxHp;
 	CurrentHp = DataStat->Hp;
 	CurrentExp = DataStat->Exp;
 	CurrentLevel = 1;
+	
+	bWantsInitializeComponent = true;
 
 }
 
@@ -27,6 +30,11 @@ UCharacterStatComponent::UCharacterStatComponent()
 void UCharacterStatComponent::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+void UCharacterStatComponent::InitializeComponent()
+{
+	Super::InitializeComponent();
 
 	AEnemyBase::OnDead.BindUObject(this, &UCharacterStatComponent::SetExp);
 }
@@ -54,6 +62,7 @@ float UCharacterStatComponent::ApplyDamage(float InDamage)
 void UCharacterStatComponent::SetHp(float ChangeHp)
 {
 	CurrentHp = ChangeHp;
+	UE_LOG(LogTemp, Display, TEXT("Current Hp : %f"), CurrentHp);
 	OnHpChanged.Broadcast(CurrentHp);
 }
 
@@ -62,5 +71,6 @@ void UCharacterStatComponent::SetExp(float InExp)
 	UE_LOG(LogTemp, Display, TEXT("Get Exp Amount : %f"), InExp);
 	CurrentExp = CurrentExp + InExp;
 	UE_LOG(LogTemp, Display, TEXT("Current Exp : %f,  //  Current Level : %d"), CurrentExp, CurrentLevel);
+	OnExpChanged.Broadcast(CurrentExp);
 }
 
