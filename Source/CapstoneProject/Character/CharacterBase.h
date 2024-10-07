@@ -48,6 +48,13 @@ public:
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	virtual void SetupHUDWidget(class UHUDWidget* InHUDWidget) override;
 
+/* Getter */
+
+public:
+
+	UFUNCTION(BlueprintCallable, Category = "WeaponType")
+	int GetWeaponType();
+
 /* 스킬 섹션 */
 protected:
 	void Q_Skill();
