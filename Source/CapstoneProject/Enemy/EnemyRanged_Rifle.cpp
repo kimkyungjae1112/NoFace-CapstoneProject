@@ -22,6 +22,8 @@ AEnemyRanged_Rifle::AEnemyRanged_Rifle()
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
 
 	Stat->OnHpZero.AddUObject(this, &AEnemyRanged_Rifle::SetDead);
+
+	SetRunSpeed();
 }
 
 void AEnemyRanged_Rifle::AttackByAI()
@@ -54,6 +56,8 @@ void AEnemyRanged_Rifle::DefaultAttackHitCheck()
 		HitResult.GetActor()->TakeDamage(Damage, DamageEvent, GetController(), this);
 	}
 
+	DrawDebugBox(GetWorld(), Origin, BoxExtent, FColor::Green, false, 3.f);
+	DrawDebugBox(GetWorld(), End, BoxExtent, FColor::Green, false, 3.f);
 }
 
 float AEnemyRanged_Rifle::GetPatrolRadius()

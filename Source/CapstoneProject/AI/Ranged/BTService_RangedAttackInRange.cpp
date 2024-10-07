@@ -41,10 +41,12 @@ void UBTService_RangedAttackInRange::TickNode(UBehaviorTreeComponent& OwnerComp,
 		if (Distance <= 500.f)
 		{
 			OwnerComp.GetBlackboardComponent()->SetValueAsBool(TEXT("CanBackstep"), true);
+			UE_LOG(LogTemp, Display, TEXT("Can Backstep"));
 		}
 		else
 		{
 			OwnerComp.GetBlackboardComponent()->SetValueAsBool(TEXT("CanBackstep"), false);
+			UE_LOG(LogTemp, Display, TEXT("No Backstep"));
 		}
 	}
 	else

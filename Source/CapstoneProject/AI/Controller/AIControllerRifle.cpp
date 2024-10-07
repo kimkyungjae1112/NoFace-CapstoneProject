@@ -87,13 +87,11 @@ void AAIControllerRifle::HandleSenseSight(AActor* Actor, const FAIStimulus& AISt
 	if (AIStimulus.WasSuccessfullySensed())
 	{
 		GetBlackboardComponent()->SetValueAsObject(TEXT("Target"), Actor);
-		Enemy->SetRunSpeed();
 		Anim->bIsBattle = true;
 	}
 	else
 	{
 		GetBlackboardComponent()->SetValueAsObject(TEXT("Target"), nullptr);
-		Enemy->SetWalkSpeed();
 		Anim->bIsBattle = false;
 	}
 }

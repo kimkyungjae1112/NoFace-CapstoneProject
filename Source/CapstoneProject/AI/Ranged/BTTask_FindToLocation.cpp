@@ -42,12 +42,15 @@ EBTNodeResult::Type UBTTask_FindToLocation::ExecuteTask(UBehaviorTreeComponent& 
 
 	float Radius = Interface->GetPatrolRadius();
 
-	//뒷걸음질을 구현하고 싶은데 마음처럼 안되네
 	FVector Origin = PossessedPawn->GetActorLocation();
 	FVector Target = TargetPawn->GetActorLocation();
-	FVector BackwardDirection = (Target - Origin).GetSafeNormal();
+	FVector Direction = (Target - Origin).GetSafeNormal();
 	
-	Cast<AAIController>(PossessedPawn->GetController())->MoveToLocation(-(Origin + BackwardDirection * 420.f));
+	FRotator LookAtRotation = FRotationMatrix::MakeFromX(Direction).Rotator();
+	PossessedPawn->SetActorRotation(LookAtRotation);
+
+	PossessedPawn->AddMovementInput(-Direction);
 
 	return EBTNodeResult::Succeeded;
 }
+			
