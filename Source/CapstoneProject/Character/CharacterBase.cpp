@@ -193,6 +193,11 @@ float ACharacterBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, 
 	return Damage;
 }
 
+int ACharacterBase::GetWeaponType()
+{
+	return WeaponIndex;
+}
+
 void ACharacterBase::Q_Skill()
 {
 	RotateToTarget();
